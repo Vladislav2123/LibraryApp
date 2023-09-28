@@ -12,6 +12,6 @@
 		public ICollection<User> ReadUsers { get; set; }
 
 		public ICollection<Review> Reviews { get; set; }
-		public float Rating { get; set; }
+		//public float Rating { get; set; }
 	}
 }
