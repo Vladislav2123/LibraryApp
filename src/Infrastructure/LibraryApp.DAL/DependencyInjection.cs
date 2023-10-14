@@ -7,11 +7,11 @@ namespace LibraryApp.DAL
 {
 	public static class DependencyInjection
 	{
-		public static IServiceCollection AddDal(IServiceCollection service, IConfiguration configuration)
+		public static IServiceCollection AddDal(this IServiceCollection service, IConfiguration configuration)
 		{
 			service.AddDbContext<LibraryDbContext>(options =>
 			{
-				options.UseSqlServer(configuration.GetConnectionString("SqlServerConnectionString"));
+				options.UseSqlServer(configuration.GetConnectionString("SqlServer"));
 			});
 			service.AddScoped<ILibraryDbContext>(provider => provider.GetService<LibraryDbContext>());
 

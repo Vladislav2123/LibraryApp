@@ -1,3 +1,8 @@
+using LibraryApp.DAL;
+using LibraryApp.Application;
+using LibraryApp.Application.Common.Mappings;
+using System.Reflection;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +11,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddApplication();
+builder.Services.AddDal(builder.Configuration);
+builder.Services.AddAutoMapper(cfg =>
+	cfg.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly())));
 
 var app = builder.Build();
 
