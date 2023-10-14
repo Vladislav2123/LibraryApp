@@ -26,10 +26,5 @@ namespace LibraryApp.DAL
 			builder.ApplyConfiguration(new BookConfiguration());
 			builder.ApplyConfiguration(new ReviewConfiguration());
 		}
-
-		void ILibraryDbContext.SaveChangesAsync(CancellationToken cancellationToken)
-		{
-			SaveChangesAsync(cancellationToken);
-		}
 	}
 }

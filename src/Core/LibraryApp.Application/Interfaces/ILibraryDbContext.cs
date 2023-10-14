@@ -11,6 +11,6 @@ namespace LibraryApp.Application.Interfaces
 		DbSet<Book> Books { get; set; }
 		DbSet<Review> Reviews { get; set; }
 
-		void SaveChangesAsync(CancellationToken cancellationToken);
+		Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 	}
 }
