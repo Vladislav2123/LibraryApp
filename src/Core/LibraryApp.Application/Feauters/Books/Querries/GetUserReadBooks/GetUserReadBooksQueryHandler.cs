@@ -27,10 +27,8 @@ namespace LibraryApp.Application.Feauters.Books.Querries.GetUserReadBooks
             
             if(user == null) throw new EntityNotFoundException(nameof(User), request.UserId);
 
-            IQueryable<Book> booksQuery = user.ReadedBooks.AsQueryable();
-
-            var booksLookupsQuery = _mapper.Map<IQueryable<BookLookupDto>>(user.ReadedBooks);
-            return await PagedList<BookLookupDto>.CreateAsync(booksLookupsQuery, request.Page, request.PageSize, cancellationToken);
+            var booksLookups = _mapper.Map<List<BookLookupDto>>(user.ReadedBooks);
+            return PagedList<BookLookupDto>.Create(booksLookups, request.Page, request.PageSize);
         }
     }
 }

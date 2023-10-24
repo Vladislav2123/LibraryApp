@@ -4,7 +4,7 @@ using LibraryApp.Domain.Enteties;
 
 namespace LibraryApp.Application.Feauters.Users.Queries.Dto
 {
-	public class UserLookupDto : IMapWith<User>
+	public class UserLookupDto : IMappping
 	{
 		public string Name { get; set; }
 		public DateOnly BirthDate { get; set; }

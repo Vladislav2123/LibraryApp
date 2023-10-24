@@ -38,8 +38,8 @@ namespace LibraryApp.Application.Feauters.Reviews.Queries.GetBookReviews
             }
             else reviewsQuery = reviewsQuery.OrderByDescending(sortingColumnPropertyExpression);
 
-            var reviewsDtosQuery = _mapper.Map<IQueryable<ReviewDto>>(reviewsQuery);
-            return await PagedList<ReviewDto>.CreateAsync(reviewsDtosQuery, request.Page, request.PageSize, cancellationToken);
+            var reviewsDtos = _mapper.Map<List<ReviewDto>>(await reviewsQuery.ToListAsync(cancellationToken));
+            return PagedList<ReviewDto>.Create(reviewsDtos, request.Page, request.PageSize);
         }
 
         private Expression<Func<Review, object>> GetSortingColumnProperty(GetBookReviewsCommand request)

@@ -37,8 +37,8 @@ namespace LibraryApp.Application.Feauters.Users.Queries.GetUsers
 			}
 			else usersQuery.OrderBy(sortingColumnPropertyExpression);
 
-			var usersLookupsQuery = _mapper.Map<IQueryable<UserLookupDto>>(usersQuery);
-			return await PagedList<UserLookupDto>.CreateAsync(usersLookupsQuery, request.Page, request.PageSize, cancellationToken);
+			var usersLookups = _mapper.Map<List<UserLookupDto>>(await usersQuery.ToListAsync(cancellationToken));
+			return PagedList<UserLookupDto>.Create(usersLookups, request.Page, request.PageSize);
 		}
 
 		private Expression<Func<User, object>> GetSortingColumnProperty(GetUsersQuery request)

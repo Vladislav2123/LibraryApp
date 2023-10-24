@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using LibraryApp.Application.Common.Helpers;
 using LibraryApp.Application.Feauters.Authors.Queries.Dto;
-using LibraryApp.Application.Feauters.Authors.Queries.GetAuthor;
 using LibraryApp.Application.Interfaces;
 using LibraryApp.Domain.Enteties;
 using MediatR;
@@ -29,11 +28,11 @@ namespace LibraryApp.Application.Feauters.Authors.Queries.GetAuthors
 				authorsQuery = authorsQuery.Where(author => author.Name.Contains(request.SearchTerms));
 			}
 
-			var authorsLookupsQuery = _mapper.Map<List<AuthorLookupDto>>(await authorsQuery.ToListAsync()).AsQueryable();
-			var authors = await PagedList<AuthorLookupDto>
-				.CreateAsync(authorsLookupsQuery, request.Page, request.Page, cancellationToken);
+			var one = _mapper.Map<AuthorLookupDto>(authorsQuery.First());
+			var authorsLookups = _mapper.Map<List<AuthorLookupDto>>(await authorsQuery.ToListAsync(cancellationToken));
 
-			return authors;
+			return PagedList<AuthorLookupDto>
+				.Create(authorsLookups, request.Page, request.PageSize);
 		}
 	}
 }

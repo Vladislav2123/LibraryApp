@@ -4,7 +4,7 @@ using LibraryApp.Domain.Enteties;
 
 namespace LibraryApp.Application.Feauters.Books.Querries.Dto
 {
-	public class BookLookupDto : IMapWith<Book>
+	public class BookLookupDto : IMappping
 	{
 		public Guid Id { get; set; }
 		public Guid AuthorId { get; set; }

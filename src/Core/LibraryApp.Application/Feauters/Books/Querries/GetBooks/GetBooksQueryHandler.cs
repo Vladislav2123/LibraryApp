@@ -42,8 +42,8 @@ namespace LibraryApp.Application.Feauters.Books.Querries.GetBooks
 			}
 			else booksQuery.OrderByDescending(sortingColumnPropertyExpression);
 
-			var booksLookupsQuery = _mapper.Map<IQueryable<BookLookupDto>>(booksQuery);
-			return await PagedList<BookLookupDto>.CreateAsync(booksLookupsQuery, request.Page, request.PageSize, cancellationToken);
+			var booksLookups = _mapper.Map<List<BookLookupDto>>(booksQuery.ToListAsync(cancellationToken));
+			return PagedList<BookLookupDto>.Create(booksLookups, request.Page, request.PageSize);
 		}
 
 		private Expression<Func<Book, object>> GetSortingColumnProperty(GetBooksQuery request)
