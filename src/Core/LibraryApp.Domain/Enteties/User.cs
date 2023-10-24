@@ -7,7 +7,8 @@
 		public string Email { get; set; }
 		public string Login { get; set; }
 		public string Password { get; set; }
-		public DateTime BirthDate { get; set; }
+		public DateOnly BirthDate { get; set; }
+
 		public ICollection<Book> ReadedBooks { get; set; }
 		public ICollection<Review> Reviews { get; set; }
 	}

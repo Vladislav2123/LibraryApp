@@ -9,6 +9,8 @@ namespace LibraryApp.Application.Common.Mappings
 
 		private void ApplyMappingsFromAssembly(Assembly assembly)
 		{
+			Console.WriteLine("Assembly mapping profile");
+
 			var types = assembly.GetExportedTypes()
 				.Where(type => type.GetInterfaces()
 				.Any(type => type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IMapWith<>)))

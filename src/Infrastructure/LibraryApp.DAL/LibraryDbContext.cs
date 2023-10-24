@@ -2,6 +2,7 @@
 using LibraryApp.Application.Interfaces;
 using LibraryApp.Domain.Enteties;
 using LibraryApp.DAL.EntityTypeConfigurations;
+using LibraryApp.DAL.ValueConverters;
 
 namespace LibraryApp.DAL
 {
@@ -21,10 +22,23 @@ namespace LibraryApp.DAL
 		{
 			base.OnModelCreating(builder);
 
-			builder.ApplyConfiguration(new UserConfiguration());
 			builder.ApplyConfiguration(new AuthorConfiguration());
+			builder.ApplyConfiguration(new UserConfiguration());
 			builder.ApplyConfiguration(new BookConfiguration());
 			builder.ApplyConfiguration(new ReviewConfiguration());
+		}
+
+		protected override void ConfigureConventions(ModelConfigurationBuilder builder)
+		{
+			base.ConfigureConventions(builder);
+
+			builder.Properties<DateOnly>()
+				.HaveConversion<DateOnlyConverter>()
+				.HaveColumnType("date");
+
+			builder.Properties<DateOnly?>()
+				.HaveConversion<DateOnlyNullableConverter>()
+				.HaveColumnType("date");
 		}
 	}
 }

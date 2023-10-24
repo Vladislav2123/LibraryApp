@@ -8,7 +8,6 @@ namespace LibraryApp.DAL.EntityTypeConfigurations
 	{
 		public void Configure(EntityTypeBuilder<User> builder)
 		{
-			
 		}
 	}
 }

@@ -44,7 +44,7 @@ namespace LibraryApp.DAL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("BirthDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -129,7 +129,7 @@ namespace LibraryApp.DAL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("BirthDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -169,26 +169,32 @@ namespace LibraryApp.DAL.Migrations
 
             modelBuilder.Entity("LibraryApp.Domain.Enteties.Book", b =>
                 {
-                    b.HasOne("LibraryApp.Domain.Enteties.Author", null)
+                    b.HasOne("LibraryApp.Domain.Enteties.Author", "Author")
                         .WithMany("Books")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Author");
                 });
 
             modelBuilder.Entity("LibraryApp.Domain.Enteties.Review", b =>
                 {
-                    b.HasOne("LibraryApp.Domain.Enteties.Book", null)
+                    b.HasOne("LibraryApp.Domain.Enteties.Book", "Book")
                         .WithMany("Reviews")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LibraryApp.Domain.Enteties.User", null)
+                    b.HasOne("LibraryApp.Domain.Enteties.User", "User")
                         .WithMany("Reviews")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("LibraryApp.Domain.Enteties.Author", b =>
