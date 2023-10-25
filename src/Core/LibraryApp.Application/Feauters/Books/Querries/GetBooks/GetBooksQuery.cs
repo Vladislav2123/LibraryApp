@@ -10,5 +10,5 @@ namespace LibraryApp.Application.Feauters.Books.Querries.GetBooks
         string? SortColumn, 
         string? SortOrder,
         int Page,
-        int Limit) : IRequest<PagedList<BookLookupDto>>;
+        int PageSize) : IRequest<PagedList<BookLookupDto>>;
 }

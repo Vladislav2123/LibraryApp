@@ -9,5 +9,5 @@ namespace LibraryApp.Application.Feauters.Users.Queries.GetUsers
 		string? SortColumn,
 		string? SortOrder,
 		int Page,
-		int Limit) : IRequest<PagedList<UserLookupDto>>;
+		int PageSize) : IRequest<PagedList<UserLookupDto>>;
 }

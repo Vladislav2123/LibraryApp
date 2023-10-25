@@ -22,9 +22,9 @@ namespace LibraryApp.API.Controllers
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<PagedList<AuthorLookupDto>>> Get(string? search, int page, int limit)
+		public async Task<ActionResult<PagedList<AuthorLookupDto>>> Get(string? search, int page, int pageSize)
 		{
-			var query = new GetAuthorsQuery(search, page, limit);
+			var query = new GetAuthorsQuery(search, page, pageSize);
 			var response = await _mediator.Send(query);
 
 			return Ok(response);

@@ -9,5 +9,5 @@ namespace LibraryApp.Application.Feauters.Reviews.Queries.GetBookReviews
 		string? SortColumn,
 		string? SortOrder,
 		int Page,
-		int Limit) : IRequest<PagedList<ReviewDto>>;
+		int PageSize) : IRequest<PagedList<ReviewDto>>;
 }

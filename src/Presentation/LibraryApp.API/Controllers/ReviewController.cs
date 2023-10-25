@@ -22,9 +22,9 @@ namespace LibraryApp.API.Controllers
 
 		[HttpGet("{id}/reviews")]
 		public async Task<ActionResult<PagedList<ReviewDto>>> Get(
-			Guid id, string? sortColumn, string? sortOrder, int page, int limit)
+			Guid id, string? sortColumn, string? sortOrder, int page, int pageSize)
 		{
-			var query = new GetBookReviewsCommand(id, sortColumn, sortOrder, page, limit);
+			var query = new GetBookReviewsCommand(id, sortColumn, sortOrder, page, pageSize);
 			var response = _mediator.Send(query);
 
 			return Ok(response);
