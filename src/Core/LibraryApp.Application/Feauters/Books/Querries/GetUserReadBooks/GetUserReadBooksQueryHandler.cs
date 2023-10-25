@@ -28,7 +28,7 @@ namespace LibraryApp.Application.Feauters.Books.Querries.GetUserReadBooks
             if(user == null) throw new EntityNotFoundException(nameof(User), request.UserId);
 
             var booksLookups = _mapper.Map<List<BookLookupDto>>(user.ReadedBooks);
-            return PagedList<BookLookupDto>.Create(booksLookups, request.Page, request.Limit);
+            return PagedList<BookLookupDto>.Create(booksLookups, request.Page, request.PageSize);
         }
     }
 }

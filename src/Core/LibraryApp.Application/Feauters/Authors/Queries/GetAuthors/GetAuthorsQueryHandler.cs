@@ -28,11 +28,9 @@ namespace LibraryApp.Application.Feauters.Authors.Queries.GetAuthors
 				authorsQuery = authorsQuery.Where(author => author.Name.Contains(request.SearchTerms));
 			}
 
-			var one = _mapper.Map<AuthorLookupDto>(authorsQuery.First());
 			var authorsLookups = _mapper.Map<List<AuthorLookupDto>>(await authorsQuery.ToListAsync(cancellationToken));
-
 			return PagedList<AuthorLookupDto>
-				.Create(authorsLookups, request.Page, request.PageSize);
+				.Create(authorsLookups, request.Page, request.Limit);
 		}
 	}
 }
