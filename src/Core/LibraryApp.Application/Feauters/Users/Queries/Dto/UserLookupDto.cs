@@ -6,6 +6,7 @@ namespace LibraryApp.Application.Feauters.Users.Queries.Dto
 {
 	public class UserLookupDto : IMappping
 	{
+		public Guid Id { get; set; }
 		public string Name { get; set; }
 		public DateOnly BirthDate { get; set; }
 		public int ReadBooksCount { get; set; }
