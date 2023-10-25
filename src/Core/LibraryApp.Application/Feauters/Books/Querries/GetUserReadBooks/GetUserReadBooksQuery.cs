@@ -7,5 +7,5 @@ namespace LibraryApp.Application.Feauters.Books.Querries.GetUserReadBooks
     public record GetUserReadBooksQuery(
         Guid UserId, 
         int Page, 
-        int PageSize) : IRequest<PagedList<BookLookupDto>>;
+        int Limit) : IRequest<PagedList<BookLookupDto>>;
 }

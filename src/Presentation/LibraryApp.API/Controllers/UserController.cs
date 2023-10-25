@@ -25,9 +25,9 @@ namespace LibraryApp.API.Controllers
 
 		[HttpGet]
 		public async Task<ActionResult<PagedList<UserLookupDto>>> Get(
-			string? search, string? sortColumn, string? sortOrder, int page, int pageSize)
+			string? search, string? sortColumn, string? sortOrder, int page, int limit)
 		{
-			var query = new GetUsersQuery(search, sortColumn, sortOrder, page, pageSize);
+			var query = new GetUsersQuery(search, sortColumn, sortOrder, page, limit);
 			var response = await _mediator.Send(query);
 
 			return Ok(response);
