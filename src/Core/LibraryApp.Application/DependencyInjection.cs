@@ -8,7 +8,6 @@ namespace LibraryApp.Application
 	{
 		public static IServiceCollection AddApplication(this IServiceCollection services)
 		{
-			Console.WriteLine("Adding auto mapper");
 			services.AddAutoMapper(cfg =>
 			{
 				cfg.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));

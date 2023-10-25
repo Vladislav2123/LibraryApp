@@ -7,8 +7,6 @@ namespace LibraryApp.Application.Common.Mappings
 	{
 		public AssemblyMappingProfile(Assembly assembly)
 		{
-			Console.WriteLine("Assembly mapping profile");
-
 			var types = assembly.GetExportedTypes()
 				.Where(type => type.GetInterfaces()
 				.Any(type => type.IsInterface && type == typeof(IMappping)))
