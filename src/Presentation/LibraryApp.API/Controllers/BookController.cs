@@ -45,7 +45,7 @@ namespace LibraryApp.API.Controllers
         {
             var response = await _mediator.Send(command);
 
-            return CreatedAtAction(nameof(GetById), response);
+            return CreatedAtAction(nameof(Create), response);
         }
 
         [HttpPut]

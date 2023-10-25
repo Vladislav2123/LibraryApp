@@ -35,7 +35,7 @@ namespace LibraryApp.API.Controllers
 		{
 			var response = await _mediator.Send(command);
 
-			return CreatedAtAction(nameof(Get), response);
+			return CreatedAtAction(nameof(Create), response);
 		}
 
 		[HttpPut("{id}/reviews")]
