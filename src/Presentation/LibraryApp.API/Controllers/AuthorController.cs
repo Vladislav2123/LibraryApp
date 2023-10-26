@@ -1,4 +1,4 @@
-﻿using LibraryApp.Application.Common.Helpers;
+﻿using LibraryApp.Application.Common.Helpers.Pagination;
 using LibraryApp.Application.Feauters.Authors.Commands.Create;
 using LibraryApp.Application.Feauters.Authors.Commands.Delete;
 using LibraryApp.Application.Feauters.Authors.Commands.Update;
@@ -22,9 +22,9 @@ namespace LibraryApp.API.Controllers
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<PagedList<AuthorLookupDto>>> Get(string? search, int page, int limit)
+		public async Task<ActionResult<PagedList<AuthorLookupDto>>> Get(string? search, int page, int size)
 		{
-			var query = new GetAuthorsQuery(search, page, limit);
+			var query = new GetAuthorsQuery(search, new Page(page, size));
 			var response = await _mediator.Send(query);
 
 			return Ok(response);

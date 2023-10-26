@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
-using LibraryApp.Application.Common.Helpers;
 using LibraryApp.Application.Interfaces;
 using LibraryApp.Domain.Enteties;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using LibraryApp.Application.Feauters.Users.Queries.Dto;
+using LibraryApp.Application.Common.Helpers.Pagination;
 
 namespace LibraryApp.Application.Feauters.Users.Queries.GetUsers
 {
-	public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, PagedList<UserLookupDto>>
+    public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, PagedList<UserLookupDto>>
 	{
 		private readonly ILibraryDbContext _dbContext;
 		private readonly IMapper _mapper;
@@ -38,7 +38,7 @@ namespace LibraryApp.Application.Feauters.Users.Queries.GetUsers
 			else usersQuery.OrderBy(sortingColumnPropertyExpression);
 
 			var usersLookups = _mapper.Map<List<UserLookupDto>>(await usersQuery.ToListAsync(cancellationToken));
-			return PagedList<UserLookupDto>.Create(usersLookups, request.Page, request.Limit);
+			return PagedList<UserLookupDto>.Create(usersLookups, request.Page);
 		}
 
 		private Expression<Func<User, object>> GetSortingColumnProperty(GetUsersQuery request)

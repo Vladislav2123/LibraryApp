@@ -1,6 +1,6 @@
-﻿using LibraryApp.Application.Common.Helpers;
-using MediatR;
+﻿using MediatR;
 using LibraryApp.Application.Feauters.Books.Querries.Dto;
+using LibraryApp.Application.Common.Helpers.Pagination;
 
 namespace LibraryApp.Application.Feauters.Books.Querries.GetBooks
 {
@@ -9,6 +9,5 @@ namespace LibraryApp.Application.Feauters.Books.Querries.GetBooks
         Guid? AuthorId, 
         string? SortColumn, 
         string? SortOrder,
-        int Page,
-        int Limit) : IRequest<PagedList<BookLookupDto>>;
+        Page Page) : IRequest<PagedList<BookLookupDto>>;
 }

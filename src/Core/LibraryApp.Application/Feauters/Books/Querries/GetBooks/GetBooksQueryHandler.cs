@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using LibraryApp.Application.Common.Helpers;
 using LibraryApp.Application.Interfaces;
 using LibraryApp.Domain.Enteties;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using LibraryApp.Application.Feauters.Books.Querries.Dto;
+using LibraryApp.Application.Common.Helpers.Pagination;
 
 namespace LibraryApp.Application.Feauters.Books.Querries.GetBooks
 {
@@ -43,7 +43,7 @@ namespace LibraryApp.Application.Feauters.Books.Querries.GetBooks
 			else booksQuery.OrderByDescending(sortingColumnPropertyExpression);
 
 			var booksLookups = _mapper.Map<List<BookLookupDto>>(await booksQuery.ToListAsync(cancellationToken));
-			return PagedList<BookLookupDto>.Create(booksLookups, request.Page, request.Limit);
+			return PagedList<BookLookupDto>.Create(booksLookups, request.Page);
 		}
 
 		private Expression<Func<Book, object>> GetSortingColumnProperty(GetBooksQuery request)

@@ -1,5 +1,4 @@
-﻿using LibraryApp.Application.Common.Helpers;
-using LibraryApp.Application.Feauters.Books.Querries.Dto;
+﻿using LibraryApp.Application.Feauters.Books.Querries.Dto;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using LibraryApp.Application.Feauters.Books.Querries.GetBooks;
@@ -7,6 +6,7 @@ using LibraryApp.Application.Feauters.Books.Querries.GetBook;
 using LibraryApp.Application.Feauters.Books.Commands.Create;
 using LibraryApp.Application.Feauters.Books.Commands.Update;
 using LibraryApp.Application.Feauters.Books.Commands.Delete;
+using LibraryApp.Application.Common.Helpers.Pagination;
 
 namespace LibraryApp.API.Controllers
 {
@@ -23,9 +23,9 @@ namespace LibraryApp.API.Controllers
 
         [HttpGet]
         public async Task<ActionResult<PagedList<BookLookupDto>>> Get(
-            string? search, Guid? author, string? sortColumn, string? sortOrder, int page, int limit)
+            string? search, Guid? author, string? sortColumn, string? sortOrder, int page, int size)
         {
-            var query = new GetBooksQuery(search, author, sortColumn, sortOrder, page, limit);
+            var query = new GetBooksQuery(search, author, sortColumn, sortOrder, new Page(page, size));
             var response = await _mediator.Send(query);
 
             return Ok(response);

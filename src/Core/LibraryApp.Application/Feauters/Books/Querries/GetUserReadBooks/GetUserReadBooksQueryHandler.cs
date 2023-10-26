@@ -5,11 +5,11 @@ using LibraryApp.Domain.Enteties;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Feauters.Books.Querries.Dto;
-using LibraryApp.Application.Common.Helpers;
+using LibraryApp.Application.Common.Helpers.Pagination;
 
 namespace LibraryApp.Application.Feauters.Books.Querries.GetUserReadBooks
 {
-	public class GetUserReadBooksQueryHandler : IRequestHandler<GetUserReadBooksQuery, PagedList<BookLookupDto>>
+    public class GetUserReadBooksQueryHandler : IRequestHandler<GetUserReadBooksQuery, PagedList<BookLookupDto>>
 	{
 		private readonly ILibraryDbContext _dbContext;
 		private readonly IMapper _mapper;
@@ -28,7 +28,7 @@ namespace LibraryApp.Application.Feauters.Books.Querries.GetUserReadBooks
             if(user == null) throw new EntityNotFoundException(nameof(User), request.UserId);
 
             var booksLookups = _mapper.Map<List<BookLookupDto>>(user.ReadedBooks);
-            return PagedList<BookLookupDto>.Create(booksLookups, request.Page, request.Limit);
+            return PagedList<BookLookupDto>.Create(booksLookups, request.Page);
         }
     }
 }

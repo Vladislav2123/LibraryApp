@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using LibraryApp.Application.Common.Helpers;
+using LibraryApp.Application.Common.Helpers.Pagination;
 using LibraryApp.Application.Feauters.Authors.Queries.Dto;
 using LibraryApp.Application.Interfaces;
 using LibraryApp.Domain.Enteties;
@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LibraryApp.Application.Feauters.Authors.Queries.GetAuthors
 {
-	public class GetAuthorsQueryHandler : IRequestHandler<GetAuthorsQuery, PagedList<AuthorLookupDto>>
+    public class GetAuthorsQueryHandler : IRequestHandler<GetAuthorsQuery, PagedList<AuthorLookupDto>>
 	{
 		private readonly ILibraryDbContext _dbContext;
 		private readonly IMapper _mapper;
@@ -29,8 +29,7 @@ namespace LibraryApp.Application.Feauters.Authors.Queries.GetAuthors
 			}
 
 			var authorsLookups = _mapper.Map<List<AuthorLookupDto>>(await authorsQuery.ToListAsync(cancellationToken));
-			return PagedList<AuthorLookupDto>
-				.Create(authorsLookups, request.Page, request.Limit);
+			return PagedList<AuthorLookupDto>.Create(authorsLookups, request.Page);
 		}
 	}
 }

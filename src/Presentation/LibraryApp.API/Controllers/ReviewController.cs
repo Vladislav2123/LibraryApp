@@ -1,4 +1,4 @@
-﻿using LibraryApp.Application.Common.Helpers;
+﻿using LibraryApp.Application.Common.Helpers.Pagination;
 using LibraryApp.Application.Feauters.Reviews.Commands.Create;
 using LibraryApp.Application.Feauters.Reviews.Commands.Delete;
 using LibraryApp.Application.Feauters.Reviews.Commands.Update;
@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryApp.API.Controllers
 {
-	[ApiController]
+    [ApiController]
 	[Route("api/books")]
 	public class ReviewController : ControllerBase
 	{
@@ -22,9 +22,9 @@ namespace LibraryApp.API.Controllers
 
 		[HttpGet("{id}/reviews")]
 		public async Task<ActionResult<PagedList<ReviewDto>>> Get(
-			Guid id, string? sortColumn, string? sortOrder, int page, int limit)
+			Guid id, string? sortColumn, string? sortOrder, int page, int size)
 		{
-			var query = new GetBookReviewsQuery(id, sortColumn, sortOrder, page, limit);
+			var query = new GetBookReviewsQuery(id, sortColumn, sortOrder, new Page(page, size));
 			var response = _mediator.Send(query);
 
 			return Ok(response);

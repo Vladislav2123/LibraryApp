@@ -1,11 +1,10 @@
 ﻿using MediatR;
 using LibraryApp.Application.Feauters.Books.Querries.Dto;
-using LibraryApp.Application.Common.Helpers;
+using LibraryApp.Application.Common.Helpers.Pagination;
 
 namespace LibraryApp.Application.Feauters.Books.Querries.GetUserReadBooks
 {
     public record GetUserReadBooksQuery(
         Guid UserId, 
-        int Page, 
-        int Limit) : IRequest<PagedList<BookLookupDto>>;
+        Page Page) : IRequest<PagedList<BookLookupDto>>;
 }

@@ -1,4 +1,4 @@
-﻿using LibraryApp.Application.Common.Helpers;
+﻿using LibraryApp.Application.Common.Helpers.Pagination;
 using LibraryApp.Application.Feauters.Books.Querries.Dto;
 using LibraryApp.Application.Feauters.Books.Querries.GetUserReadBooks;
 using LibraryApp.Application.Feauters.Users.Commands.Create;
@@ -25,9 +25,9 @@ namespace LibraryApp.API.Controllers
 
 		[HttpGet]
 		public async Task<ActionResult<PagedList<UserLookupDto>>> Get(
-			string? search, string? sortColumn, string? sortOrder, int page, int limit)
+			string? search, string? sortColumn, string? sortOrder, int page, int size)
 		{
-			var query = new GetUsersQuery(search, sortColumn, sortOrder, page, limit);
+			var query = new GetUsersQuery(search, sortColumn, sortOrder, new Page(page, size));
 			var response = await _mediator.Send(query);
 
 			return Ok(response);
@@ -43,9 +43,9 @@ namespace LibraryApp.API.Controllers
 		}
 
 		[HttpGet("{id}/books")]
-		public async Task<ActionResult<PagedList<BookLookupDto>>> GetReadedBooks(Guid id, int page, int limit)
+		public async Task<ActionResult<PagedList<BookLookupDto>>> GetReadedBooks(Guid id, int page, int size)
 		{
-			var query = new GetUserReadBooksQuery(id, page, limit);
+			var query = new GetUserReadBooksQuery(id, new Page(page, size));
 			var response = await _mediator.Send(query);
 
 			return Ok(response);

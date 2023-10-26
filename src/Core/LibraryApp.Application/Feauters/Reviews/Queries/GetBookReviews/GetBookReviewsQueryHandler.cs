@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using LibraryApp.Application.Common.Exceptions;
-using LibraryApp.Application.Common.Helpers;
+using LibraryApp.Application.Common.Helpers.Pagination;
 using LibraryApp.Application.Feauters.Reviews.Queries.Dto;
 using LibraryApp.Application.Interfaces;
 using LibraryApp.Domain.Enteties;
@@ -39,7 +39,7 @@ namespace LibraryApp.Application.Feauters.Reviews.Queries.GetBookReviews
             else reviewsQuery = reviewsQuery.OrderByDescending(sortingColumnPropertyExpression);
 
             var reviewsDtos = _mapper.Map<List<ReviewDto>>(await reviewsQuery.ToListAsync(cancellationToken));
-            return PagedList<ReviewDto>.Create(reviewsDtos, request.Page, request.Limit);
+            return PagedList<ReviewDto>.Create(reviewsDtos, request.Page);
         }
 
         private Expression<Func<Review, object>> GetSortingColumnProperty(GetBookReviewsQuery request)
