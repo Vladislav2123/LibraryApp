@@ -42,7 +42,7 @@ namespace LibraryApp.Application.Feauters.Books.Querries.GetBooks
 			}
 			else booksQuery.OrderByDescending(sortingColumnPropertyExpression);
 
-			var booksLookups = _mapper.Map<List<BookLookupDto>>(booksQuery.ToListAsync(cancellationToken));
+			var booksLookups = _mapper.Map<List<BookLookupDto>>(await booksQuery.ToListAsync(cancellationToken));
 			return PagedList<BookLookupDto>.Create(booksLookups, request.Page, request.Limit);
 		}
 
