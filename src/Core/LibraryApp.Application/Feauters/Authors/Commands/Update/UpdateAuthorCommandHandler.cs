@@ -18,7 +18,6 @@ namespace LibraryApp.Application.Feauters.Authors.Commands.Update
 		public async Task<Unit> Handle(UpdateAuthorCommand command, CancellationToken cancellationToken)
 		{
 			var author = await _dbContext.Authors.FirstOrDefaultAsync(author => author.Id == command.Id);
-
 			if (author == null) throw new EntityNotFoundException(nameof(Author), command.Id);
 
 			author.Name = command.Name;
