@@ -43,9 +43,9 @@ namespace LibraryApp.API.Controllers
 		}
 
 		[HttpGet("{id}/books")]
-		public async Task<ActionResult<PagedList<BookLookupDto>>> GetReadedBooks(Guid id, int page, int pageSize)
+		public async Task<ActionResult<PagedList<BookLookupDto>>> GetReadedBooks(Guid id, int page, int limit)
 		{
-			var query = new GetUserReadBooksQuery(id, page, pageSize);
+			var query = new GetUserReadBooksQuery(id, page, limit);
 			var response = await _mediator.Send(query);
 
 			return Ok(response);
