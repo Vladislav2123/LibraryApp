@@ -4,7 +4,7 @@ using MediatR;
 
 namespace LibraryApp.Application.Feauters.Reviews.Queries.GetBookReviews
 {
-	public record GetBookReviewsCommand(
+	public record GetBookReviewsQuery(
 		Guid BookId,
 		string? SortColumn,
 		string? SortOrder,

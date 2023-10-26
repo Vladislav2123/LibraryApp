@@ -10,18 +10,18 @@ using System.Linq.Expressions;
 
 namespace LibraryApp.Application.Feauters.Reviews.Queries.GetBookReviews
 {
-    public class GetBookReviewsCommandHandler : IRequestHandler<GetBookReviewsCommand, PagedList<ReviewDto>>
+    public class GetBookReviewsQueryHandler : IRequestHandler<GetBookReviewsQuery, PagedList<ReviewDto>>
     {
         private readonly ILibraryDbContext _dbContext;
         private readonly IMapper _mapper;
 
-        public GetBookReviewsCommandHandler(ILibraryDbContext dbContext, IMapper mapper)
+        public GetBookReviewsQueryHandler(ILibraryDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
         }
 
-        public async Task<PagedList<ReviewDto>> Handle(GetBookReviewsCommand request, CancellationToken cancellationToken)
+        public async Task<PagedList<ReviewDto>> Handle(GetBookReviewsQuery request, CancellationToken cancellationToken)
         {
             var book = await _dbContext.Books
                 .Include(book => book.Reviews)
@@ -42,7 +42,7 @@ namespace LibraryApp.Application.Feauters.Reviews.Queries.GetBookReviews
             return PagedList<ReviewDto>.Create(reviewsDtos, request.Page, request.Limit);
         }
 
-        private Expression<Func<Review, object>> GetSortingColumnProperty(GetBookReviewsCommand request)
+        private Expression<Func<Review, object>> GetSortingColumnProperty(GetBookReviewsQuery request)
         {
             return request.SortColumn?.ToLower() switch
             {
