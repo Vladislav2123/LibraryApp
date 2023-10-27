@@ -23,6 +23,8 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Create
 				Description = command.Description,
 				Year = command.Year,
 				Text = command.Text,
+				CreationDate = DateTime.Now,
+				CreatedUserId = command.UserId
 			};
 
 			await _dbContext.Books.AddAsync(newBook, cancellationToken);

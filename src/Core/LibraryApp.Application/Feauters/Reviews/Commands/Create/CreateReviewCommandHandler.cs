@@ -28,10 +28,10 @@ namespace LibraryApp.Application.Feauters.Reviews.Commands.Create
                 Id = Guid.NewGuid(),
                 UserId = user.Id,
                 BookId = book.Id,
-                Date = DateTime.Now,
                 Rating = command.Rating,
                 Title = command.Title,
                 Text = command.Text
+                CreationDate = DateTime.Now,
             };
 
             await _dbContext.Reviews.AddAsync(newReview, cancellationToken);

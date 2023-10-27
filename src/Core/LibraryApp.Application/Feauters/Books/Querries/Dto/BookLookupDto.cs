@@ -10,13 +10,13 @@ namespace LibraryApp.Application.Feauters.Books.Querries.Dto
 		public Guid AuthorId { get; set; }
 		public string Name { get; set; }
 		public string Year { get; set; }
-		public int ReadUsersCount { get; set; }
+		public int ReadersCount { get; set; }
 
 		public void CreateMap(Profile profile)
 		{
 			profile.CreateMap<Book, BookLookupDto>()
-				.ForMember(dest => dest.ReadUsersCount,
-					opt => opt.MapFrom(src => src.ReadUsers.Select(user => user.Id)));
+				.ForMember(dest => dest.ReadersCount,
+					opt => opt.MapFrom(src => src.Readers.Count));
 		}
 	}
 }

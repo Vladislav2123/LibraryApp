@@ -7,13 +7,18 @@
 		public string Description { get; set; }
 		public int Year { get; set; }
 		public string Text { get; set; }
+		//public float Rating { get; set; }
+
+		public DateTime CreationDate { get; set; }
+
+		public Guid CreatedUserId { get; set; }
+		public User CreatedUser { get; set; }
 
 		public Guid AuthorId { get; set; }
 		public Author Author { get; set; }
 
-		public ICollection<User> ReadUsers { get; set; }
+		public ICollection<User> Readers { get; set; }
 
 		public ICollection<Review> Reviews { get; set; }
-		//public float Rating { get; set; }
 	}
 }

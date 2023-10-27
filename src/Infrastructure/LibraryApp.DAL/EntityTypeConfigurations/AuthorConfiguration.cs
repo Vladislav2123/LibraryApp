@@ -10,12 +10,18 @@ namespace LibraryApp.DAL.EntityTypeConfigurations
 		{
 			builder.HasKey(author => author.Id);
 
+			builder.Property(author => author.CreatedUserId)
+				.IsRequired();
+
 			builder.Property(author => author.Name)
 				.HasMaxLength(50)
 				.IsRequired();
 
 			builder.Property(author => author.BirthDate)
 				.HasColumnType("date");
+
+			builder.Property(author => author.CreationDate)
+				.IsRequired();
 		}
 	}
 }

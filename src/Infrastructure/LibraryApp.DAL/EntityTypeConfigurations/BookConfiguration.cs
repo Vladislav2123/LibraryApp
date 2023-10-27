@@ -10,6 +10,9 @@ namespace LibraryApp.DAL.EntityTypeConfigurations
 		{
 			builder.HasKey(book => book.Id);
 
+			builder.Property(book => book.CreatedUserId)
+				.IsRequired();
+
 			builder.Property(book => book.Name)
 				.HasMaxLength(50)
 				.IsRequired();
@@ -19,6 +22,9 @@ namespace LibraryApp.DAL.EntityTypeConfigurations
 
 			builder.Property(book => book.Year)
 				.HasMaxLength(4);
+
+			builder.Property(book => book.CreationDate)
+				.IsRequired();
 		}
 	}
 }

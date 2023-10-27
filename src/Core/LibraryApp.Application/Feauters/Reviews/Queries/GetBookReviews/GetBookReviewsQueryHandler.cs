@@ -46,7 +46,7 @@ namespace LibraryApp.Application.Feauters.Reviews.Queries.GetBookReviews
         {
             return request.SortColumn?.ToLower() switch
             {
-                "date" => review => review.Date,
+                "date" => review => review.CreationDate,
                 _ => review => review.Rating
             };
         }

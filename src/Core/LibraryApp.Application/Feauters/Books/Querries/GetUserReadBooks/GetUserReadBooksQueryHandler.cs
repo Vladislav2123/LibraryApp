@@ -22,12 +22,12 @@ namespace LibraryApp.Application.Feauters.Books.Querries.GetUserReadBooks
 
         public async Task<PagedList<BookLookupDto>> Handle(GetUserReadBooksQuery request, CancellationToken cancellationToken)
         {
-            User user = await _dbContext.Users.Include(user => user.ReadedBooks)
+            User user = await _dbContext.Users.Include(user => user.ReadBooks)
                 .FirstOrDefaultAsync(user => user.Id == request.UserId, cancellationToken);
             
             if(user == null) throw new EntityNotFoundException(nameof(User), request.UserId);
 
-            var booksLookups = _mapper.Map<List<BookLookupDto>>(user.ReadedBooks);
+            var booksLookups = _mapper.Map<List<BookLookupDto>>(user.ReadBooks);
             return PagedList<BookLookupDto>.Create(booksLookups, request.Page);
         }
     }

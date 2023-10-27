@@ -3,7 +3,8 @@
 namespace LibraryApp.Application.Feauters.Books.Commands.Update
 {
 	public record UpdateBookCommand(
-		Guid Id,
+		Guid UserId,
+		Guid BookId,
 		Guid AuthorId,
 		string Name,
 		string Description,

@@ -58,7 +58,7 @@ namespace LibraryApp.API.Controllers
 		[HttpDelete("{id}")]
 		public async Task<ActionResult> Delete(Guid id)
 		{
-			var command = new DeleteAuthorCommand(id);
+			var command = new DeleteAuthorCommand(Guid.NewGuid(), id);
 			await _mediator.Send(command);
 
 			return NoContent();

@@ -28,7 +28,9 @@ namespace LibraryApp.Application.Feauters.Authors.Commands.Create
 			{
 				Id = Guid.NewGuid(),
 				Name = request.Name,
-				BirthDate = request.BirthDate
+				BirthDate = request.BirthDate,
+				CreationDate = DateTime.Now,
+				CreatedUserId = request.UserId
 			};
 
 			await _dbContext.Authors.AddAsync(author, cancellationToken);

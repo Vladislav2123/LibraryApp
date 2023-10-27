@@ -22,7 +22,7 @@ namespace LibraryApp.Application.Feauters.Books.Querries.GetBooks
 
         public async Task<PagedList<BookLookupDto>> Handle(GetBooksQuery request, CancellationToken cancellationToken)
 		{
-			IQueryable<Book> booksQuery = _dbContext.Books.Include(book => book.ReadUsers);
+			IQueryable<Book> booksQuery = _dbContext.Books.Include(book => book.Readers);
 			
 			if(string.IsNullOrWhiteSpace(request.SearchTerms) == false)
 			{
@@ -52,7 +52,7 @@ namespace LibraryApp.Application.Feauters.Books.Querries.GetBooks
 			{
 				"name" => book => book.Name,
 				"year" => book => book.Year,
-				_ => book => book.ReadUsers.Count,
+				_ => book => book.Readers.Count,
 			};
 
 			return expression;

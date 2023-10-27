@@ -8,6 +8,11 @@ namespace LibraryApp.DAL.EntityTypeConfigurations
 	{
 		public void Configure(EntityTypeBuilder<Review> builder)
 		{
+			builder.HasKey(review => review.Id);
+
+			builder.Property(review => review.UserId)
+				.IsRequired();
+
 			builder.Property(review => review.Rating)
 				.HasPrecision(5)
 				.IsRequired();
@@ -17,6 +22,8 @@ namespace LibraryApp.DAL.EntityTypeConfigurations
 
 			builder.Property(review => review.Text)
 				.HasMaxLength(1000);
+
+			builder.Property(review => review.CreationDate);
 		}
 	}
 }

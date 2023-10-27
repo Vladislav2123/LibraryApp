@@ -2,5 +2,7 @@
 
 namespace LibraryApp.Application.Feauters.Books.Commands.Delete
 {
-	public record DeleteBookCommand(Guid Id) : IRequest<Unit>;
+	public record DeleteBookCommand(
+		Guid UserId,
+		Guid BookId) : IRequest<Unit>;
 }

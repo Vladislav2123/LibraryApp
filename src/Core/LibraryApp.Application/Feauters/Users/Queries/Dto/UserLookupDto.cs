@@ -15,7 +15,7 @@ namespace LibraryApp.Application.Feauters.Users.Queries.Dto
 		{
 			profile.CreateMap<User, UserLookupDto>()
 				.ForMember(dest => dest.ReadBooksCount,
-					opt => opt.MapFrom(src => src.ReadedBooks.Count));
+					opt => opt.MapFrom(src => src.ReadBooks.Count));
 		}
 	}
 }

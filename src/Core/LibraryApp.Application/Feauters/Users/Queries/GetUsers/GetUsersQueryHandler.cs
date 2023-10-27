@@ -22,7 +22,7 @@ namespace LibraryApp.Application.Feauters.Users.Queries.GetUsers
 
 		public async Task<PagedList<UserLookupDto>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
 		{
-			IQueryable<User> usersQuery = _dbContext.Users.Include(user => user.ReadedBooks);
+			IQueryable<User> usersQuery = _dbContext.Users.Include(user => user.ReadBooks);
 
 			if(string.IsNullOrWhiteSpace(request.SearchTerms) == false)
 			{
@@ -47,7 +47,7 @@ namespace LibraryApp.Application.Feauters.Users.Queries.GetUsers
 			{
 				"name" => user => user.Name,
 				"age" => user => user.BirthDate,
-				_ => user => user.ReadedBooks.Count
+				_ => user => user.ReadBooks.Count
 			};
 
 			return expression;

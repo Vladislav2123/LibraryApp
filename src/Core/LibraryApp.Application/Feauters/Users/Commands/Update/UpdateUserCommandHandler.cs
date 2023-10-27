@@ -23,7 +23,6 @@ namespace LibraryApp.Application.Feauters.Users.Commands.Update
 
             user.Name = command.Name;
             user.Email = command.Email;
-            user.Login = command.Login;
             user.BirthDate = command.BirthDate;
 
             await _dbContext.SaveChangesAsync(cancellationToken);

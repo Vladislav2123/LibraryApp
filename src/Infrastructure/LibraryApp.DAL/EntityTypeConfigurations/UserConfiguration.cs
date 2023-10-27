@@ -20,10 +20,6 @@ namespace LibraryApp.DAL.EntityTypeConfigurations
 			builder.HasIndex(user => user.Email)
 				.IsUnique();
 
-			builder.Property(user => user.Login)
-				.HasMaxLength(50)
-				.IsRequired();
-
 			builder.Property(user => user.Password)
 				.HasMaxLength(50)
 				.IsRequired();
@@ -31,6 +27,9 @@ namespace LibraryApp.DAL.EntityTypeConfigurations
 			builder.Property(user => user.BirthDate)
 				.IsRequired()
 				.HasColumnType("date");
+
+			builder.Property(user => user.CreationDate)
+				.IsRequired();
 		}
 	}
 }

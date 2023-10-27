@@ -6,6 +6,5 @@ namespace LibraryApp.Application.Feauters.Users.Commands.Update
 		Guid Id,
 		string Name,
 		string Email,
-		string Login,
 		DateOnly BirthDate) : IRequest<Unit>;
 }

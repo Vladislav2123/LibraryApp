@@ -20,9 +20,9 @@ namespace LibraryApp.Application.Feauters.Users.Commands.Create
                 Id = Guid.NewGuid(),
                 Name = command.Name,
                 Email = command.Email,
-                Login = command.Login,
                 Password = command.Password,
                 BirthDate = command.BirthDate,
+                CreationDate = DateTime.Now
             };
 
             await _dbContext.Users.AddAsync(newUser, cancellationToken);
