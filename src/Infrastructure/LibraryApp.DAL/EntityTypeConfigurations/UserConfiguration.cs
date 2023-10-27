@@ -30,6 +30,10 @@ namespace LibraryApp.DAL.EntityTypeConfigurations
 
 			builder.Property(user => user.CreationDate)
 				.IsRequired();
+
+			builder.Property(user => user.Role)
+				.IsRequired(true)
+				.HasConversion(r => r.ToString(), sr => Enum.Parse<UserRole>(sr));
 		}
 	}
 }

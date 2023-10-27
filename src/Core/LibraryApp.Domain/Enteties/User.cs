@@ -8,10 +8,17 @@
 		public string Password { get; set; }
 		public DateOnly BirthDate { get; set; }
 		public DateTime CreationDate { get; set; }
+		public UserRole Role { get; set; }
 
 		public ICollection<Author> CreatedAuthors { get; set; }
 		public ICollection<Book> CreatedBooks { get; set; }
 		public ICollection<Book> ReadBooks { get; set; }
 		public ICollection<Review> Reviews { get; set; }
+	}
+
+	public enum UserRole
+	{
+		Default,
+		Administrator
 	}
 }
