@@ -8,7 +8,17 @@ namespace LibraryApp.DAL.EntityTypeConfigurations
 	{
 		public void Configure(EntityTypeBuilder<Book> builder)
 		{
-			builder.Property(b => b.Name).HasMaxLength(256);
+			builder.HasKey(book => book.Id);
+
+			builder.Property(book => book.Name)
+				.HasMaxLength(50)
+				.IsRequired();
+
+			builder.Property(book => book.Description)
+				.HasMaxLength(1000);
+
+			builder.Property(book => book.Year)
+				.HasMaxLength(4);
 		}
 	}
 }

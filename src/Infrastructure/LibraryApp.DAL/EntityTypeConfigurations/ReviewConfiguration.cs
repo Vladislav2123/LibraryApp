@@ -8,8 +8,15 @@ namespace LibraryApp.DAL.EntityTypeConfigurations
 	{
 		public void Configure(EntityTypeBuilder<Review> builder)
 		{
-			builder.Property(r => r.Rating).HasMaxLength(5);
-			builder.Property(r => r.Title).HasMaxLength(256);
+			builder.Property(review => review.Rating)
+				.HasPrecision(5)
+				.IsRequired();
+
+			builder.Property(review => review.Title)
+				.HasMaxLength(50);
+
+			builder.Property(review => review.Text)
+				.HasMaxLength(1000);
 		}
 	}
 }

@@ -8,6 +8,14 @@ namespace LibraryApp.DAL.EntityTypeConfigurations
 	{
 		public void Configure(EntityTypeBuilder<Author> builder)
 		{
+			builder.HasKey(author => author.Id);
+
+			builder.Property(author => author.Name)
+				.HasMaxLength(50)
+				.IsRequired();
+
+			builder.Property(author => author.BirthDate)
+				.HasColumnType("date");
 		}
 	}
 }
