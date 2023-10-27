@@ -1,6 +1,8 @@
 ﻿using LibraryApp.Application.Common.Helpers.Pagination;
 using LibraryApp.Application.Feauters.Books.Querries.Dto;
 using LibraryApp.Application.Feauters.Books.Querries.GetUserReadBooks;
+using LibraryApp.Application.Feauters.Reviews.Queries.Dto;
+using LibraryApp.Application.Feauters.Reviews.Queries.GetUserReviews;
 using LibraryApp.Application.Feauters.Users.Commands.Create;
 using LibraryApp.Application.Feauters.Users.Commands.Delete;
 using LibraryApp.Application.Feauters.Users.Commands.Update;
@@ -49,6 +51,15 @@ namespace LibraryApp.API.Controllers
 			var response = await _mediator.Send(query);
 
 			return Ok(response);
+		}
+
+		[HttpGet("{id}/reviews")]
+		public async Task<ActionResult<PagedList<ReviewDto>>> GetReviews(Guid id, int page, int size)
+		{
+			var query = new GetUserReviewsQuery(id, new Page(page, size));
+			var resopnse = await _mediator.Send(query);
+
+			return Ok(resopnse);
 		}
 
 		[HttpPost]

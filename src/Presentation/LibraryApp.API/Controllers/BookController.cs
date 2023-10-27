@@ -7,6 +7,8 @@ using LibraryApp.Application.Feauters.Books.Commands.Create;
 using LibraryApp.Application.Feauters.Books.Commands.Update;
 using LibraryApp.Application.Feauters.Books.Commands.Delete;
 using LibraryApp.Application.Common.Helpers.Pagination;
+using LibraryApp.Application.Feauters.Reviews.Queries.Dto;
+using LibraryApp.Application.Feauters.Reviews.Queries.GetBookReviews;
 
 namespace LibraryApp.API.Controllers
 {
@@ -35,6 +37,15 @@ namespace LibraryApp.API.Controllers
         public async Task<ActionResult<BookDto>> GetById(Guid id)
         {
             var query = new GetBookQuery(id);
+            var response = await _mediator.Send(query);
+
+            return Ok(response);
+        }
+
+        [HttpGet("{id}/reviews")]
+        public async Task<ActionResult<PagedList<ReviewDto>>> GetReviews(Guid id, string sortColumn, string sortOrder, int page, int size)
+        {
+            var query = new GetBookReviewsQuery(id, sortColumn, sortOrder, new Page(page, size));
             var response = await _mediator.Send(query);
 
             return Ok(response);
