@@ -32,7 +32,7 @@ namespace LibraryApp.DAL.EntityTypeConfigurations
 				.IsRequired();
 
 			builder.Property(user => user.Role)
-				.IsRequired(true)
+				.IsRequired()
 				.HasConversion(r => r.ToString(), sr => Enum.Parse<UserRole>(sr));
 
 			builder.HasMany(user => user.ReadBooks)

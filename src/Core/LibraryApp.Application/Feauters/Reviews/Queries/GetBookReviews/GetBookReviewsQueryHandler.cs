@@ -29,7 +29,7 @@ namespace LibraryApp.Application.Feauters.Reviews.Queries.GetBookReviews
 
             if (book == null) throw new EntityNotFoundException(nameof(Book), request.BookId);
 
-            IQueryable<Review>reviewsQuery = book.Reviews.AsQueryable();
+            IQueryable<Review> reviewsQuery = book.Reviews.AsQueryable();
 
             var sortingColumnPropertyExpression = GetSortingColumnProperty(request);
             if (request.SortOrder?.ToLower() == "asc")
@@ -38,7 +38,7 @@ namespace LibraryApp.Application.Feauters.Reviews.Queries.GetBookReviews
             }
             else reviewsQuery = reviewsQuery.OrderByDescending(sortingColumnPropertyExpression);
 
-            var reviewsDtos = _mapper.Map<List<ReviewDto>>(await reviewsQuery.ToListAsync(cancellationToken));
+            var reviewsDtos = _mapper.Map<List<ReviewDto>>(reviewsQuery.ToList());
             return PagedList<ReviewDto>.Create(reviewsDtos, request.Page);
         }
 

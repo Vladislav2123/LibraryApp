@@ -12,7 +12,7 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Update
 
 		public UpdateBookCommandHandler(ILibraryDbContext dbContext)
 		{
-			_dbContext = _dbContext;
+			_dbContext = dbContext;
 		}
 
 		public async Task<Unit> Handle(UpdateBookCommand command, CancellationToken cancellationToken)

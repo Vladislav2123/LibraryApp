@@ -30,7 +30,7 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Create
 			await _dbContext.Books.AddAsync(newBook, cancellationToken);
 			await _dbContext.SaveChangesAsync(cancellationToken);
 
-			return Guid.NewGuid();
+			return newBook.Id;
 		}
 	}
 }

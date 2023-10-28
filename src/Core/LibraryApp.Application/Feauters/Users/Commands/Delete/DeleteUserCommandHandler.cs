@@ -17,10 +17,13 @@ namespace LibraryApp.Application.Feauters.Users.Commands.Delete
 
         public async Task<Unit> Handle(DeleteUserCommand command, CancellationToken cancellationToken)
         {
-            User user = await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == command.Id);
+            User user = await _dbContext.Users
+                .Include(user => user.CreatedAuthors)
+                .FirstOrDefaultAsync(user => user.Id == command.Id);
 
             if (user == null) throw new EntityNotFoundException(nameof(User), command.Id);
 
+            _dbContext.Authors.RemoveRange(user.CreatedAuthors);
             _dbContext.Users.Remove(user);
             await _dbContext.SaveChangesAsync(cancellationToken);
 

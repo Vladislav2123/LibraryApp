@@ -32,7 +32,7 @@ namespace LibraryApp.Application.Feauters.Reviews.Queries.GetUserReviews
 
 			reviewsQuery.OrderByDescending(user => user.CreationDate);
 
-			var reviewsDtos = _mapper.Map<List<ReviewDto>>(await reviewsQuery.ToListAsync(cancellationToken));
+			var reviewsDtos = _mapper.Map<List<ReviewDto>>(reviewsQuery.ToList());
 			return PagedList<ReviewDto>.Create(reviewsDtos, request.Page);
 		}
 	}

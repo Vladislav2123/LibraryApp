@@ -43,7 +43,7 @@ namespace LibraryApp.API.Controllers
         }
 
         [HttpGet("{id}/reviews")]
-        public async Task<ActionResult<PagedList<ReviewDto>>> GetReviews(Guid id, string sortColumn, string sortOrder, int page, int size)
+        public async Task<ActionResult<PagedList<ReviewDto>>> GetReviews(Guid id, string? sortColumn, string? sortOrder, int page, int size)
         {
             var query = new GetBookReviewsQuery(id, sortColumn, sortOrder, new Page(page, size));
             var response = await _mediator.Send(query);
@@ -67,10 +67,9 @@ namespace LibraryApp.API.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        [HttpDelete()]
+        public async Task<ActionResult> Delete(DeleteBookCommand command)
         {
-            var command = new DeleteBookCommand(Guid.NewGuid(), id);
             await _mediator.Send(command);
 
             return NoContent();
