@@ -1,4 +1,5 @@
 ﻿using LibraryApp.Application.Common.Exceptions;
+using LibraryApp.Application.Feauters.Reviews.Notifications.BookReviewsUpdated;
 using LibraryApp.Application.Interfaces;
 using LibraryApp.Domain.Enteties;
 using MediatR;
@@ -9,10 +10,12 @@ namespace LibraryApp.Application.Feauters.Reviews.Commands.Update
 	public class UpdateReviewCommandHandler : IRequestHandler<UpdateReviewCommand, Unit>
 	{
 		private readonly ILibraryDbContext _dbContext;
+		private readonly IPublisher _publisher;
 
-		public UpdateReviewCommandHandler(ILibraryDbContext dbContext)
+		public UpdateReviewCommandHandler(ILibraryDbContext dbContext, IPublisher publisher)
 		{
 			_dbContext = dbContext;
+			_publisher = publisher;
 		}
 
 		public async Task<Unit> Handle(UpdateReviewCommand command, CancellationToken cancellationToken)
@@ -26,6 +29,8 @@ namespace LibraryApp.Application.Feauters.Reviews.Commands.Update
 			review.Text = command.Text;
 
 			await _dbContext.SaveChangesAsync(cancellationToken);
+
+			await _publisher.Publish(new BookReviewsUpdatedEvent(review.BookId));
 
 			return Unit.Value;
 		}
