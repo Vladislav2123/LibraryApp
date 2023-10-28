@@ -22,7 +22,8 @@ namespace LibraryApp.Application.Feauters.Users.Commands.Create
                 Email = command.Email,
                 Password = command.Password,
                 BirthDate = command.BirthDate,
-                CreationDate = DateTime.Now
+                CreationDate = DateTime.Now,
+                Role = UserRole.Default
             };
 
             await _dbContext.Users.AddAsync(newUser, cancellationToken);
