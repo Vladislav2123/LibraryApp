@@ -30,7 +30,7 @@ namespace LibraryApp.Application.Feauters.Reviews.Queries.GetUserReviews
 
 			IQueryable<Review> reviewsQuery = user.Reviews.AsQueryable();
 
-			reviewsQuery.OrderByDescending(user => user.CreationDate);
+			reviewsQuery = reviewsQuery.OrderByDescending(user => user.CreationDate);
 
 			var reviewsDtos = _mapper.Map<List<ReviewDto>>(reviewsQuery.ToList());
 			return PagedList<ReviewDto>.Create(reviewsDtos, request.Page);

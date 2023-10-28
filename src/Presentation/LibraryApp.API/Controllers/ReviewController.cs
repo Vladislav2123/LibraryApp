@@ -1,6 +1,9 @@
-﻿using LibraryApp.Application.Feauters.Reviews.Commands.Create;
+﻿using LibraryApp.Application.Common.Helpers.Pagination;
+using LibraryApp.Application.Feauters.Reviews.Commands.Create;
 using LibraryApp.Application.Feauters.Reviews.Commands.Delete;
 using LibraryApp.Application.Feauters.Reviews.Commands.Update;
+using LibraryApp.Application.Feauters.Reviews.Queries.Dto;
+using LibraryApp.Application.Feauters.Reviews.Queries.GetAllReviews;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +20,16 @@ namespace LibraryApp.API.Controllers
 			_mediator = mediator;
 		}
 
-		[HttpPost()]
+		[HttpGet]
+		public async Task<ActionResult<PagedList<ReviewDto>>> GetAll(int page, int size)
+		{
+			var query = new GetAllReviewsQuery(new Page(page, size));
+			var response = await _mediator.Send(query);
+
+			return Ok(response);
+		}
+
+		[HttpPost]
 		public async Task<ActionResult<Guid>> Create([FromBody] CreateReviewCommand command)
 		{
 			var response = await _mediator.Send(command);
@@ -25,7 +37,7 @@ namespace LibraryApp.API.Controllers
 			return CreatedAtAction(nameof(Create), response);
 		}
 
-		[HttpPut()]
+		[HttpPut]
 		public async Task<ActionResult> Update([FromBody] UpdateReviewCommand command)
 		{
 			await _mediator.Send(command);
@@ -33,7 +45,7 @@ namespace LibraryApp.API.Controllers
 			return NoContent();
 		}
 
-		[HttpDelete()]
+		[HttpDelete]
 		public async Task<ActionResult> Delete(DeleteReviewCommand command)
 		{
 			await _mediator.Send(command);
