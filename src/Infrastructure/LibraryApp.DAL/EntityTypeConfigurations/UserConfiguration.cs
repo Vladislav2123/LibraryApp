@@ -34,6 +34,19 @@ namespace LibraryApp.DAL.EntityTypeConfigurations
 			builder.Property(user => user.Role)
 				.IsRequired(true)
 				.HasConversion(r => r.ToString(), sr => Enum.Parse<UserRole>(sr));
+
+			builder.HasMany(user => user.ReadBooks)
+				.WithMany(book => book.Readers);
+
+			builder.HasMany(user => user.CreatedBooks)
+				.WithOne(book => book.CreatedUser)
+				.HasForeignKey(book => book.CreatedUserId)
+				.OnDelete(DeleteBehavior.Restrict);
+
+			builder.HasMany(user => user.CreatedAuthors)
+				.WithOne(author => author.CreatedUser)
+				.HasForeignKey(author => author.CreatedUserId)
+				.OnDelete(DeleteBehavior.Restrict);
 		}
 	}
 }
