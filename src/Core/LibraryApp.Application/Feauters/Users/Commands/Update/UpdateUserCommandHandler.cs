@@ -17,7 +17,8 @@ namespace LibraryApp.Application.Feauters.Users.Commands.Update
 
         public async Task<Unit> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
         {
-            User user = await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == command.Id, cancellationToken);
+            User user = await _dbContext.Users
+                .FirstOrDefaultAsync(user => user.Id == command.Id, cancellationToken);
 
             if (user == null) throw new EntityNotFoundException(nameof(User), command.Id);
 

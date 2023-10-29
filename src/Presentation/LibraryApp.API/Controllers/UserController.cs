@@ -1,4 +1,4 @@
-﻿using LibraryApp.Application.Common.Helpers.Pagination;
+﻿using LibraryApp.Application.Common.Pagination;
 using LibraryApp.Application.Feauters.Books.Querries.Dto;
 using LibraryApp.Application.Feauters.Books.Querries.GetUserReadBooks;
 using LibraryApp.Application.Feauters.Reviews.Queries.Dto;
@@ -26,10 +26,10 @@ namespace LibraryApp.API.Controllers
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<PagedList<UserLookupDto>>> Get(
+		public async Task<ActionResult<PagedList<UserLookupDto>>> GetAll(
 			string? search, string? sortColumn, string? sortOrder, int page, int size)
 		{
-			var query = new GetUsersQuery(search, sortColumn, sortOrder, new Page(page, size));
+			var query = new GetAllUsersQuery(search, sortColumn, sortOrder, new Page(page, size));
 			var response = await _mediator.Send(query);
 
 			return Ok(response);
@@ -38,7 +38,7 @@ namespace LibraryApp.API.Controllers
 		[HttpGet("{id}")]
 		public async Task<ActionResult<UserDetailsDto>> GetById(Guid id)
 		{
-			var query = new GetUserDetailsQuery(id);
+			var query = new GetUserQuery(id);
 			var response = await _mediator.Send(query);
 
 			return Ok(response);
@@ -82,7 +82,7 @@ namespace LibraryApp.API.Controllers
 		public async Task<ActionResult> Delete(Guid id)
 		{
 			var command = new DeleteUserCommand(id);
-			var response = await _mediator.Send(command);
+			await _mediator.Send(command);
 
 			return NoContent();
 		}

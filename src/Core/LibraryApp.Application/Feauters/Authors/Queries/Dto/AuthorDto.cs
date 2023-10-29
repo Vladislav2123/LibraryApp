@@ -6,6 +6,7 @@ namespace LibraryApp.Application.Feauters.Authors.Queries.Dto
 {
 	public class AuthorDto : IMappping
 	{
+		public Guid CreatedUserId { get; set; }
 		public string Name { get; set; }
 		public DateOnly? BirthDate { get; set; }
 

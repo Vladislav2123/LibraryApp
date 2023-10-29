@@ -17,7 +17,8 @@ namespace LibraryApp.Application.Feauters.Authors.Commands.Delete
 
 		public async Task<Unit> Handle(DeleteAuthorCommand command, CancellationToken cancellationToken)
 		{
-			var author = await _dbContext.Authors.FirstOrDefaultAsync(author => author.Id == command.AuthorId, cancellationToken);
+			var author = await _dbContext.Authors
+				.FirstOrDefaultAsync(author => author.Id == command.AuthorId, cancellationToken);
 
 			if (author == null) throw new EntityNotFoundException(nameof(Author), command.AuthorId);
 

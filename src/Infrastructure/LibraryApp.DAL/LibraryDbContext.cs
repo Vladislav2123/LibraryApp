@@ -22,8 +22,8 @@ namespace LibraryApp.DAL
 		{
 			base.OnModelCreating(builder);
 
-			builder.ApplyConfiguration(new AuthorConfiguration());
 			builder.ApplyConfiguration(new UserConfiguration());
+			builder.ApplyConfiguration(new AuthorConfiguration());
 			builder.ApplyConfiguration(new BookConfiguration());
 			builder.ApplyConfiguration(new ReviewConfiguration());
 		}

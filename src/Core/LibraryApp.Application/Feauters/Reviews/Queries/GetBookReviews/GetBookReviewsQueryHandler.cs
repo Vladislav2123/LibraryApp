@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using LibraryApp.Application.Common.Exceptions;
-using LibraryApp.Application.Common.Helpers.Pagination;
+using LibraryApp.Application.Common.Pagination;
 using LibraryApp.Application.Feauters.Reviews.Queries.Dto;
 using LibraryApp.Application.Interfaces;
 using LibraryApp.Domain.Enteties;
@@ -46,7 +46,7 @@ namespace LibraryApp.Application.Feauters.Reviews.Queries.GetBookReviews
         {
             return request.SortColumn?.ToLower() switch
             {
-                "date" => review => review.CreationDate,
+                "date" => review => review.CreationDate
                 _ => review => review.Rating
             };
         }

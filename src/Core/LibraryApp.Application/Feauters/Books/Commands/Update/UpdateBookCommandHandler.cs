@@ -17,7 +17,8 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Update
 
 		public async Task<Unit> Handle(UpdateBookCommand command, CancellationToken cancellationToken)
 		{
-			Book book = await _dbContext.Books.FirstOrDefaultAsync(book => book.Id == command.BookId, cancellationToken);
+			Book book = await _dbContext.Books
+				.FirstOrDefaultAsync(book => book.Id == command.BookId, cancellationToken);
 
 			if(book == null) throw new EntityNotFoundException(nameof(Book), command.BookId);
 

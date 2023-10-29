@@ -5,7 +5,7 @@ using LibraryApp.Domain.Enteties;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Feauters.Books.Querries.Dto;
-using LibraryApp.Application.Common.Helpers.Pagination;
+using LibraryApp.Application.Common.Pagination;
 
 namespace LibraryApp.Application.Feauters.Books.Querries.GetUserReadBooks
 {
@@ -22,7 +22,8 @@ namespace LibraryApp.Application.Feauters.Books.Querries.GetUserReadBooks
 
         public async Task<PagedList<BookLookupDto>> Handle(GetUserReadBooksQuery request, CancellationToken cancellationToken)
         {
-            User user = await _dbContext.Users.Include(user => user.ReadBooks)
+            User user = await _dbContext.Users
+                .Include(user => user.ReadBooks)
                 .FirstOrDefaultAsync(user => user.Id == request.UserId, cancellationToken);
             
             if(user == null) throw new EntityNotFoundException(nameof(User), request.UserId);

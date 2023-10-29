@@ -21,7 +21,8 @@ namespace LibraryApp.Application.Feauters.Books.Querries.GetBook
 
         public async Task<BookDto> Handle(GetBookQuery request, CancellationToken cancellationToken)
 		{
-			Book book = await _dbContext.Books.FirstOrDefaultAsync(book => book.Id == request.Id, cancellationToken);
+			Book book = await _dbContext.Books
+                .FirstOrDefaultAsync(book => book.Id == request.Id, cancellationToken);
 
             if (book == null) throw new EntityNotFoundException(nameof(Book), request.Id);
 

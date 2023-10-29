@@ -8,20 +8,21 @@ using LibraryApp.Application.Feauters.Users.Queries.Dto;
 
 namespace LibraryApp.Application.Feauters.Users.Queries.GetUserDetails
 {
-	public class GetUserDetailsQueryHandler : IRequestHandler<GetUserDetailsQuery, UserDetailsDto>
+	public class GetUserQueryHandler : IRequestHandler<GetUserQuery, UserDetailsDto>
 	{
 		private readonly ILibraryDbContext _dbContext;
 		private readonly IMapper _mapper;
 
-        public GetUserDetailsQueryHandler(ILibraryDbContext dbContext, IMapper mapper)
+        public GetUserQueryHandler(ILibraryDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
         }
 
-        public async Task<UserDetailsDto> Handle(GetUserDetailsQuery request, CancellationToken cancellationToken)
+        public async Task<UserDetailsDto> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
-            User user = await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == request.Id, cancellationToken);
+            User user = await _dbContext.Users
+                .FirstOrDefaultAsync(user => user.Id == request.Id, cancellationToken);
 
             if (user == null) throw new EntityNotFoundException(nameof(User), request.Id);
 

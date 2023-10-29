@@ -5,24 +5,25 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using LibraryApp.Application.Feauters.Books.Querries.Dto;
-using LibraryApp.Application.Common.Helpers.Pagination;
+using LibraryApp.Application.Common.Pagination;
 
 namespace LibraryApp.Application.Feauters.Books.Querries.GetBooks
 {
-    public class GetBooksQueryHandler : IRequestHandler<GetBooksQuery, PagedList<BookLookupDto>>
+    public class GetAllBooksQueryHandler : IRequestHandler<GetAllBooksQuery, PagedList<BookLookupDto>>
 	{
 		private readonly ILibraryDbContext _dbContext;
 		private readonly IMapper _mapper;
 
-        public GetBooksQueryHandler(ILibraryDbContext dbContext, IMapper mapper)
+        public GetAllBooksQueryHandler(ILibraryDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
 			_mapper = mapper;
         }
 
-        public async Task<PagedList<BookLookupDto>> Handle(GetBooksQuery request, CancellationToken cancellationToken)
+        public async Task<PagedList<BookLookupDto>> Handle(GetAllBooksQuery request, CancellationToken cancellationToken)
 		{
-			IQueryable<Book> booksQuery = _dbContext.Books.Include(book => book.Readers);
+			IQueryable<Book> booksQuery = _dbContext.Books
+				.Include(book => book.Readers);
 			
 			if(string.IsNullOrWhiteSpace(request.SearchTerms) == false)
 			{
@@ -46,7 +47,7 @@ namespace LibraryApp.Application.Feauters.Books.Querries.GetBooks
 			return PagedList<BookLookupDto>.Create(booksLookups, request.Page);
 		}
 
-		private Expression<Func<Book, object>> GetSortingColumnProperty(GetBooksQuery request)
+		private Expression<Func<Book, object>> GetSortingColumnProperty(GetAllBooksQuery request)
 		{
 			Expression<Func<Book, object>> expression = request.SortColumn?.ToLower() switch
 			{

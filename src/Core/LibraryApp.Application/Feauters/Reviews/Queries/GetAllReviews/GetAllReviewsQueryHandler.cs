@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using LibraryApp.Application.Common.Helpers.Pagination;
+using LibraryApp.Application.Common.Pagination;
 using LibraryApp.Application.Feauters.Reviews.Queries.Dto;
 using LibraryApp.Application.Interfaces;
 using LibraryApp.Domain.Enteties;
@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LibraryApp.Application.Feauters.Reviews.Queries.GetAllReviews
 {
-	public class GetAllReviewsQueryHandler : IRequestHandler<GetAllReviewsQuery, PagedList<ReviewDto>>
+    public class GetAllReviewsQueryHandler : IRequestHandler<GetAllReviewsQuery, PagedList<ReviewDto>>
 	{
 		private readonly ILibraryDbContext _dbContext;
 		private readonly IMapper _mapper;

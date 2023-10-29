@@ -1,4 +1,5 @@
 ﻿using LibraryApp.Application.Common.Mappings;
+using MediatR.NotificationPublishers;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -12,7 +13,11 @@ namespace LibraryApp.Application
 			{
 				cfg.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
 			});
-			services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+			services.AddMediatR(cfg =>
+			{
+				cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+				cfg.NotificationPublisher = new ForeachAwaitPublisher();
+			});
 
 
 			return services;

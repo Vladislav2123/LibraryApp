@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using LibraryApp.Application.Feauters.Books.Querries.Dto;
-using LibraryApp.Application.Common.Helpers.Pagination;
+using LibraryApp.Application.Common.Pagination;
 
 namespace LibraryApp.Application.Feauters.Books.Querries.GetBooks
 {
-    public record GetBooksQuery(
+    public record GetAllBooksQuery(
         string? SearchTerms,
         Guid? AuthorId, 
         string? SortColumn, 

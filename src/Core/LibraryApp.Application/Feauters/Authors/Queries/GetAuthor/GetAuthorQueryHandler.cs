@@ -11,7 +11,6 @@ namespace LibraryApp.Application.Feauters.Authors.Queries.GetAuthor
 	public class GetAuthorQueryHandler : IRequestHandler<GetAuthorQuery, AuthorDto>
 	{
 		private readonly ILibraryDbContext _dbContext;
-
 		private readonly IMapper _mapper;
 
 		public GetAuthorQueryHandler(ILibraryDbContext dbContext, IMapper mapper)
@@ -22,7 +21,8 @@ namespace LibraryApp.Application.Feauters.Authors.Queries.GetAuthor
 
 		public async Task<AuthorDto> Handle(GetAuthorQuery request, CancellationToken cancellationToken)
 		{
-			var author = await _dbContext.Authors.FirstOrDefaultAsync(author => author.Id == request.Id, cancellationToken);
+			var author = await _dbContext.Authors
+				.FirstOrDefaultAsync(author => author.Id == request.Id, cancellationToken);
 
 			if (author == null) throw new EntityNotFoundException(nameof(Author), request.Id);
 

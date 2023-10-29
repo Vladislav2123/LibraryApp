@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using LibraryApp.Application.Common.Helpers.Pagination;
+using LibraryApp.Application.Common.Pagination;
 using LibraryApp.Application.Feauters.Authors.Queries.Dto;
 using LibraryApp.Application.Interfaces;
 using LibraryApp.Domain.Enteties;
@@ -8,18 +8,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LibraryApp.Application.Feauters.Authors.Queries.GetAuthors
 {
-    public class GetAuthorsQueryHandler : IRequestHandler<GetAuthorsQuery, PagedList<AuthorLookupDto>>
+    public class GetAllAuthorsQueryHandler : IRequestHandler<GetAllAuthorsQuery, PagedList<AuthorLookupDto>>
 	{
 		private readonly ILibraryDbContext _dbContext;
 		private readonly IMapper _mapper;
 
-		public GetAuthorsQueryHandler(ILibraryDbContext dbContext, IMapper mapper)
+		public GetAllAuthorsQueryHandler(ILibraryDbContext dbContext, IMapper mapper)
         {
 			_dbContext = dbContext;
 			_mapper = mapper;
         }
 
-        public async Task<PagedList<AuthorLookupDto>> Handle(GetAuthorsQuery request, CancellationToken cancellationToken)
+        public async Task<PagedList<AuthorLookupDto>> Handle(GetAllAuthorsQuery request, CancellationToken cancellationToken)
 		{
 			IQueryable<Author> authorsQuery = _dbContext.Authors;
 
