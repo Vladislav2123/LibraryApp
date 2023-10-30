@@ -1,4 +1,7 @@
-﻿using LibraryApp.Application.Common.Mappings;
+﻿using FluentValidation;
+using LibraryApp.Application.Common.Mappings;
+using LibraryApp.Application.Common.Validation;
+using MediatR;
 using MediatR.NotificationPublishers;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -13,12 +16,15 @@ namespace LibraryApp.Application
 			{
 				cfg.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
 			});
+
 			services.AddMediatR(cfg =>
 			{
 				cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
 				cfg.NotificationPublisher = new ForeachAwaitPublisher();
 			});
 
+			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+			services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
 			return services;
 		}
