@@ -10,7 +10,7 @@ namespace LibraryApp.Application.Feauters.Books.Querries.Dto
 		public Guid AuthorId { get; set; }
 		public string Name { get; set; }
 		public double Rating { get; set; }
-		public string Year { get; set; }
+		public int Year { get; set; }
 		public int ReadersCount { get; set; }
 
 		public void CreateMap(Profile profile)
