@@ -27,53 +27,59 @@ namespace LibraryApp.API.Controllers
 
 		[HttpGet]
 		public async Task<ActionResult<PagedList<UserLookupDto>>> GetAll(
-			string? search, string? sortColumn, string? sortOrder, int page, int size)
+			string? search, string? sortColumn, string? sortOrder, 
+			int page, int size, CancellationToken cancellationToken)
 		{
 			var query = new GetAllUsersQuery(search, sortColumn, sortOrder, new Page(page, size));
-			var response = await _mediator.Send(query);
+			var response = await _mediator.Send(query, cancellationToken);
 
 			return Ok(response);
 		}
 
 		[HttpGet("{id}")]
-		public async Task<ActionResult<UserDetailsDto>> GetById(Guid id)
+		public async Task<ActionResult<UserDetailsDto>> GetById(
+			Guid id, CancellationToken cancellationToken)
 		{
 			var query = new GetUserQuery(id);
-			var response = await _mediator.Send(query);
+			var response = await _mediator.Send(query, cancellationToken);
 
 			return Ok(response);
 		}
 
 		[HttpGet("{id}/books")]
-		public async Task<ActionResult<PagedList<BookLookupDto>>> GetReadBooks(Guid id, int page, int size)
+		public async Task<ActionResult<PagedList<BookLookupDto>>> GetReadBooks(
+			Guid id, int page, int size, CancellationToken cancellationToken)
 		{
 			var query = new GetUserReadBooksQuery(id, new Page(page, size));
-			var response = await _mediator.Send(query);
+			var response = await _mediator.Send(query, cancellationToken);
 
 			return Ok(response);
 		}
 
 		[HttpGet("{id}/reviews")]
-		public async Task<ActionResult<PagedList<ReviewDto>>> GetReviews(Guid id, int page, int size)
+		public async Task<ActionResult<PagedList<ReviewDto>>> GetReviews(
+			Guid id, int page, int size, CancellationToken cancellationToken)
 		{
 			var query = new GetUserReviewsQuery(id, new Page(page, size));
-			var resopnse = await _mediator.Send(query);
+			var resopnse = await _mediator.Send(query, cancellationToken);
 
 			return Ok(resopnse);
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<Guid>> Create([FromBody] CreateUserCommand command)
+		public async Task<ActionResult<Guid>> Create(
+			[FromBody] CreateUserCommand command, CancellationToken cancellationToken)
 		{
-			var response = await _mediator.Send(command);
+			var response = await _mediator.Send(command, cancellationToken);
 
 			return CreatedAtAction(nameof(Create), response);
 		}
 
 		[HttpPut]
-		public async Task<ActionResult> Update([FromBody] UpdateUserCommand command)
+		public async Task<ActionResult> Update(
+			[FromBody] UpdateUserCommand command, CancellationToken cancellationToken)
 		{
-			await _mediator.Send(command);
+			await _mediator.Send(command, cancellationToken);
 
 			return NoContent();
 		}

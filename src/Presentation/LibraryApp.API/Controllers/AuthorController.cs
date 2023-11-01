@@ -23,43 +23,45 @@ namespace LibraryApp.API.Controllers
 
 		[HttpGet]
 		public async Task<ActionResult<PagedList<AuthorLookupDto>>> GetAll(
-			string? search, int page, int size)
+			string? search, int page, int size, CancellationToken cancellationToken)
 		{
 			var query = new GetAllAuthorsQuery(search, new Page(page, size));
-			var response = await _mediator.Send(query);
+			var response = await _mediator.Send(query, cancellationToken);
 
 			return Ok(response);
 		}
 
 		[HttpGet("{id}")]
-		public async Task<ActionResult<AuthorDto>> GetById(Guid id)
+		public async Task<ActionResult<AuthorDto>> GetById(Guid id, CancellationToken cancellationToken)
 		{
 			var query = new GetAuthorQuery(id);
-			var response = await _mediator.Send(query);
+			var response = await _mediator.Send(query, cancellationToken);
 
 			return Ok(response);
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<Guid>> Create([FromBody] CreateAuthorCommand command)
+		public async Task<ActionResult<Guid>> Create(
+			[FromBody] CreateAuthorCommand command, CancellationToken cancellationToken)
 		{
-			var response = await _mediator.Send(command);
+			var response = await _mediator.Send(command, cancellationToken);
 
 			return CreatedAtAction(nameof(Create), response);
 		}
 
 		[HttpPut]
-		public async Task<ActionResult> Update([FromBody] UpdateAuthorCommand command)
+		public async Task<ActionResult> Update(
+			[FromBody] UpdateAuthorCommand command, CancellationToken cancellationToken)
 		{
-			await _mediator.Send(command);
+			await _mediator.Send(command, cancellationToken);
 
 			return NoContent();
 		}
 
 		[HttpDelete()]
-		public async Task<ActionResult> Delete(DeleteAuthorCommand command)
+		public async Task<ActionResult> Delete(DeleteAuthorCommand command, CancellationToken cancellationToken)
 		{
-			await _mediator.Send(command);
+			await _mediator.Send(command, cancellationToken);
 
 			return NoContent();
 		}
