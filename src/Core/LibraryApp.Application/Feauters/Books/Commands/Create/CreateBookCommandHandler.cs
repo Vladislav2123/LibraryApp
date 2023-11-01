@@ -2,6 +2,7 @@
 using MediatR;
 using LibraryApp.Domain.Enteties;
 using LibraryApp.Application.Common.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibraryApp.Application.Feauters.Books.Commands.Create
 {
@@ -16,17 +17,18 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Create
 
 		public async Task<Guid> Handle(CreateBookCommand command, CancellationToken cancellationToken)
 		{
-			if (_dbContext.Authors.Any(author => 
-				author.Id == command.AuthorId) == false)
+			if (await _dbContext.Authors
+				.AnyAsync(author => author.Id == command.AuthorId, cancellationToken) == false)
 			{
 				throw new EntityNotFoundException(nameof(Author), command.AuthorId);
 			}
 
-			if (_dbContext.Books.Any(book =>
-				book.AuthorId == command.AuthorId &&
-				book.Name == command.Name &&
-				book.Description == command.Description &&
-				book.Year == command.Year))
+			if (await _dbContext.Books
+				.AnyAsync(book =>
+					book.AuthorId == command.AuthorId &&
+					book.Name == command.Name &&
+					book.Description == command.Description &&
+					book.Year == command.Year, cancellationToken))
 			{
 				throw new EntityAlreadyExistException(nameof(Book));
 			}

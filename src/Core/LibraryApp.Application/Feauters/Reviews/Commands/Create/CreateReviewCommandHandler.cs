@@ -32,8 +32,8 @@ namespace LibraryApp.Application.Feauters.Reviews.Commands.Create
                 throw new EntityNotFoundException(nameof(User), command.UserId);
             }
 
-            if(book.Reviews.Any(review => 
-                review.UserId == command.UserId))
+            if(book.Reviews
+                .Any(review => review.UserId == command.UserId))
             {
                 throw new BookAlreadyHasReviewException(command.BookId, command.UserId);
             }

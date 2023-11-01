@@ -29,8 +29,8 @@ namespace LibraryApp.Application.Feauters.Users.Commands.Update
 				throw new EntityHasNoChangesException(nameof(User), command.Id);
 			}
 
-			if(_dbContext.Users
-				.Any(user => user.Email == command.Email))
+			if(await _dbContext.Users
+				.AnyAsync(user => user.Email == command.Email, cancellationToken))
 			{
 				throw new UserEmailAlreadyUsingException(command.Email);
 			}

@@ -24,14 +24,14 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Update
 
 			if (Equal(command, book)) throw new EntityHasNoChangesException(nameof(Book), command.BookId);
 
-			if (_dbContext.Authors.Any(author =>
-				author.Id == command.AuthorId) == false)
+			if (await _dbContext.Authors
+				.AnyAsync(author => author.Id == command.AuthorId, cancellationToken) == false)
 			{
 				throw new EntityNotFoundException(nameof(Author), command.AuthorId);
 			}
 
-			if (_dbContext.Books.Any(book =>
-				Equal(command, book)))
+			if (await _dbContext.Books
+				.AnyAsync(book => Equal(command, book), cancellationToken))
 			{
 				throw new EntityAlreadyExistException(nameof(Book));
 			}

@@ -2,6 +2,7 @@
 using LibraryApp.Application.Interfaces;
 using LibraryApp.Domain.Enteties;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibraryApp.Application.Feauters.Authors.Commands.Create
 {
@@ -16,15 +17,16 @@ namespace LibraryApp.Application.Feauters.Authors.Commands.Create
 
 		public async Task<Guid> Handle(CreateAuthorCommand command, CancellationToken cancellationToken)
 		{
-			if (_dbContext.Users.Any(user =>
-				user.Id == command.UserId) == false)
+			if (await _dbContext.Users
+				.AnyAsync(user => user.Id == command.UserId, cancellationToken) == false)
 			{
 				throw new EntityNotFoundException(nameof(User), command.UserId);
 			}
 
-			if (_dbContext.Authors.Any(author =>
-				author.Name == command.Name &&
-				author.BirthDate == command.BirthDate))
+			if (await _dbContext.Authors
+				.AnyAsync(author => 
+					author.Name == command.Name &&
+					author.BirthDate == command.BirthDate, cancellationToken))
 			{
 				throw new EntityAlreadyExistException(nameof(Author));
 			}

@@ -2,6 +2,7 @@
 using LibraryApp.Application.Interfaces;
 using LibraryApp.Domain.Enteties;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibraryApp.Application.Feauters.Users.Commands.Create
 {
@@ -16,8 +17,8 @@ namespace LibraryApp.Application.Feauters.Users.Commands.Create
 
         public async Task<Guid> Handle(CreateUserCommand command, CancellationToken cancellationToken)
         {
-            if(_dbContext.Users.Any(user => 
-                user.Email == command.Email))
+            if(await _dbContext.Users
+                .AnyAsync(user => user.Email == command.Email, cancellationToken))
             {
                 throw new UserEmailAlreadyUsingException(command.Email);
             }

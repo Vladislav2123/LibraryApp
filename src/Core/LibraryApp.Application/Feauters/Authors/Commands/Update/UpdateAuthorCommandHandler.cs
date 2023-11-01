@@ -18,19 +18,14 @@ namespace LibraryApp.Application.Feauters.Authors.Commands.Update
 		public async Task<Unit> Handle(UpdateAuthorCommand command, CancellationToken cancellationToken)
 		{
 			var author = await _dbContext.Authors
-				.FirstOrDefaultAsync(author => author.Id == command.AuthorId);
+				.FirstOrDefaultAsync(author => author.Id == command.AuthorId, cancellationToken);
 
 			if (author == null) throw new EntityNotFoundException(nameof(Author), command.AuthorId);
 
-			if (author.Name == command.Name &&
-				author.BirthDate == command.BirthDate)
-			{
-				throw new EntityHasNoChangesException(nameof(Author), command.AuthorId);
-			}
+			if (Equal(command, author)) throw new EntityHasNoChangesException(nameof(Author), command.AuthorId);
 
-			if (_dbContext.Authors
-				.Any(author => author.Name == command.Name &&
-					author.BirthDate == command.BirthDate))
+			if (await _dbContext.Authors
+				.AnyAsync(author => Equal(command, author), cancellationToken))
 			{
 				throw new EntityAlreadyExistException(nameof(Author));
 			}
@@ -41,6 +36,14 @@ namespace LibraryApp.Application.Feauters.Authors.Commands.Update
 			await _dbContext.SaveChangesAsync(cancellationToken);
 
 			return Unit.Value;
+		}
+
+		private bool Equal(UpdateAuthorCommand command, Author author)
+		{
+			return
+				author.Name == command.Name &&
+				author.BirthDate == command.BirthDate;
+
 		}
 	}
 }
