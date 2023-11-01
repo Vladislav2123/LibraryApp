@@ -39,6 +39,11 @@ namespace LibraryApp.API.Middleware
 			exception switch
 			{
 				ValidationException => StatusCodes.Status422UnprocessableEntity,
+				EntityHasNoChangesException => StatusCodes.Status422UnprocessableEntity,
+				EntityAlreadyExistException => StatusCodes.Status409Conflict,
+				BookAlreadyHasReviewException => StatusCodes.Status409Conflict,
+				UserEmailAlreadyUsingException => StatusCodes.Status409Conflict,
+				EntityNotFoundException => StatusCodes.Status404NotFound,
 				_ => StatusCodes.Status500InternalServerError
 			};
 

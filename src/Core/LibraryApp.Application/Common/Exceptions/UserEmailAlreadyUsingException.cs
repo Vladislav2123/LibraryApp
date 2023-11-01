@@ -3,6 +3,6 @@
 	public class UserEmailAlreadyUsingException : Exception
 	{
         public UserEmailAlreadyUsingException(string email)
-            : base($"Email ({email}) already in use by another User.") { }
+            : base($"Email ({email}) already in use by another User") { }
     }
 }

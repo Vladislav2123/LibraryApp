@@ -3,7 +3,7 @@
 	public class ValidationException : Exception
 	{
         public ValidationException(IReadOnlyDictionary<string, string[]> errorsDictionary) 
-            : base("Validation Failure")
+            : base("Validation failed")
         {
             ErrorsDictionary = errorsDictionary;
         }
