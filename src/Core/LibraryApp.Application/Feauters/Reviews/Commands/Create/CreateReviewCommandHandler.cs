@@ -21,20 +21,28 @@ namespace LibraryApp.Application.Feauters.Reviews.Commands.Create
         public async Task<Guid> Handle(CreateReviewCommand command, CancellationToken cancellationToken)
         {
             var book = await _dbContext.Books
+                .Include(book => book.Reviews)
                 .FirstOrDefaultAsync(book => book.Id == command.BookId, cancellationToken);
 
             if (book == null) throw new EntityNotFoundException(nameof(Book), command.BookId);
 
-            var user = await _dbContext.Users
-                .FirstOrDefaultAsync(user => user.Id == command.UserId, cancellationToken);
+            if (await _dbContext.Users.AnyAsync(user => 
+                user.Id == command.UserId, cancellationToken) == false)
+            {
+                throw new EntityNotFoundException(nameof(User), command.UserId);
+            }
 
-            if (user == null) throw new EntityNotFoundException(nameof(User), command.UserId);
+            if(book.Reviews.Any(review => 
+                review.UserId == command.UserId))
+            {
+                throw new BookAlreadyHasReviewException(command.BookId, command.UserId);
+            }
 
             var newReview = new Review
             {
                 Id = Guid.NewGuid(),
-                UserId = user.Id,
-                BookId = book.Id,
+                UserId = command.UserId,
+                BookId = command.BookId,
                 Rating = command.Rating,
                 Title = command.Title,
                 Text = command.Text,

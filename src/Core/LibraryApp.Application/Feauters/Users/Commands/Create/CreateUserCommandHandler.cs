@@ -1,4 +1,5 @@
-﻿using LibraryApp.Application.Interfaces;
+﻿using LibraryApp.Application.Common.Exceptions;
+using LibraryApp.Application.Interfaces;
 using LibraryApp.Domain.Enteties;
 using MediatR;
 
@@ -15,6 +16,12 @@ namespace LibraryApp.Application.Feauters.Users.Commands.Create
 
         public async Task<Guid> Handle(CreateUserCommand command, CancellationToken cancellationToken)
         {
+            if(_dbContext.Users.Any(user => 
+                user.Email == command.Email))
+            {
+                throw new UserEmailAlreadyUsingException(command.Email);
+            }
+
             User newUser = new User()
             {
                 Id = Guid.NewGuid(),

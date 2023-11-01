@@ -22,6 +22,19 @@ namespace LibraryApp.Application.Feauters.Authors.Commands.Update
 
 			if (author == null) throw new EntityNotFoundException(nameof(Author), command.AuthorId);
 
+			if (author.Name == command.Name &&
+				author.BirthDate == command.BirthDate)
+			{
+				throw new EntityHasNoChangesException(nameof(Author), command.AuthorId);
+			}
+
+			if (_dbContext.Authors
+				.Any(author => author.Name == command.Name &&
+					author.BirthDate == command.BirthDate))
+			{
+				throw new EntityAlreadyExistException(nameof(Author));
+			}
+
 			author.Name = command.Name;
 			author.BirthDate = command.BirthDate;
 

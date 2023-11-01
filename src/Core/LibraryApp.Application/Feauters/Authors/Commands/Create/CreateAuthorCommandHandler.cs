@@ -14,11 +14,17 @@ namespace LibraryApp.Application.Feauters.Authors.Commands.Create
 			_dbContext = dbContext;
 		}
 
-		public async Task<Guid> Handle(CreateAuthorCommand request, CancellationToken cancellationToken)
+		public async Task<Guid> Handle(CreateAuthorCommand command, CancellationToken cancellationToken)
 		{
-			if (_dbContext.Authors
-				.Any(author => author.Name == request.Name &&
-					author.BirthDate == request.BirthDate))
+			if (_dbContext.Users.Any(user =>
+				user.Id == command.UserId) == false)
+			{
+				throw new EntityNotFoundException(nameof(User), command.UserId);
+			}
+
+			if (_dbContext.Authors.Any(author =>
+				author.Name == command.Name &&
+				author.BirthDate == command.BirthDate))
 			{
 				throw new EntityAlreadyExistException(nameof(Author));
 			}
@@ -26,10 +32,10 @@ namespace LibraryApp.Application.Feauters.Authors.Commands.Create
 			Author author = new Author()
 			{
 				Id = Guid.NewGuid(),
-				Name = request.Name,
-				BirthDate = request.BirthDate,
+				Name = command.Name,
+				BirthDate = command.BirthDate,
 				CreationDate = DateTime.Now,
-				CreatedUserId = request.UserId
+				CreatedUserId = command.UserId
 			};
 
 			await _dbContext.Authors.AddAsync(author, cancellationToken);

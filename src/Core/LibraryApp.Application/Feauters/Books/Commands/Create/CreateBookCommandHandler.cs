@@ -1,6 +1,7 @@
 ﻿using LibraryApp.Application.Interfaces;
 using MediatR;
 using LibraryApp.Domain.Enteties;
+using LibraryApp.Application.Common.Exceptions;
 
 namespace LibraryApp.Application.Feauters.Books.Commands.Create
 {
@@ -8,13 +9,28 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Create
 	{
 		private readonly ILibraryDbContext _dbContext;
 
-        public CreateBookCommandHandler(ILibraryDbContext dbContext)
-        {
-			_dbContext = dbContext;
-        }
-
-        public async Task<Guid> Handle(CreateBookCommand command, CancellationToken cancellationToken)
+		public CreateBookCommandHandler(ILibraryDbContext dbContext)
 		{
+			_dbContext = dbContext;
+		}
+
+		public async Task<Guid> Handle(CreateBookCommand command, CancellationToken cancellationToken)
+		{
+			if (_dbContext.Authors.Any(author => 
+				author.Id == command.AuthorId) == false)
+			{
+				throw new EntityNotFoundException(nameof(Author), command.AuthorId);
+			}
+
+			if (_dbContext.Books.Any(book =>
+				book.AuthorId == command.AuthorId &&
+				book.Name == command.Name &&
+				book.Description == command.Description &&
+				book.Year == command.Year))
+			{
+				throw new EntityAlreadyExistException(nameof(Book));
+			}
+
 			Book newBook = new Book()
 			{
 				Id = Guid.NewGuid(),

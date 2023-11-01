@@ -20,7 +20,8 @@ namespace LibraryApp.Application.Feauters.Reviews.Commands.Update
 
 		public async Task<Unit> Handle(UpdateReviewCommand command, CancellationToken cancellationToken)
 		{
-			var review = await _dbContext.Reviews.FirstOrDefaultAsync(review => review.Id == command.ReviewId, cancellationToken);
+			var review = await _dbContext.Reviews
+				.FirstOrDefaultAsync(review => review.Id == command.ReviewId, cancellationToken);
 
 			if(review == null) throw new EntityNotFoundException(nameof(Review), command.ReviewId);
 
