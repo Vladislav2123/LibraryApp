@@ -34,25 +34,6 @@ namespace LibraryApp.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<BookDto>> GetById(Guid id, CancellationToken cancellationToken)
-        {
-            var query = new GetBookQuery(id);
-            var response = await _mediator.Send(query, cancellationToken);
-
-            return Ok(response);
-        }
-
-        [HttpGet("{id}/reviews")]
-        public async Task<ActionResult<PagedList<ReviewDto>>> GetReviews(
-            Guid id, string? sortColumn, string? sortOrder, int page, int size, CancellationToken cancellationToken)
-        {
-            var query = new GetBookReviewsQuery(id, sortColumn, sortOrder, new Page(page, size));
-            var response = await _mediator.Send(query, cancellationToken);
-
-            return Ok(response);
-        }
-
         [HttpPost]
         public async Task<ActionResult<Guid>> Create(
             [FromBody] CreateBookCommand command, CancellationToken cancellationToken)
@@ -78,6 +59,25 @@ namespace LibraryApp.API.Controllers
             await _mediator.Send(command, cancellationToken);
 
             return NoContent();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<BookDto>> GetById(Guid id, CancellationToken cancellationToken)
+        {
+            var query = new GetBookQuery(id);
+            var response = await _mediator.Send(query, cancellationToken);
+
+            return Ok(response);
+        }
+
+        [HttpGet("{id}/reviews")]
+        public async Task<ActionResult<PagedList<ReviewDto>>> GetReviews(
+            Guid id, string? sortColumn, string? sortOrder, int page, int size, CancellationToken cancellationToken)
+        {
+            var query = new GetBookReviewsQuery(id, sortColumn, sortOrder, new Page(page, size));
+            var response = await _mediator.Send(query, cancellationToken);
+
+            return Ok(response);
         }
 
     }

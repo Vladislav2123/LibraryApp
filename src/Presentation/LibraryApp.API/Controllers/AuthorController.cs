@@ -31,15 +31,6 @@ namespace LibraryApp.API.Controllers
 			return Ok(response);
 		}
 
-		[HttpGet("{id}")]
-		public async Task<ActionResult<AuthorDto>> GetById(Guid id, CancellationToken cancellationToken)
-		{
-			var query = new GetAuthorQuery(id);
-			var response = await _mediator.Send(query, cancellationToken);
-
-			return Ok(response);
-		}
-
 		[HttpPost]
 		public async Task<ActionResult<Guid>> Create(
 			[FromBody] CreateAuthorCommand command, CancellationToken cancellationToken)
@@ -58,12 +49,21 @@ namespace LibraryApp.API.Controllers
 			return NoContent();
 		}
 
-		[HttpDelete()]
+		[HttpDelete]
 		public async Task<ActionResult> Delete(DeleteAuthorCommand command, CancellationToken cancellationToken)
 		{
 			await _mediator.Send(command, cancellationToken);
 
 			return NoContent();
+		}
+
+		[HttpGet("{id}")]
+		public async Task<ActionResult<AuthorDto>> GetById(Guid id, CancellationToken cancellationToken)
+		{
+			var query = new GetAuthorQuery(id);
+			var response = await _mediator.Send(query, cancellationToken);
+
+			return Ok(response);
 		}
 	}
 }
