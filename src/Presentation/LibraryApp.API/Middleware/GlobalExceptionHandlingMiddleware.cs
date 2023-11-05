@@ -1,4 +1,5 @@
 ﻿using LibraryApp.Application.Common.Exceptions;
+using Serilog;
 using System.Text.Json;
 
 namespace LibraryApp.API.Middleware
@@ -13,6 +14,7 @@ namespace LibraryApp.API.Middleware
 			}
 			catch (Exception exception)
 			{
+				Log.Error(exception.Message);
 				await HandleExceptionAsync(context, exception);
 			}
 		}

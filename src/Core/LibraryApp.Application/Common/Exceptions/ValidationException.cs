@@ -2,8 +2,8 @@
 {
 	public class ValidationException : Exception
 	{
-        public ValidationException(IReadOnlyDictionary<string, string[]> errorsDictionary) 
-            : base("Validation failed")
+        public ValidationException(string entityName, IReadOnlyDictionary<string, string[]> errorsDictionary) 
+            : base($"{entityName} validation failed")
         {
             ErrorsDictionary = errorsDictionary;
         }

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
+using LibraryApp.Application.Common.Behaviours;
 using LibraryApp.Application.Common.Mappings;
-using LibraryApp.Application.Common.Validation;
 using MediatR;
 using MediatR.NotificationPublishers;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace LibraryApp.Application
 {
-	public static class DependencyInjection
+    public static class DependencyInjection
 	{
 		public static IServiceCollection AddApplication(this IServiceCollection services)
 		{
@@ -23,7 +23,8 @@ namespace LibraryApp.Application
 				cfg.NotificationPublisher = new ForeachAwaitPublisher();
 			});
 
-			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 			services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
 			return services;

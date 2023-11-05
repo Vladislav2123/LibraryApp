@@ -1,6 +1,7 @@
 using LibraryApp.DAL;
 using LibraryApp.Application;
 using LibraryApp.API.Middleware;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,8 +13,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddApplication();
-builder.Services.AddDal(builder.Configuration);
 builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
+builder.Services.AddDal(builder.Configuration);
+
+builder.Host.UseSerilog((context, congiguration) =>
+	congiguration.ReadFrom.Configuration(context.Configuration));
 
 var app = builder.Build();
 
