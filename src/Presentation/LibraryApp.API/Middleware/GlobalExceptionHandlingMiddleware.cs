@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace LibraryApp.API.Middleware
 {
-	public class GlobalExceptionHandlingMiddleware : IMiddleware
+    public class GlobalExceptionHandlingMiddleware : IMiddleware
 	{
 		public async Task InvokeAsync(HttpContext context, RequestDelegate next)
 		{
@@ -45,6 +45,8 @@ namespace LibraryApp.API.Middleware
 				EntityAlreadyExistException => StatusCodes.Status409Conflict,
 				BookAlreadyHasReviewException => StatusCodes.Status409Conflict,
 				UserEmailAlreadyUsingException => StatusCodes.Status409Conflict,
+				UserAlreadyReadBookException => StatusCodes.Status409Conflict,
+				UserHasNotReadBookException => StatusCodes.Status400BadRequest,
 				EntityNotFoundException => StatusCodes.Status404NotFound,
 				_ => StatusCodes.Status500InternalServerError
 			};

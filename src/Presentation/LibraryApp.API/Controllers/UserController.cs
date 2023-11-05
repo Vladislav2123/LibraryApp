@@ -3,8 +3,10 @@ using LibraryApp.Application.Feauters.Books.Querries.Dto;
 using LibraryApp.Application.Feauters.Books.Querries.GetUserReadBooks;
 using LibraryApp.Application.Feauters.Reviews.Queries.Dto;
 using LibraryApp.Application.Feauters.Reviews.Queries.GetUserReviews;
+using LibraryApp.Application.Feauters.Users.Commands.AddReadedBook;
 using LibraryApp.Application.Feauters.Users.Commands.Create;
 using LibraryApp.Application.Feauters.Users.Commands.Delete;
+using LibraryApp.Application.Feauters.Users.Commands.DeleteReadBook;
 using LibraryApp.Application.Feauters.Users.Commands.Update;
 using LibraryApp.Application.Feauters.Users.Queries.Dto;
 using LibraryApp.Application.Feauters.Users.Queries.GetUserDetails;
@@ -36,36 +38,6 @@ namespace LibraryApp.API.Controllers
 			return Ok(response);
 		}
 
-		[HttpGet("{id}")]
-		public async Task<ActionResult<UserDetailsDto>> GetById(
-			Guid id, CancellationToken cancellationToken)
-		{
-			var query = new GetUserQuery(id);
-			var response = await _mediator.Send(query, cancellationToken);
-
-			return Ok(response);
-		}
-
-		[HttpGet("{id}/books")]
-		public async Task<ActionResult<PagedList<BookLookupDto>>> GetReadBooks(
-			Guid id, int page, int size, CancellationToken cancellationToken)
-		{
-			var query = new GetUserReadBooksQuery(id, new Page(page, size));
-			var response = await _mediator.Send(query, cancellationToken);
-
-			return Ok(response);
-		}
-
-		[HttpGet("{id}/reviews")]
-		public async Task<ActionResult<PagedList<ReviewDto>>> GetReviews(
-			Guid id, int page, int size, CancellationToken cancellationToken)
-		{
-			var query = new GetUserReviewsQuery(id, new Page(page, size));
-			var resopnse = await _mediator.Send(query, cancellationToken);
-
-			return Ok(resopnse);
-		}
-
 		[HttpPost]
 		public async Task<ActionResult<Guid>> Create(
 			[FromBody] CreateUserCommand command, CancellationToken cancellationToken)
@@ -84,11 +56,61 @@ namespace LibraryApp.API.Controllers
 			return NoContent();
 		}
 
+		[HttpGet("{id}")]
+		public async Task<ActionResult<UserDetailsDto>> GetById(
+			Guid id, CancellationToken cancellationToken)
+		{
+			var query = new GetUserQuery(id);
+			var response = await _mediator.Send(query, cancellationToken);
+
+			return Ok(response);
+		}
+
 		[HttpDelete("{id}")]
 		public async Task<ActionResult> Delete(Guid id)
 		{
 			var command = new DeleteUserCommand(id);
 			await _mediator.Send(command);
+
+			return NoContent();
+		}
+
+		[HttpGet("{id}/reviews")]
+		public async Task<ActionResult<PagedList<ReviewDto>>> GetReviews(
+			Guid id, int page, int size, CancellationToken cancellationToken)
+		{
+			var query = new GetUserReviewsQuery(id, new Page(page, size));
+			var resopnse = await _mediator.Send(query, cancellationToken);
+
+			return Ok(resopnse);
+		}
+
+		[HttpGet("{id}/read-books")]
+		public async Task<ActionResult<PagedList<BookLookupDto>>> GetReadBooks(
+			Guid id, int page, int size, CancellationToken cancellationToken)
+		{
+			var query = new GetUserReadBooksQuery(id, new Page(page, size));
+			var response = await _mediator.Send(query, cancellationToken);
+
+			return Ok(response);
+		}
+
+		[HttpPost("{userId}/read-books/{bookId}")]
+		public async Task<ActionResult> AddReadBook(
+			Guid userId, Guid bookId, CancellationToken cancellationToken)
+		{
+			var command = new AddReadBookCommand(userId, bookId);
+			await _mediator.Send(command, cancellationToken);
+
+			return NoContent();
+		}
+
+		[HttpDelete("{userId}/read-books/{bookId}")]
+		public async Task<ActionResult> DeleteReadedBook(
+			Guid userId, Guid bookId, CancellationToken cancellationToken)
+		{
+			var command = new DeleteReadBookCommand(userId, bookId);
+			await _mediator.Send(command, cancellationToken);
 
 			return NoContent();
 		}
