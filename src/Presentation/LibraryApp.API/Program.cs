@@ -36,4 +36,12 @@ app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 app.MapControllers();
 
+using (var scope = app.Services.CreateScope())
+{
+	var dbContext = scope.ServiceProvider
+		.GetRequiredService<LibraryDbContext>();
+	DbInitializer.Initialize(dbContext);
+}
+
 app.Run();
+

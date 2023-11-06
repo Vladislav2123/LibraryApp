@@ -10,7 +10,6 @@ namespace LibraryApp.DAL
 	{
 		public LibraryDbContext(DbContextOptions<LibraryDbContext> options) : base(options) 
 		{
-			Database.EnsureCreated();
 		}
 
 		public DbSet<User> Users { get; set; }
