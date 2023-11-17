@@ -8,6 +8,5 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Update
 		Guid AuthorId,
 		string Name,
 		string Description,
-		int Year,
-		string Text) : IRequest<Unit>;
+		int Year) : IRequest<Unit>;
 }

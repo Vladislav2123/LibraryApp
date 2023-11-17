@@ -22,6 +22,8 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Delete
 
 			if(book == null) throw new EntityNotFoundException(nameof(Book), command.BookId);
 
+			File.Delete(book.ContentPath);
+
 			_dbContext.Books.Remove(book);
 			await _dbContext.SaveChangesAsync(cancellationToken);
 

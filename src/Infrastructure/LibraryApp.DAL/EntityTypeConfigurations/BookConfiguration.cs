@@ -14,7 +14,7 @@ namespace LibraryApp.DAL.EntityTypeConfigurations
 				.IsRequired();
 
 			builder.Property(book => book.Name)
-				.HasMaxLength(50)
+				.HasMaxLength(100)
 				.IsRequired();
 
 			builder.Property(book => book.Description)
@@ -24,6 +24,9 @@ namespace LibraryApp.DAL.EntityTypeConfigurations
 				.HasMaxLength(4);
 
 			builder.Property(book => book.CreationDate)
+				.IsRequired();
+
+			builder.Property(book => book.ContentPath)
 				.IsRequired();
 		}
 	}

@@ -2,19 +2,25 @@ using LibraryApp.DAL;
 using LibraryApp.Application;
 using LibraryApp.API.Middleware;
 using Serilog;
+using LibraryApp.Domain.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services
+	.AddEndpointsApiExplorer()
+	.AddSwaggerGen()
+	.AddApplication()
+	.AddTransient<GlobalExceptionHandlingMiddleware>()
+	.AddDal(builder.Configuration);
 
-builder.Services.AddApplication();
-builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
-builder.Services.AddDal(builder.Configuration);
+builder.Services
+	.Configure<FilePaths>(
+		builder.Configuration
+		.GetSection(FilePaths.ConfigSectionKey));
 
 builder.Host.UseSerilog((context, congiguration) =>
 	congiguration.ReadFrom.Configuration(context.Configuration));

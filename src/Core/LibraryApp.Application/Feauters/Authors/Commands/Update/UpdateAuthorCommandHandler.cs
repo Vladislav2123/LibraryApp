@@ -22,12 +22,16 @@ namespace LibraryApp.Application.Feauters.Authors.Commands.Update
 
 			if (author == null) throw new EntityNotFoundException(nameof(Author), command.AuthorId);
 
-			if (Equal(command, author)) throw new EntityHasNoChangesException(nameof(Author), command.AuthorId);
+			var sameAuthor = await _dbContext.Authors
+				.FirstOrDefaultAsync(author =>
+					author.Name == command.Name &&
+					author.BirthDate == command.BirthDate, cancellationToken);
 
-			if (await _dbContext.Authors
-				.AnyAsync(author => Equal(command, author), cancellationToken))
+			if(sameAuthor != null)
 			{
-				throw new EntityAlreadyExistException(nameof(Author));
+				if(sameAuthor.Id == author.Id) 
+					throw new EntityHasNoChangesException(nameof(Author), command.AuthorId);
+				else throw new EntityAlreadyExistException(nameof(Author));
 			}
 
 			author.Name = command.Name;
@@ -36,14 +40,6 @@ namespace LibraryApp.Application.Feauters.Authors.Commands.Update
 			await _dbContext.SaveChangesAsync(cancellationToken);
 
 			return Unit.Value;
-		}
-
-		private bool Equal(UpdateAuthorCommand command, Author author)
-		{
-			return
-				author.Name == command.Name &&
-				author.BirthDate == command.BirthDate;
-
 		}
 	}
 }

@@ -9,6 +9,7 @@ using LibraryApp.Application.Feauters.Books.Commands.Delete;
 using LibraryApp.Application.Feauters.Reviews.Queries.Dto;
 using LibraryApp.Application.Feauters.Reviews.Queries.GetBookReviews;
 using LibraryApp.Application.Common.Pagination;
+using LibraryApp.Application.Feauters.Books.Querries.GetBookContent;
 
 namespace LibraryApp.API.Controllers
 {
@@ -36,7 +37,7 @@ namespace LibraryApp.API.Controllers
 
         [HttpPost]
         public async Task<ActionResult<Guid>> Create(
-            [FromBody] CreateBookCommand command, CancellationToken cancellationToken)
+            [FromForm] CreateBookCommand command, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(command, cancellationToken);
 
@@ -68,6 +69,15 @@ namespace LibraryApp.API.Controllers
             var response = await _mediator.Send(query, cancellationToken);
 
             return Ok(response);
+        }
+
+        [HttpGet("{id}/content")]
+        public async Task<ActionResult<BookContentVm>> GetContent(Guid id, CancellationToken cancellationToken)
+        {
+            var query = new GetBookContentQuery(id);
+            BookContentVm response = await _mediator.Send(query, cancellationToken);
+
+            return File(response.Bytes, response.ContentType, response.FileName);
         }
 
         [HttpGet("{id}/reviews")]

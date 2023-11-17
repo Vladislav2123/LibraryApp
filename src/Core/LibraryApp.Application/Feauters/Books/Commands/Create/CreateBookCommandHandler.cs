@@ -3,16 +3,20 @@ using MediatR;
 using LibraryApp.Domain.Enteties;
 using LibraryApp.Application.Common.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using LibraryApp.Domain.Models;
+using Microsoft.Extensions.Options;
 
 namespace LibraryApp.Application.Feauters.Books.Commands.Create
 {
 	public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, Guid>
 	{
 		private readonly ILibraryDbContext _dbContext;
+		private readonly FilePaths _filePaths;
 
-		public CreateBookCommandHandler(ILibraryDbContext dbContext)
+		public CreateBookCommandHandler(ILibraryDbContext dbContext, IOptions<FilePaths> filePathsOptions)
 		{
 			_dbContext = dbContext;
+			_filePaths = filePathsOptions.Value;
 		}
 
 		public async Task<Guid> Handle(CreateBookCommand command, CancellationToken cancellationToken)
@@ -33,6 +37,14 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Create
 				throw new EntityAlreadyExistException(nameof(Book));
 			}
 
+			string newContentFileName = $"{Guid.NewGuid()}.pdf";
+			string contentPath = Path.Combine(_filePaths.BooksPath, newContentFileName);
+
+			using (FileStream stream = new FileStream(contentPath, FileMode.Create))
+			{
+				await command.ContentFile.CopyToAsync(stream, cancellationToken);
+			}
+
 			Book newBook = new Book()
 			{
 				Id = Guid.NewGuid(),
@@ -40,7 +52,7 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Create
 				Name = command.Name,
 				Description = command.Description,
 				Year = command.Year,
-				Text = command.Text,
+				ContentPath = contentPath,
 				CreationDate = DateTime.Now,
 				CreatedUserId = command.UserId
 			};

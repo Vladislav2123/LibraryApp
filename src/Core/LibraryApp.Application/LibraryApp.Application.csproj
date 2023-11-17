@@ -20,8 +20,4 @@
     <ProjectReference Include="..\LibraryApp.Domain\LibraryApp.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Common\Exceptions\Common\" />
-  </ItemGroup>
-
 </Project>

@@ -20,7 +20,7 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Update
 
 			RuleFor(command => command.Name)
 				.NotEmpty()
-				.MaximumLength(50);
+				.MaximumLength(100);
 
 			RuleFor(command => command.Description)
 				.MaximumLength(1000);

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace LibraryApp.Application.Feauters.Books.Commands.Create
 {
@@ -8,5 +9,5 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Create
 		string Name,
 		string Description,
 		int Year,
-		string Text) : IRequest<Guid>;
+		IFormFile ContentFile) : IRequest<Guid>;
 }

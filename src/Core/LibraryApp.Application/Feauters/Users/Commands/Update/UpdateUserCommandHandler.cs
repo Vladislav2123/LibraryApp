@@ -29,8 +29,10 @@ namespace LibraryApp.Application.Feauters.Users.Commands.Update
 				throw new EntityHasNoChangesException(nameof(User), command.Id);
 			}
 
-			if(await _dbContext.Users
-				.AnyAsync(user => user.Email == command.Email, cancellationToken))
+			if (await _dbContext.Users
+				.AnyAsync(u =>
+					u.Id != user.Id &&
+					u.Email == command.Email, cancellationToken))
 			{
 				throw new UserEmailAlreadyUsingException(command.Email);
 			}

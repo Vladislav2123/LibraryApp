@@ -25,4 +25,8 @@
     <ProjectReference Include="..\..\Infrastructure\LibraryApp.DAL\LibraryApp.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Files\Books\" />
+  </ItemGroup>
+
 </Project>
