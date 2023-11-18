@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using LibraryApp.Application.Common.Validators;
 
 namespace LibraryApp.Application.Feauters.Books.Commands.Create
 {
@@ -27,7 +28,7 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Create
 
             RuleFor(command => command.ContentFile)
                 .NotNull()
-                .Must(file => file.ContentType == "application/pdf");
+                .SetValidator(new PdfFileValidator());
         }
     }
 }

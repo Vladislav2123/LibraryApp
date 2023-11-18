@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using LibraryApp.Application.Common.Validators;
 
 namespace LibraryApp.Application.Feauters.Books.Commands.Update
 {
@@ -28,6 +29,9 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Update
 			RuleFor(command => command.Year)
 				.Must(year => year == 0 || (year > 1000 && year < 2025))
 				.WithMessage("Year must be in the range from 1000 to 2025 or 0");
+
+			RuleFor(command => command.ContentFile)
+				.SetValidator(new PdfFileValidator());
 		}
     }
 }

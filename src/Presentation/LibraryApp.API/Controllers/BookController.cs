@@ -46,7 +46,7 @@ namespace LibraryApp.API.Controllers
 
         [HttpPut]
         public async Task<ActionResult> Update(
-            [FromBody] UpdateBookCommand command, CancellationToken cancellationToken)
+            [FromForm] UpdateBookCommand command, CancellationToken cancellationToken)
         {
             await _mediator.Send(command, cancellationToken);
 

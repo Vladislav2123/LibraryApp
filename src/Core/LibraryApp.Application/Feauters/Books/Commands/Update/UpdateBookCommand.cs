@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace LibraryApp.Application.Feauters.Books.Commands.Update
 {
@@ -8,5 +9,6 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Update
 		Guid AuthorId,
 		string Name,
 		string Description,
-		int Year) : IRequest<Unit>;
+		int Year,
+		IFormFile? ContentFile) : IRequest<Unit>;
 }
