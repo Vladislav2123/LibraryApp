@@ -8,12 +8,10 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Update
         public UpdateBookCommandValidator()
         {
 			RuleFor(command => command.UserId)
-				.NotNull()
-				.NotEmpty();
+				.SetValidator(new GuidValidator());
 
 			RuleFor(command => command.BookId)
-				.NotNull()
-				.NotEmpty();
+				.SetValidator(new GuidValidator());
 
 			RuleFor(command => command.AuthorId)
 				.NotNull()

@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using LibraryApp.Application.Common.Validators;
 
 namespace LibraryApp.Application.Feauters.Books.Commands.Delete
 {
@@ -7,12 +8,10 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Delete
         public DeleteBookCommandValidator()
         {
             RuleFor(command => command.UserId)
-                .NotNull()
-                .NotEmpty();
+				.SetValidator(new GuidValidator());
 
-            RuleFor(command => command.BookId)
-                .NotNull()
-                .NotEmpty();
-        }
+			RuleFor(command => command.BookId)
+				.SetValidator(new GuidValidator());
+		}
     }
 }

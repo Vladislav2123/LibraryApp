@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using LibraryApp.Application.Common.Validators;
 
 namespace LibraryApp.Application.Feauters.Authors.Commands.Update
 {
@@ -7,14 +8,12 @@ namespace LibraryApp.Application.Feauters.Authors.Commands.Update
         public UpdateAuthorCommandValidator()
         {
             RuleFor(command => command.UserId)
-                .NotNull()
-                .NotEmpty();
+				.SetValidator(new GuidValidator());
 
-            RuleFor(command => command.AuthorId)
-                .NotNull()
-                .NotEmpty();
+			RuleFor(command => command.AuthorId)
+				.SetValidator(new GuidValidator());
 
-            RuleFor(command => command.Name)
+			RuleFor(command => command.Name)
                 .NotEmpty()
                 .Length(3, 50);
         }

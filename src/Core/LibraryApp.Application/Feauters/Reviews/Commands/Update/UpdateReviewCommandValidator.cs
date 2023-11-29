@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using LibraryApp.Application.Common.Validators;
 
 namespace LibraryApp.Application.Feauters.Reviews.Commands.Update
 {
@@ -7,12 +8,10 @@ namespace LibraryApp.Application.Feauters.Reviews.Commands.Update
         public UpdateReviewCommandValidator()
         {
 			RuleFor(command => command.UserId)
-				.NotNull()
-				.NotEmpty();
+				.SetValidator(new GuidValidator());
 
 			RuleFor(command => command.ReviewId)
-				.NotNull()
-				.NotEmpty();
+				.SetValidator(new GuidValidator());
 
 			RuleFor(command => command.Rating)
 				.NotEmpty()

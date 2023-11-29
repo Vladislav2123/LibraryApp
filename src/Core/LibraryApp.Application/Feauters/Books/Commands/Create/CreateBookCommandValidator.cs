@@ -8,14 +8,12 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Create
         public CreateBookCommandValidator()
         {
             RuleFor(command => command.UserId)
-                .NotNull()
-                .NotEmpty();
+				.SetValidator(new GuidValidator());
 
-            RuleFor(command => command.AuthorId)
-                .NotNull()
-                .NotEmpty();
+			RuleFor(command => command.AuthorId)
+				.SetValidator(new GuidValidator());
 
-            RuleFor(command => command.Name)
+			RuleFor(command => command.Name)
                 .NotEmpty()
                 .MaximumLength(100);
 
