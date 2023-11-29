@@ -16,12 +16,12 @@ namespace LibraryApp.Application.Feauters.Authors.Commands.DeleteAuthorAvatar
 			_dbContext = dbContext;
 		}
 
-		public async Task<Unit> Handle(DeleteAuthorAvatarCommand request, CancellationToken cancellationToken)
+		public async Task<Unit> Handle(DeleteAuthorAvatarCommand command, CancellationToken cancellationToken)
 		{
 			var author = await _dbContext.Authors
-				.FirstOrDefaultAsync(author => author.Id == request.Id, cancellationToken);
+				.FirstOrDefaultAsync(author => author.Id == command.Id, cancellationToken);
 
-			if (author == null) throw new EntityNotFoundException(nameof(Author), request.Id);
+			if (author == null) throw new EntityNotFoundException(nameof(Author), command.Id);
 
 			if (string.IsNullOrEmpty(author.AvatarPath) ||
 				Path.Exists(author.AvatarPath) == false)

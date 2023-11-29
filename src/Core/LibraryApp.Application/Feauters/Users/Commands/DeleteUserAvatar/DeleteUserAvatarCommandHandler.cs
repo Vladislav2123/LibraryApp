@@ -16,12 +16,12 @@ namespace LibraryApp.Application.Feauters.Users.Commands.DeleteUserAvatar
 			_dbContext = dbContext;
 		}
 
-		public async Task<Unit> Handle(DeleteUserAvatarCommand request, CancellationToken cancellationToken)
+		public async Task<Unit> Handle(DeleteUserAvatarCommand command, CancellationToken cancellationToken)
 		{
 			var user = await _dbContext.Users
-				.FirstOrDefaultAsync(user => user.Id == request.Id, cancellationToken);
+				.FirstOrDefaultAsync(user => user.Id == command.Id, cancellationToken);
 
-			if (user == null) throw new EntityNotFoundException(nameof(User), request.Id);
+			if (user == null) throw new EntityNotFoundException(nameof(User), command.Id);
 
 			if (string.IsNullOrEmpty(user.AvatarPath) ||
 				Path.Exists(user.AvatarPath) == false)

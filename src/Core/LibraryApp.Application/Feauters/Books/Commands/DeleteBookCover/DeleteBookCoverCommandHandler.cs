@@ -17,12 +17,12 @@ namespace LibraryApp.Application.Feauters.Books.Commands.DeleteBookCover
 			_dbContext = dbContext;
 		}
 
-		public async Task<Unit> Handle(DeleteBookCommand request, CancellationToken cancellationToken)
+		public async Task<Unit> Handle(DeleteBookCommand command, CancellationToken cancellationToken)
 		{
 			var book = await _dbContext.Books
-				.FirstOrDefaultAsync(book => book.Id == request.BookId, cancellationToken);
+				.FirstOrDefaultAsync(book => book.Id == command.BookId, cancellationToken);
 
-			if (book == null) throw new EntityNotFoundException(nameof(Book), request.BookId);
+			if (book == null) throw new EntityNotFoundException(nameof(Book), command.BookId);
 
 			if (string.IsNullOrEmpty(book.CoverPath) ||
 				Path.Exists(book.CoverPath) == false)

@@ -19,23 +19,23 @@ namespace LibraryApp.Application.Feauters.Authors.Commands.UpdateAuthorAvatar
 			_filePaths = filePathsOptions.Value;
 		}
 
-		public async Task<Unit> Handle(UpdateAuthorAvatarCommand request, CancellationToken cancellationToken)
+		public async Task<Unit> Handle(UpdateAuthorAvatarCommand command, CancellationToken cancellationToken)
 		{
 			var author = await _dbContext.Authors
-				.FirstOrDefaultAsync(author => author.Id == request.AuthorId, cancellationToken);
+				.FirstOrDefaultAsync(author => author.Id == command.AuthorId, cancellationToken);
 
-			if (author == null) throw new EntityNotFoundException(nameof(Author), request.AuthorId);
+			if (author == null) throw new EntityNotFoundException(nameof(Author), command.AuthorId);
 
 			if (string.IsNullOrEmpty(author.AvatarPath))
 			{
-				string avatarFileName = $"{Guid.NewGuid()}{Path.GetExtension(request.AvatarFile.FileName)}";
+				string avatarFileName = $"{Guid.NewGuid()}{Path.GetExtension(command.AvatarFile.FileName)}";
 				author.AvatarPath = Path.Combine(_filePaths.AvatarsPath, avatarFileName);
 			}
 			else File.Delete(author.AvatarPath);
 
 			using (var stream = new FileStream(author.AvatarPath, FileMode.Create))
 			{
-				await request.AvatarFile.CopyToAsync(stream, cancellationToken);
+				await command.AvatarFile.CopyToAsync(stream, cancellationToken);
 			}
 
 			await _dbContext.SaveChangesAsync(cancellationToken);
