@@ -3,9 +3,9 @@ using LibraryApp.Application.Common.Validators;
 
 namespace LibraryApp.Application.Feauters.Reviews.Commands.Create
 {
-	public class CreateReviewCommandValidation : AbstractValidator<CreateReviewCommand>
+	public class CreateReviewCommandValidator : AbstractValidator<CreateReviewCommand>
 	{
-        public CreateReviewCommandValidation()
+        public CreateReviewCommandValidator()
         {
             RuleFor(command => command.UserId)
 				.SetValidator(new GuidValidator());
