@@ -8,6 +8,7 @@ namespace LibraryApp.Application.Feauters.Authors.Queries.Dto
 	{
 		public Guid Id { get; set; }
 		public string Name { get; set; }
+		public string AvatarUrl { get; set; }
 
 		public void CreateMap(Profile profile)
 		{

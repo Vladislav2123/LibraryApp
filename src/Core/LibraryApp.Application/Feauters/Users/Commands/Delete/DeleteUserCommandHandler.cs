@@ -23,6 +23,9 @@ namespace LibraryApp.Application.Feauters.Users.Commands.Delete
 
             if (user == null) throw new EntityNotFoundException(nameof(User), command.Id);
 
+            if(string.IsNullOrEmpty(user.AvatarPath) == false)
+                File.Delete(user.AvatarPath);
+
             _dbContext.Authors.RemoveRange(user.CreatedAuthors);
             _dbContext.Users.Remove(user);
             await _dbContext.SaveChangesAsync(cancellationToken);

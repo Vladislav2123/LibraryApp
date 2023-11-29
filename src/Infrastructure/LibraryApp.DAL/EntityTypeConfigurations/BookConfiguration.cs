@@ -28,6 +28,9 @@ namespace LibraryApp.DAL.EntityTypeConfigurations
 
 			builder.Property(book => book.ContentPath)
 				.IsRequired();
+
+			builder.Ignore(book => book.ContentUrl);
+			builder.Ignore(book => book.CoverUrl);
 		}
 	}
 }

@@ -3,6 +3,7 @@ using LibraryApp.Application;
 using LibraryApp.API.Middleware;
 using Serilog;
 using LibraryApp.Domain.Models;
+using Microsoft.AspNetCore.StaticFiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +36,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();
 
 app.UseAuthorization();
 

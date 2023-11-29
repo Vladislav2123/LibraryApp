@@ -37,7 +37,7 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Create
 				throw new EntityAlreadyExistException(nameof(Book));
 			}
 
-			string newContentFileName = $"{Guid.NewGuid()}.pdf";
+			string newContentFileName = $"{Guid.NewGuid()}{Path.GetExtension(command.ContentFile.FileName)}";
 			string contentPath = Path.Combine(_filePaths.BooksPath, newContentFileName);
 
 			using (FileStream stream = new FileStream(contentPath, FileMode.Create))

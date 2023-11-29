@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using LibraryApp.Application.Common.Validators;
 
 namespace LibraryApp.Application.Feauters.Users.Commands.Update
 {
@@ -7,8 +8,7 @@ namespace LibraryApp.Application.Feauters.Users.Commands.Update
         public UpdateUserCommandValidator()
         {
             RuleFor(command => command.Id)
-                .NotNull()
-                .NotEmpty();
+				.SetValidator(new GuidValidator());
 
 			RuleFor(command => command.Name)
 				.NotEmpty()

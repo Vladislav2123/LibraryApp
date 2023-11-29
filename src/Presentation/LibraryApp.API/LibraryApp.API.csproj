@@ -27,6 +27,8 @@
 
   <ItemGroup>
     <Folder Include="Files\Books\" />
+    <Folder Include="Files\Images\Avatars\" />
+    <Folder Include="Files\Images\Covers\" />
   </ItemGroup>
 
 </Project>

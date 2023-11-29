@@ -47,6 +47,8 @@ namespace LibraryApp.DAL.EntityTypeConfigurations
 				.WithOne(author => author.CreatedUser)
 				.HasForeignKey(author => author.CreatedUserId)
 				.OnDelete(DeleteBehavior.Restrict);
+
+			builder.Ignore(user => user.AvatarUrl);
 		}
 	}
 }

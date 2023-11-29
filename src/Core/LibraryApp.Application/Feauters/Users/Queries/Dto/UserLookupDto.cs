@@ -10,6 +10,7 @@ namespace LibraryApp.Application.Feauters.Users.Queries.Dto
 		public string Name { get; set; }
 		public DateOnly BirthDate { get; set; }
 		public int ReadBooksCount { get; set; }
+		public string AvatarUrl { get; set; }
 
 		public void CreateMap(Profile profile)
 		{

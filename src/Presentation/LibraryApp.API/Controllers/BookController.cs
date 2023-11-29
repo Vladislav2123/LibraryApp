@@ -10,6 +10,10 @@ using LibraryApp.Application.Feauters.Reviews.Queries.Dto;
 using LibraryApp.Application.Feauters.Reviews.Queries.GetBookReviews;
 using LibraryApp.Application.Common.Pagination;
 using LibraryApp.Application.Feauters.Books.Querries.GetBookContent;
+using LibraryApp.Domain.Models;
+using LibraryApp.Application.Feauters.Books.Querries.GetBookCover;
+using LibraryApp.Application.Feauters.Books.Commands.UpdateBookCover;
+using LibraryApp.Application.Feauters.Books.Commands.DeleteBookCover;
 
 namespace LibraryApp.API.Controllers
 {
@@ -71,16 +75,43 @@ namespace LibraryApp.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet("{id}/content")]
-        public async Task<ActionResult<BookContentVm>> GetContent(Guid id, CancellationToken cancellationToken)
-        {
-            var query = new GetBookContentQuery(id);
-            BookContentVm response = await _mediator.Send(query, cancellationToken);
+		[HttpGet("{id}/cover")]
+		public async Task<ActionResult> GetCover(Guid id, CancellationToken cancellationToken)
+		{
+            var query = new GetBookCoverQuery(id);
+            FileVm response = await _mediator.Send(query, cancellationToken);
 
             return File(response.Bytes, response.ContentType, response.FileName);
         }
 
-        [HttpGet("{id}/reviews")]
+        [HttpPut("{id}/cover")]
+        public async Task<ActionResult> UpdateCover(
+            [FromForm] UpdateBookCoverCommand command, CancellationToken cancellationToken)
+        {
+            await _mediator.Send(command, cancellationToken);
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}/cover")]
+        public async Task<ActionResult> DeleteCover(
+            DeleteBookCoverCommand command, CancellationToken cancellationToken)
+        {
+            await _mediator.Send(command, cancellationToken);
+
+            return NoContent();
+        }
+
+        [HttpGet("{id}/content")]
+        public async Task<ActionResult> GetContent(Guid id, CancellationToken cancellationToken)
+        {
+            var query = new GetBookContentQuery(id);
+            FileVm response = await _mediator.Send(query, cancellationToken);
+
+            return File(response.Bytes, response.ContentType, response.FileName);
+        }
+
+		[HttpGet("{id}/reviews")]
         public async Task<ActionResult<PagedList<ReviewDto>>> GetReviews(
             Guid id, string? sortColumn, string? sortOrder, int page, int size, CancellationToken cancellationToken)
         {

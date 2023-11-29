@@ -22,6 +22,9 @@ namespace LibraryApp.Application.Feauters.Authors.Commands.Delete
 
 			if (author == null) throw new EntityNotFoundException(nameof(Author), command.AuthorId);
 
+			if (string.IsNullOrEmpty(author.AvatarPath) == false)
+				File.Delete(author.AvatarPath);
+
 			_dbContext.Authors.Remove(author);
 			await _dbContext.SaveChangesAsync(cancellationToken);
 

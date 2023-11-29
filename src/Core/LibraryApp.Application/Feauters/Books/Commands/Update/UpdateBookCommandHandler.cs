@@ -5,7 +5,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Http;
-using iTextSharp.text;
 
 namespace LibraryApp.Application.Feauters.Books.Commands.Update
 {
@@ -27,9 +26,7 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Update
 
 			if (await _dbContext.Authors
 				.AnyAsync(author => author.Id == command.AuthorId, cancellationToken) == false)
-			{
-				throw new EntityNotFoundException(nameof(Author), command.AuthorId);
-			}
+					throw new EntityNotFoundException(nameof(Author), command.AuthorId);
 
 			var sameBook = await _dbContext.Books
 				.FirstOrDefaultAsync(book =>
@@ -40,16 +37,12 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Update
 
 			if (sameBook != null)
 			{
-				if (sameBook.Id == book.Id)
-				{
-					if (command.ContentFile != null)
-					{
-						if (IsContentsEqual(book.ContentPath, command.ContentFile))
-							throw new EntityHasNoChangesException(nameof(Book), command.BookId);
-					}
-					else throw new EntityHasNoChangesException(nameof(Book), command.BookId);
-				}
-				else throw new EntityAlreadyExistException(nameof(Book));
+				if (sameBook.Id != book.Id) throw new EntityAlreadyExistException(nameof(Book));
+				if (command.ContentFile == null) throw new EntityHasNoChangesException(nameof(Book), command.BookId);
+				if (IsContentsEqual(book.ContentPath, command.ContentFile))
+					throw new EntityHasNoChangesException(nameof(Book), command.BookId);
+
+				File.Delete(book.ContentPath);
 			}
 
 			book.AuthorId = command.AuthorId;

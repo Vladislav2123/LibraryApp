@@ -10,6 +10,9 @@
 		public DateTime CreationDate { get; set; }
 		public UserRole Role { get; set; }
 
+		public string? AvatarPath { get; set; }
+		public string AvatarUrl => $"/api/users/{Id}/avatar";
+
 		public ICollection<Author> CreatedAuthors { get; set; }
 		public ICollection<Book> CreatedBooks { get; set; }
 		public ICollection<Book> ReadBooks { get; set; }

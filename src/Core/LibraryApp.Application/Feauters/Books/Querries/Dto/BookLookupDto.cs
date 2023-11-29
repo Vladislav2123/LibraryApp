@@ -12,6 +12,7 @@ namespace LibraryApp.Application.Feauters.Books.Querries.Dto
 		public double Rating { get; set; }
 		public int Year { get; set; }
 		public int ReadersCount { get; set; }
+		public string CoverUrl { get; set; }
 
 		public void CreateMap(Profile profile)
 		{

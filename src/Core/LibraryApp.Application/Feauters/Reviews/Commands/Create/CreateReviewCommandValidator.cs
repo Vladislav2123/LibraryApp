@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using LibraryApp.Application.Common.Validators;
 
 namespace LibraryApp.Application.Feauters.Reviews.Commands.Create
 {
@@ -7,12 +8,10 @@ namespace LibraryApp.Application.Feauters.Reviews.Commands.Create
         public CreateReviewCommandValidation()
         {
             RuleFor(command => command.UserId)
-                .NotNull()
-                .NotEmpty();
+				.SetValidator(new GuidValidator());
 
 			RuleFor(command => command.BookId)
-				.NotNull()
-				.NotEmpty();
+				.SetValidator(new GuidValidator());
 
 			RuleFor(command => command.Rating)
 				.NotEmpty()

@@ -7,8 +7,11 @@ using LibraryApp.Application.Feauters.Users.Commands.AddReadedBook;
 using LibraryApp.Application.Feauters.Users.Commands.Create;
 using LibraryApp.Application.Feauters.Users.Commands.Delete;
 using LibraryApp.Application.Feauters.Users.Commands.DeleteReadBook;
+using LibraryApp.Application.Feauters.Users.Commands.DeleteUserAvatar;
 using LibraryApp.Application.Feauters.Users.Commands.Update;
+using LibraryApp.Application.Feauters.Users.Commands.UpdateUserAvatar;
 using LibraryApp.Application.Feauters.Users.Queries.Dto;
+using LibraryApp.Application.Feauters.Users.Queries.GetUserAvatar;
 using LibraryApp.Application.Feauters.Users.Queries.GetUserDetails;
 using LibraryApp.Application.Feauters.Users.Queries.GetUsers;
 using MediatR;
@@ -16,7 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryApp.API.Controllers
 {
-    [ApiController]
+	[ApiController]
 	[Route("api/users")]
 	public class UserController : ControllerBase
 	{
@@ -29,7 +32,7 @@ namespace LibraryApp.API.Controllers
 
 		[HttpGet]
 		public async Task<ActionResult<PagedList<UserLookupDto>>> GetAll(
-			string? search, string? sortColumn, string? sortOrder, 
+			string? search, string? sortColumn, string? sortOrder,
 			int page, int size, CancellationToken cancellationToken)
 		{
 			var query = new GetAllUsersQuery(search, sortColumn, sortOrder, new Page(page, size));
@@ -67,10 +70,38 @@ namespace LibraryApp.API.Controllers
 		}
 
 		[HttpDelete("{id}")]
-		public async Task<ActionResult> Delete(Guid id)
+		public async Task<ActionResult> Delete(Guid id, CancellationToken cancellationToken)
 		{
 			var command = new DeleteUserCommand(id);
-			await _mediator.Send(command);
+			await _mediator.Send(command, cancellationToken);
+
+			return NoContent();
+		}
+
+		[HttpGet("{id}/avatar")]
+		public async Task<ActionResult> GetAvatar(Guid id, CancellationToken cancellationToken)
+		{
+			var query = new GetUserAvatarQuery(id);
+			var response = await _mediator.Send(query, cancellationToken);
+
+			return File(response.Bytes, response.ContentType, response.FileName);
+		}
+
+		[HttpPut("{id}/avatar")]
+		public async Task<ActionResult> UpdateAvatar(
+			[FromForm] UpdateUserAvatarCommand command, CancellationToken cancellationToken)
+		{
+			await _mediator.Send(command, cancellationToken);
+
+			return NoContent();
+		}
+
+		[HttpDelete("{id}/avatar")]
+		public async Task<ActionResult> DeleteAvatar(
+			Guid id, CancellationToken cancellationToken)
+		{
+			var command = new DeleteUserAvatarCommand(id);
+			await _mediator.Send(command, cancellationToken);
 
 			return NoContent();
 		}

@@ -13,7 +13,8 @@ namespace LibraryApp.Application.Feauters.Books.Querries.Dto
 		public double Rating { get; set; }
 		public string Description { get; set; }
 		public int Year { get; set; }
-		public string ContentUrl => $"/api/books/{Id}/content";
+		public string ContentUrl { get; set; }
+		public string CoverUrl { get; set; }
 
 		public void CreateMap(Profile profile)
 		{

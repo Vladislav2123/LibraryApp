@@ -1,6 +1,7 @@
 ﻿using LibraryApp.Application.Common.Exceptions;
 using Serilog;
 using System.Text.Json;
+using FileNotFoundException = LibraryApp.Application.Common.Exceptions.FileNotFoundException;
 
 namespace LibraryApp.API.Middleware
 {
@@ -48,6 +49,8 @@ namespace LibraryApp.API.Middleware
 				UserAlreadyReadBookException => StatusCodes.Status409Conflict,
 				UserHasNotReadBookException => StatusCodes.Status400BadRequest,
 				EntityNotFoundException => StatusCodes.Status404NotFound,
+				FileNotFoundException => StatusCodes.Status404NotFound,
+				ContentTypeNotFoundException => StatusCodes.Status500InternalServerError,
 				_ => StatusCodes.Status500InternalServerError
 			};
 

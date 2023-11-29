@@ -22,6 +22,8 @@ namespace LibraryApp.DAL.EntityTypeConfigurations
 
 			builder.Property(author => author.CreationDate)
 				.IsRequired();
+
+			builder.Ignore(author => author.AvatarUrl);
 		}
 	}
 }
