@@ -2,10 +2,10 @@
 {
     public class PagedList<T>
     {
-        private const int DEFAULT_PAGE = 1;
-        private const int DEFAULT_SIZE = 10;
-        private const int MIN_SIZE = 5;
-        private const int MAX_SIZE = 20;
+        private const int DefaultPage = 1;
+        private const int DefaultSize = 10;
+        private const int MinSize = 5;
+        private const int MaxSize = 20;
 
         public PagedList(List<T> items, int total, Page page)
         {
@@ -24,10 +24,10 @@
         {
             var totalCount = items.Count;
 
-            if (page.number == 0) page.number = DEFAULT_PAGE;
+            if (page.number == 0) page.number = DefaultPage;
 
-            if (page.size == 0) page.size = DEFAULT_SIZE;
-            else page.size = Math.Clamp(page.size, MIN_SIZE, MAX_SIZE);
+            if (page.size == 0) page.size = DefaultSize;
+            else page.size = Math.Clamp(page.size, MinSize, MaxSize);
 
             var pageItems = items.Skip((page.number - 1) * page.size).Take(page.size).ToList();
 
