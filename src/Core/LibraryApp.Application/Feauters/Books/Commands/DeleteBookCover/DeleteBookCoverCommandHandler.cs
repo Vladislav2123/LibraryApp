@@ -1,5 +1,4 @@
 ﻿using LibraryApp.Application.Common.Exceptions;
-using LibraryApp.Application.Feauters.Books.Commands.Delete;
 using LibraryApp.Application.Interfaces;
 using LibraryApp.Domain.Enteties;
 using MediatR;
@@ -8,7 +7,7 @@ using FileNotFoundException = LibraryApp.Application.Common.Exceptions.FileNotFo
 
 namespace LibraryApp.Application.Feauters.Books.Commands.DeleteBookCover
 {
-	public class DeleteBookCoverCommandHandler : IRequestHandler<DeleteBookCommand, Unit>
+	public class DeleteBookCoverCommandHandler : IRequestHandler<DeleteBookCoverCommand, Unit>
 	{
 		private readonly ILibraryDbContext _dbContext;
 
@@ -17,7 +16,7 @@ namespace LibraryApp.Application.Feauters.Books.Commands.DeleteBookCover
 			_dbContext = dbContext;
 		}
 
-		public async Task<Unit> Handle(DeleteBookCommand command, CancellationToken cancellationToken)
+		public async Task<Unit> Handle(DeleteBookCoverCommand command, CancellationToken cancellationToken)
 		{
 			var book = await _dbContext.Books
 				.FirstOrDefaultAsync(book => book.Id == command.BookId, cancellationToken);

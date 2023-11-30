@@ -88,9 +88,9 @@ namespace LibraryApp.API.Controllers
 		}
 		
 		[HttpDelete("{id}/avatar")]
-		public async Task<ActionResult> DeleteAvatar(
-			DeleteAuthorAvatarCommand command, CancellationToken cancellationToken)
+		public async Task<ActionResult> DeleteAvatar(Guid id, CancellationToken cancellationToken)
 		{
+			var command = new DeleteAuthorAvatarCommand(id);
 			await _mediator.Send(command, cancellationToken);
 
 			return NoContent();

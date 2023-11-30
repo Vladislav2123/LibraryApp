@@ -94,9 +94,9 @@ namespace LibraryApp.API.Controllers
         }
 
         [HttpDelete("{id}/cover")]
-        public async Task<ActionResult> DeleteCover(
-            DeleteBookCoverCommand command, CancellationToken cancellationToken)
+        public async Task<ActionResult> DeleteCover(Guid id, CancellationToken cancellationToken)
         {
+            var command = new DeleteBookCoverCommand(id);
             await _mediator.Send(command, cancellationToken);
 
             return NoContent();
