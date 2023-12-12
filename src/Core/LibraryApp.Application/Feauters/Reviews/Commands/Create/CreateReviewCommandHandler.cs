@@ -1,9 +1,11 @@
 ﻿using LibraryApp.Application.Common.Exceptions;
 using LibraryApp.Application.Feauters.Reviews.Notifications.BookReviewsUpdated;
-using LibraryApp.Application.Interfaces;
 using LibraryApp.Domain.Enteties;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using LibraryApp.Application.Abstractions;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace LibraryApp.Application.Feauters.Reviews.Commands.Create
 {
@@ -11,14 +13,21 @@ namespace LibraryApp.Application.Feauters.Reviews.Commands.Create
     {
         private readonly ILibraryDbContext _dbContext;
         private readonly IPublisher _publisher;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CreateReviewCommandHandler(ILibraryDbContext dbContext, IPublisher publisher)
-        {
-            _dbContext = dbContext;
-            _publisher = publisher;
-        }
+        private HttpContext HttpContext => _httpContextAccessor.HttpContext;
 
-        public async Task<Guid> Handle(CreateReviewCommand command, CancellationToken cancellationToken)
+		public CreateReviewCommandHandler(
+            ILibraryDbContext dbContext, 
+            IPublisher publisher, 
+            IHttpContextAccessor httpContextAccessor)
+		{
+			_dbContext = dbContext;
+			_publisher = publisher;
+			_httpContextAccessor = httpContextAccessor;
+		}
+
+		public async Task<Guid> Handle(CreateReviewCommand command, CancellationToken cancellationToken)
         {
             var book = await _dbContext.Books
                 .Include(book => book.Reviews)
@@ -26,22 +35,18 @@ namespace LibraryApp.Application.Feauters.Reviews.Commands.Create
 
             if (book == null) throw new EntityNotFoundException(nameof(Book), command.BookId);
 
-            if (await _dbContext.Users.AnyAsync(user => 
-                user.Id == command.UserId, cancellationToken) == false)
-            {
-                throw new EntityNotFoundException(nameof(User), command.UserId);
-            }
+            Guid userId = Guid.Parse(HttpContext.User.FindFirstValue(ClaimTypes.Actor));
 
             if(book.Reviews
-                .Any(review => review.UserId == command.UserId))
+                .Any(review => review.UserId == userId))
             {
-                throw new BookAlreadyHasReviewException(command.BookId, command.UserId);
+                throw new BookAlreadyHasReviewException(command.BookId, userId);
             }
 
             var newReview = new Review
             {
                 Id = Guid.NewGuid(),
-                UserId = command.UserId,
+                UserId = userId,
                 BookId = command.BookId,
                 Rating = command.Rating,
                 Title = command.Title,

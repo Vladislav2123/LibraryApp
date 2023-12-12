@@ -1,4 +1,5 @@
-﻿using LibraryApp.Application.Common.Pagination;
+﻿using LibraryApp.API.Authorization;
+using LibraryApp.Application.Common.Pagination;
 using LibraryApp.Application.Feauters.Authors.Commands.Create;
 using LibraryApp.Application.Feauters.Authors.Commands.Delete;
 using LibraryApp.Application.Feauters.Authors.Commands.DeleteAuthorAvatar;
@@ -9,7 +10,9 @@ using LibraryApp.Application.Feauters.Authors.Queries.GetAuthor;
 using LibraryApp.Application.Feauters.Authors.Queries.GetAuthorAvatar;
 using LibraryApp.Application.Feauters.Authors.Queries.GetAuthors;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace LibraryApp.API.Controllers
 {
@@ -35,6 +38,7 @@ namespace LibraryApp.API.Controllers
 		}
 
 		[HttpPost]
+		[Authorize(Policy = Policies.AdminOnlyPolicyName)]
 		public async Task<ActionResult<Guid>> Create(
 			[FromBody] CreateAuthorCommand command, CancellationToken cancellationToken)
 		{
@@ -44,6 +48,7 @@ namespace LibraryApp.API.Controllers
 		}
 
 		[HttpPut]
+		[Authorize(Policy = Policies.AdminOnlyPolicyName)]
 		public async Task<ActionResult> Update(
 			[FromBody] UpdateAuthorCommand command, CancellationToken cancellationToken)
 		{
@@ -52,9 +57,11 @@ namespace LibraryApp.API.Controllers
 			return NoContent();
 		}
 
-		[HttpDelete]
-		public async Task<ActionResult> Delete(DeleteAuthorCommand command, CancellationToken cancellationToken)
+		[HttpDelete("{id}")]
+		[Authorize(Policy = Policies.AdminOnlyPolicyName)]
+		public async Task<ActionResult> Delete(Guid id, CancellationToken cancellationToken)
 		{
+			var command = new DeleteAuthorCommand(id);
 			await _mediator.Send(command, cancellationToken);
 
 			return NoContent();
@@ -79,6 +86,7 @@ namespace LibraryApp.API.Controllers
 		}
 
 		[HttpPut("{id}/avatar")]
+		[Authorize(Policy = Policies.AdminOnlyPolicyName)]
 		public async Task<ActionResult> UpdateAvatar(
 			[FromForm] UpdateAuthorAvatarCommand command, CancellationToken cancellationToken)
 		{
@@ -88,6 +96,7 @@ namespace LibraryApp.API.Controllers
 		}
 		
 		[HttpDelete("{id}/avatar")]
+		[Authorize(Policy = Policies.AdminOnlyPolicyName)]
 		public async Task<ActionResult> DeleteAvatar(Guid id, CancellationToken cancellationToken)
 		{
 			var command = new DeleteAuthorAvatarCommand(id);

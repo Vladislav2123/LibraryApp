@@ -6,5 +6,6 @@ namespace LibraryApp.Application.Feauters.Users.Commands.Create
 		string Name,
 		string Email,
 		string Password,
-		DateOnly BirthDate) : IRequest<Guid>;
+		DateOnly BirthDate) 
+		: IRequest<Guid>;
 }

@@ -3,5 +3,6 @@ using MediatR;
 
 namespace LibraryApp.Application.Feauters.Authors.Queries.GetAuthorAvatar
 {
-	public record GetAuthorAvatarQuery(Guid Id) : IRequest<FileVm>;
+	public record GetAuthorAvatarQuery(Guid AuthorId) 
+		: IRequest<FileVm>;
 }

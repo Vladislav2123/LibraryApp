@@ -14,6 +14,8 @@ using LibraryApp.Domain.Models;
 using LibraryApp.Application.Feauters.Books.Querries.GetBookCover;
 using LibraryApp.Application.Feauters.Books.Commands.UpdateBookCover;
 using LibraryApp.Application.Feauters.Books.Commands.DeleteBookCover;
+using LibraryApp.API.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibraryApp.API.Controllers
 {
@@ -40,7 +42,8 @@ namespace LibraryApp.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> Create(
+		[Authorize(Policy = Policies.AdminOnlyPolicyName)]
+		public async Task<ActionResult<Guid>> Create(
             [FromForm] CreateBookCommand command, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(command, cancellationToken);
@@ -48,7 +51,8 @@ namespace LibraryApp.API.Controllers
             return CreatedAtAction(nameof(Create), response);
         }
 
-        [HttpPut]
+		[HttpPut]
+		[Authorize(Policy = Policies.AdminOnlyPolicyName)]
         public async Task<ActionResult> Update(
             [FromForm] UpdateBookCommand command, CancellationToken cancellationToken)
         {
@@ -57,10 +61,12 @@ namespace LibraryApp.API.Controllers
             return NoContent();
         }
 
-        [HttpDelete()]
+		[HttpDelete("{id}")]
+		[Authorize(Policy = Policies.AdminOnlyPolicyName)]
         public async Task<ActionResult> Delete(
-            DeleteBookCommand command, CancellationToken cancellationToken)
+            Guid id, CancellationToken cancellationToken)
         {
+            var command = new DeleteBookCommand(id);
             await _mediator.Send(command, cancellationToken);
 
             return NoContent();
@@ -85,7 +91,8 @@ namespace LibraryApp.API.Controllers
         }
 
         [HttpPut("{id}/cover")]
-        public async Task<ActionResult> UpdateCover(
+		[Authorize(Policy = Policies.AdminOnlyPolicyName)]
+		public async Task<ActionResult> UpdateCover(
             [FromForm] UpdateBookCoverCommand command, CancellationToken cancellationToken)
         {
             await _mediator.Send(command, cancellationToken);
@@ -94,7 +101,8 @@ namespace LibraryApp.API.Controllers
         }
 
         [HttpDelete("{id}/cover")]
-        public async Task<ActionResult> DeleteCover(Guid id, CancellationToken cancellationToken)
+		[Authorize(Policy = Policies.AdminOnlyPolicyName)]
+		public async Task<ActionResult> DeleteCover(Guid id, CancellationToken cancellationToken)
         {
             var command = new DeleteBookCoverCommand(id);
             await _mediator.Send(command, cancellationToken);

@@ -7,7 +7,7 @@ namespace LibraryApp.Application.Feauters.Users.Commands.Update
 	{
         public UpdateUserCommandValidator()
         {
-            RuleFor(command => command.Id)
+			RuleFor(command => command.UserId)
 				.SetValidator(new GuidValidator());
 
 			RuleFor(command => command.Name)

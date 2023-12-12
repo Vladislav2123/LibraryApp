@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Http;
 namespace LibraryApp.Application.Feauters.Books.Commands.Update
 {
 	public record UpdateBookCommand(
-		Guid UserId,
 		Guid BookId,
 		Guid AuthorId,
 		string Name,
 		string Description,
 		int Year,
-		IFormFile? ContentFile) : IRequest<Unit>;
+		IFormFile? ContentFile) 
+		: IRequest<Unit>;
 }

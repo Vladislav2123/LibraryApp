@@ -3,8 +3,9 @@
 namespace LibraryApp.Application.Feauters.Users.Commands.Update
 {
 	public record UpdateUserCommand(
-		Guid Id,
+		Guid UserId,
 		string Name,
 		string Email,
-		DateOnly BirthDate) : IRequest<Unit>;
+		DateOnly BirthDate) 
+		: IRequest<Unit>;
 }

@@ -8,5 +8,6 @@ namespace LibraryApp.Application.Feauters.Reviews.Queries.GetBookReviews
 		Guid BookId,
 		string? SortColumn,
 		string? SortOrder,
-		Page Page) : IRequest<PagedList<ReviewDto>>;
+		Page Page) 
+		: IRequest<PagedList<ReviewDto>>;
 }

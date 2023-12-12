@@ -3,5 +3,6 @@ using MediatR;
 
 namespace LibraryApp.Application.Feauters.Books.Querries.GetBookCover
 {
-	public record GetBookCoverQuery(Guid Id) : IRequest<FileVm>;
+	public record GetBookCoverQuery(Guid BookId) 
+		: IRequest<FileVm>;
 }

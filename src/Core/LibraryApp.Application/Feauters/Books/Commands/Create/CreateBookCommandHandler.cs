@@ -1,10 +1,12 @@
-﻿using LibraryApp.Application.Interfaces;
-using MediatR;
+﻿using MediatR;
 using LibraryApp.Domain.Enteties;
 using LibraryApp.Application.Common.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using LibraryApp.Domain.Models;
 using Microsoft.Extensions.Options;
+using LibraryApp.Application.Abstractions;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace LibraryApp.Application.Feauters.Books.Commands.Create
 {
@@ -12,11 +14,18 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Create
 	{
 		private readonly ILibraryDbContext _dbContext;
 		private readonly FilePaths _filePaths;
+		private readonly IHttpContextAccessor _httpContextAccessor;
 
-		public CreateBookCommandHandler(ILibraryDbContext dbContext, IOptions<FilePaths> filePathsOptions)
+		private HttpContext HttpContext => _httpContextAccessor.HttpContext;
+
+		public CreateBookCommandHandler(
+			ILibraryDbContext dbContext, 
+			IOptions<FilePaths> filePathsOptions, 
+			IHttpContextAccessor httpContextAccessor)
 		{
 			_dbContext = dbContext;
 			_filePaths = filePathsOptions.Value;
+			_httpContextAccessor = httpContextAccessor;
 		}
 
 		public async Task<Guid> Handle(CreateBookCommand command, CancellationToken cancellationToken)
@@ -45,6 +54,8 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Create
 				await command.ContentFile.CopyToAsync(stream, cancellationToken);
 			}
 
+			Guid userId = Guid.Parse(HttpContext.User.FindFirstValue(ClaimTypes.Actor));
+
 			Book newBook = new Book()
 			{
 				Id = Guid.NewGuid(),
@@ -54,7 +65,7 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Create
 				Year = command.Year,
 				ContentPath = contentPath,
 				CreationDate = DateTime.Now,
-				CreatedUserId = command.UserId
+				CreatedUserId = userId
 			};
 
 			await _dbContext.Books.AddAsync(newBook, cancellationToken);

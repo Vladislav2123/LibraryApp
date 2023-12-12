@@ -3,5 +3,6 @@ using MediatR;
 
 namespace LibraryApp.Application.Feauters.Books.Querries.GetBookContent
 {
-	public record GetBookContentQuery(Guid Id) : IRequest<FileVm>;
+	public record GetBookContentQuery(Guid BookId) 
+		: IRequest<FileVm>;
 }

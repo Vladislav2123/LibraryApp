@@ -1,10 +1,10 @@
 ﻿using LibraryApp.Application.Common.Exceptions;
-using LibraryApp.Application.Interfaces;
 using LibraryApp.Domain.Enteties;
 using LibraryApp.Domain.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using LibraryApp.Application.Abstractions;
 
 namespace LibraryApp.Application.Feauters.Books.Commands.UpdateBookCover
 {

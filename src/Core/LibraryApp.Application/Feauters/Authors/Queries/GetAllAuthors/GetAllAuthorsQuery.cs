@@ -6,5 +6,6 @@ namespace LibraryApp.Application.Feauters.Authors.Queries.GetAuthors
 {
     public record GetAllAuthorsQuery(
 		string? SearchTerms,
-		Page Page) : IRequest<PagedList<AuthorLookupDto>>;
+		Page Page) 
+		: IRequest<PagedList<AuthorLookupDto>>;
 }

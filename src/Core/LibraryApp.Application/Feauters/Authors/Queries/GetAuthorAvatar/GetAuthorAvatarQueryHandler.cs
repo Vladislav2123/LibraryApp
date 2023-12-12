@@ -1,11 +1,11 @@
 ﻿using LibraryApp.Application.Common.Exceptions;
-using LibraryApp.Application.Interfaces;
 using LibraryApp.Domain.Enteties;
 using LibraryApp.Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using FileNotFoundException = LibraryApp.Application.Common.Exceptions.FileNotFoundException;
+using LibraryApp.Application.Abstractions;
 
 namespace LibraryApp.Application.Feauters.Authors.Queries.GetAuthorAvatar
 {
@@ -23,9 +23,9 @@ namespace LibraryApp.Application.Feauters.Authors.Queries.GetAuthorAvatar
 		public async Task<FileVm> Handle(GetAuthorAvatarQuery request, CancellationToken cancellationToken)
 		{
 			var author = await _libraryDbContext.Authors
-				.FirstOrDefaultAsync(author => author.Id == request.Id, cancellationToken);
+				.FirstOrDefaultAsync(author => author.Id == request.AuthorId, cancellationToken);
 
-			if (author == null) throw new EntityNotFoundException(nameof(Author), request.Id);
+			if (author == null) throw new EntityNotFoundException(nameof(Author), request.AuthorId);
 
 			if (string.IsNullOrEmpty(author.AvatarPath) ||
 				Path.Exists(author.AvatarPath) == false)

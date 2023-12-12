@@ -1,4 +1,5 @@
 ﻿using LibraryApp.Application.Common.Exceptions;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text.Json;
 using FileNotFoundException = LibraryApp.Application.Common.Exceptions.FileNotFoundException;
@@ -41,15 +42,17 @@ namespace LibraryApp.API.Middleware
 		private int GetStatusCode(Exception exception) =>
 			exception switch
 			{
-				ValidationException => StatusCodes.Status422UnprocessableEntity,
-				EntityHasNoChangesException => StatusCodes.Status422UnprocessableEntity,
+				LoginFailedException => StatusCodes.Status400BadRequest,
+				UserHasNotReadBookException => StatusCodes.Status400BadRequest,
+				EntityNotFoundException => StatusCodes.Status404NotFound,
+				FileNotFoundException => StatusCodes.Status404NotFound,
+				SecurityTokenException => StatusCodes.Status401Unauthorized,
 				EntityAlreadyExistException => StatusCodes.Status409Conflict,
 				BookAlreadyHasReviewException => StatusCodes.Status409Conflict,
 				UserEmailAlreadyUsingException => StatusCodes.Status409Conflict,
 				UserAlreadyReadBookException => StatusCodes.Status409Conflict,
-				UserHasNotReadBookException => StatusCodes.Status400BadRequest,
-				EntityNotFoundException => StatusCodes.Status404NotFound,
-				FileNotFoundException => StatusCodes.Status404NotFound,
+				ValidationException => StatusCodes.Status422UnprocessableEntity,
+				EntityHasNoChangesException => StatusCodes.Status422UnprocessableEntity,
 				ContentTypeNotFoundException => StatusCodes.Status500InternalServerError,
 				_ => StatusCodes.Status500InternalServerError
 			};

@@ -7,7 +7,7 @@ namespace LibraryApp.Application.Feauters.Users.Commands.Delete
 	{
         public DeleteUserCommandValidator()
         {
-            RuleFor(command => command.Id)
+            RuleFor(command => command.UserId)
 				.SetValidator(new GuidValidator());
 		}
     }

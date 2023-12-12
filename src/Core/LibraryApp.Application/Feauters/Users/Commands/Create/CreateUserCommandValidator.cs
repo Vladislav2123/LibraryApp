@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using LibraryApp.Application.Common.Validators;
 
 namespace LibraryApp.Application.Feauters.Users.Commands.Create
 {
@@ -11,13 +12,10 @@ namespace LibraryApp.Application.Feauters.Users.Commands.Create
                 .Length(2, 50);
 
             RuleFor(command => command.Email)
-                .NotEmpty()
-                .EmailAddress()
-                .MaximumLength(100);
+                .SetValidator(new EmailValidator());
 
             RuleFor(command => command.Password)
-                .NotEmpty()
-                .Length(6, 50);
+                .SetValidator(new PasswordValidator());
 
             RuleFor(command => command.BirthDate)
                 .NotEmpty();

@@ -3,5 +3,6 @@ using MediatR;
 
 namespace LibraryApp.Application.Feauters.Users.Queries.GetUserAvatar
 {
-	public record GetUserAvatarQuery(Guid Id) : IRequest<FileVm>;
+	public record GetUserAvatarQuery(Guid UserId) 
+		: IRequest<FileVm>;
 }

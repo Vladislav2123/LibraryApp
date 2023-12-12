@@ -1,10 +1,12 @@
-﻿using LibraryApp.Application.Common.Pagination;
+﻿using LibraryApp.API.Authorization;
+using LibraryApp.Application.Common.Pagination;
 using LibraryApp.Application.Feauters.Reviews.Commands.Create;
 using LibraryApp.Application.Feauters.Reviews.Commands.Delete;
 using LibraryApp.Application.Feauters.Reviews.Commands.Update;
 using LibraryApp.Application.Feauters.Reviews.Queries.Dto;
 using LibraryApp.Application.Feauters.Reviews.Queries.GetAllReviews;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryApp.API.Controllers
@@ -14,10 +16,13 @@ namespace LibraryApp.API.Controllers
 	public class ReviewController : ControllerBase
 	{
 		private readonly IMediator _mediator;
+		private readonly IAuthorizationService _authorizationService;
 
-		public ReviewController(IMediator mediator)
+		public ReviewController(IMediator mediator, IAuthorizationService authorizationService)
 		{
+
 			_mediator = mediator;
+			_authorizationService = authorizationService;
 		}
 
 		[HttpGet]
@@ -31,6 +36,7 @@ namespace LibraryApp.API.Controllers
 		}
 
 		[HttpPost]
+		[Authorize]
 		public async Task<ActionResult<Guid>> Create(
 			[FromBody] CreateReviewCommand command, CancellationToken cancellationToken)
 		{
@@ -40,18 +46,33 @@ namespace LibraryApp.API.Controllers
 		}
 
 		[HttpPut]
+		[Authorize]
 		public async Task<ActionResult> Update
 			([FromBody] UpdateReviewCommand command, CancellationToken cancellationToken)
 		{
-			await _mediator.Send(command, cancellationToken);
+			var authorizationResult = await _authorizationService
+				.AuthorizeAsync(User, command.ReviewId, Policies.ReviewUpdatePolicyName);
+
+			if (authorizationResult.Succeeded == false)
+				return new ForbidResult();
+
+            await _mediator.Send(command, cancellationToken);
 
 			return NoContent();
 		}
 
-		[HttpDelete]
+		[HttpDelete("{id}")]
+		[Authorize]
 		public async Task<ActionResult> Delete(
-			DeleteReviewCommand command, CancellationToken cancellationToken)
+			Guid id, CancellationToken cancellationToken)
 		{
+			var authorizationResult = await _authorizationService
+				.AuthorizeAsync(User, id, Policies.ReviewDeletePolicyName);
+
+			if (authorizationResult.Succeeded == false)
+				return new ForbidResult();
+
+			var command = new DeleteReviewCommand(id);
 			await _mediator.Send(command, cancellationToken);
 
 			return NoContent();

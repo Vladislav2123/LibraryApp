@@ -22,6 +22,6 @@
 	public enum UserRole
 	{
 		Default,
-		Administrator
+		Admin
 	}
 }

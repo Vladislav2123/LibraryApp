@@ -1,8 +1,8 @@
 ﻿using LibraryApp.Application.Common.Exceptions;
-using LibraryApp.Application.Interfaces;
 using LibraryApp.Domain.Enteties;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using LibraryApp.Application.Abstractions;
 
 namespace LibraryApp.Application.Feauters.Users.Commands.Update
 {
@@ -18,15 +18,15 @@ namespace LibraryApp.Application.Feauters.Users.Commands.Update
 		public async Task<Unit> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
 		{
 			User user = await _dbContext.Users
-				.FirstOrDefaultAsync(user => user.Id == command.Id, cancellationToken);
+				.FirstOrDefaultAsync(user => user.Id == command.UserId, cancellationToken);
 
-			if (user == null) throw new EntityNotFoundException(nameof(User), command.Id);
+			if (user == null) throw new EntityNotFoundException(nameof(User), command.UserId);
 
 			if (user.Name == command.Name &&
 				user.Email == command.Name &&
 				user.BirthDate == command.BirthDate)
 			{
-				throw new EntityHasNoChangesException(nameof(User), command.Id);
+				throw new EntityHasNoChangesException(nameof(User), command.UserId);
 			}
 
 			if (await _dbContext.Users

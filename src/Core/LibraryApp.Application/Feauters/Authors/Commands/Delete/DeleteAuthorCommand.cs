@@ -2,7 +2,6 @@
 
 namespace LibraryApp.Application.Feauters.Authors.Commands.Delete
 {
-	public record DeleteAuthorCommand(
-		Guid UserId,
-		Guid AuthorId) : IRequest<Unit>;
+	public record DeleteAuthorCommand(Guid AuthorId) 
+		: IRequest<Unit>;
 }

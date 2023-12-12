@@ -7,7 +7,7 @@ namespace LibraryApp.Application.Feauters.Users.Commands.DeleteUserAvatar
 	{
         public DeleteUserAvaterCommandValidator()
         {
-            RuleFor(command => command.Id)
+            RuleFor(command => command.UserId)
                 .SetValidator(new GuidValidator());
         }
     }

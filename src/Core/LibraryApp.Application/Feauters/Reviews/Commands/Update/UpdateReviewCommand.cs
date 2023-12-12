@@ -3,7 +3,6 @@
 namespace LibraryApp.Application.Feauters.Reviews.Commands.Update
 {
 	public record UpdateReviewCommand(
-		Guid UserId,
 		Guid ReviewId,
 		int Rating,
 		string? Title,

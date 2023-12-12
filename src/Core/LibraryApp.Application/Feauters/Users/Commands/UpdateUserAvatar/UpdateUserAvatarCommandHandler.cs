@@ -1,10 +1,10 @@
 ﻿using LibraryApp.Application.Common.Exceptions;
-using LibraryApp.Application.Interfaces;
 using LibraryApp.Domain.Enteties;
 using LibraryApp.Domain.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using LibraryApp.Application.Abstractions;
 
 namespace LibraryApp.Application.Feauters.Users.Commands.UpdateUserAvatar
 {
@@ -13,7 +13,9 @@ namespace LibraryApp.Application.Feauters.Users.Commands.UpdateUserAvatar
 		private readonly ILibraryDbContext _dbContext;
 		private readonly FilePaths _filePaths;
 
-		public UpdateUserAvatarCommandHandler(ILibraryDbContext dbContext, IOptions<FilePaths> filePathsOptions)
+		public UpdateUserAvatarCommandHandler(
+			ILibraryDbContext dbContext, 
+			IOptions<FilePaths> filePathsOptions)
 		{
 			_dbContext = dbContext;
 			_filePaths = filePathsOptions.Value;
@@ -38,7 +40,7 @@ namespace LibraryApp.Application.Feauters.Users.Commands.UpdateUserAvatar
 				await command.AvatarFile.CopyToAsync(stream, cancellationToken);
 			}
 
-			_dbContext.SaveChangesAsync(cancellationToken);
+			await _dbContext.SaveChangesAsync(cancellationToken);
 
 			return Unit.Value;
 		}

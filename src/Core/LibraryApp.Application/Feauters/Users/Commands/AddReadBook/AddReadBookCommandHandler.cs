@@ -1,8 +1,8 @@
 ﻿using LibraryApp.Application.Common.Exceptions;
-using LibraryApp.Application.Interfaces;
 using LibraryApp.Domain.Enteties;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using LibraryApp.Application.Abstractions;
 
 namespace LibraryApp.Application.Feauters.Users.Commands.AddReadedBook
 {
@@ -15,24 +15,22 @@ namespace LibraryApp.Application.Feauters.Users.Commands.AddReadedBook
 			_dbContext = dbContext;
 		}
 
-		public async Task<Unit> Handle(AddReadBookCommand request, CancellationToken cancellationToken)
+		public async Task<Unit> Handle(AddReadBookCommand command, CancellationToken cancellationToken)
 		{
 			var user = await _dbContext.Users
 				.Include(user => user.ReadBooks)
-				.FirstOrDefaultAsync(user => user.Id == request.UserId, cancellationToken);
-
-			if(user == null) throw new EntityNotFoundException(nameof(User), request.UserId);
+				.FirstOrDefaultAsync(user => user.Id == command.UserId, cancellationToken);
 
 			var book = await _dbContext.Books
 				.Include(book => book.Readers)
-				.FirstOrDefaultAsync(book => book.Id == request.BookId, cancellationToken);
+				.FirstOrDefaultAsync(book => book.Id == command.BookId, cancellationToken);
 
-			if(book == null) throw new EntityNotFoundException(nameof(Book), request.BookId);
+			if(book == null) throw new EntityNotFoundException(nameof(Book), command.BookId);
 
 			if (user.ReadBooks.Any(book =>
-				book.Id == request.BookId))
+				book.Id == command.BookId))
 			{
-				throw new UserAlreadyReadBookException(request.UserId, request.BookId);
+				throw new UserAlreadyReadBookException(command.UserId, command.BookId);
 			}
 
 			user.ReadBooks.Add(book);

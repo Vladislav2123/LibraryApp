@@ -7,9 +7,6 @@ namespace LibraryApp.Application.Feauters.Authors.Commands.Delete
 	{
         public DeleteAuthorCommandValidator()
         {
-            RuleFor(command => command.UserId)
-				.SetValidator(new GuidValidator());
-
 			RuleFor(command => command.AuthorId)
 				.SetValidator(new GuidValidator());
 		}

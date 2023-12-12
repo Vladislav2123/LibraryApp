@@ -9,5 +9,6 @@ namespace LibraryApp.Application.Feauters.Books.Querries.GetBooks
         Guid? AuthorId, 
         string? SortColumn, 
         string? SortOrder,
-        Page Page) : IRequest<PagedList<BookLookupDto>>;
+        Page Page) 
+        : IRequest<PagedList<BookLookupDto>>;
 }

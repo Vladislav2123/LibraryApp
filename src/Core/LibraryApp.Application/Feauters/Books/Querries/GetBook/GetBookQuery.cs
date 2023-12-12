@@ -3,5 +3,6 @@ using LibraryApp.Application.Feauters.Books.Querries.Dto;
 
 namespace LibraryApp.Application.Feauters.Books.Querries.GetBook
 {
-    public record GetBookQuery(Guid Id) : IRequest<BookDto>;
+    public record GetBookQuery(Guid BookId) 
+        : IRequest<BookDto>;
 }

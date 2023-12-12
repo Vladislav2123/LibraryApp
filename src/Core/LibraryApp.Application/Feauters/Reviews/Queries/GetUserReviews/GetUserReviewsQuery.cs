@@ -6,5 +6,6 @@ namespace LibraryApp.Application.Feauters.Reviews.Queries.GetUserReviews
 {
     public record GetUserReviewsQuery(
 		Guid UserId,
-		Page Page) : IRequest<PagedList<ReviewDto>>;
+		Page Page) 
+		: IRequest<PagedList<ReviewDto>>;
 }

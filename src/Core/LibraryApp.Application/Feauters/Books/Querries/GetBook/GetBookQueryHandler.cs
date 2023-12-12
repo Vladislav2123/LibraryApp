@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using LibraryApp.Application.Common.Exceptions;
-using LibraryApp.Application.Interfaces;
 using LibraryApp.Domain.Enteties;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Feauters.Books.Querries.Dto;
+using LibraryApp.Application.Abstractions;
 
 namespace LibraryApp.Application.Feauters.Books.Querries.GetBook
 {
@@ -22,9 +22,9 @@ namespace LibraryApp.Application.Feauters.Books.Querries.GetBook
         public async Task<BookDto> Handle(GetBookQuery request, CancellationToken cancellationToken)
 		{
 			Book book = await _dbContext.Books
-                .FirstOrDefaultAsync(book => book.Id == request.Id, cancellationToken);
+                .FirstOrDefaultAsync(book => book.Id == request.BookId, cancellationToken);
 
-            if (book == null) throw new EntityNotFoundException(nameof(Book), request.Id);
+            if (book == null) throw new EntityNotFoundException(nameof(Book), request.BookId);
 
             return _mapper.Map<BookDto>(book);
         }

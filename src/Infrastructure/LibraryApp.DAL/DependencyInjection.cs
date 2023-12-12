@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
-using LibraryApp.Application.Interfaces;
+using LibraryApp.Application.Abstractions;
 
 namespace LibraryApp.DAL
 {

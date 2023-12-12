@@ -7,7 +7,7 @@ namespace LibraryApp.Application.Feauters.Authors.Commands.DeleteAuthorAvatar
 	{
         public DeleteAuthorAvatarCommandValidator()
         {
-            RuleFor(command => command.Id)
+            RuleFor(command => command.AuthorId)
                 .SetValidator(new GuidValidator());
         }
     }

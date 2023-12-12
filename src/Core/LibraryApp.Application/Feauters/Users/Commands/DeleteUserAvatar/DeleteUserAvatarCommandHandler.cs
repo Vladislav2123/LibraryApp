@@ -1,9 +1,9 @@
 ﻿using LibraryApp.Application.Common.Exceptions;
-using LibraryApp.Application.Interfaces;
 using LibraryApp.Domain.Enteties;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using FileNotFoundException = LibraryApp.Application.Common.Exceptions.FileNotFoundException;
+using LibraryApp.Application.Abstractions;
 
 namespace LibraryApp.Application.Feauters.Users.Commands.DeleteUserAvatar
 {
@@ -19,9 +19,9 @@ namespace LibraryApp.Application.Feauters.Users.Commands.DeleteUserAvatar
 		public async Task<Unit> Handle(DeleteUserAvatarCommand command, CancellationToken cancellationToken)
 		{
 			var user = await _dbContext.Users
-				.FirstOrDefaultAsync(user => user.Id == command.Id, cancellationToken);
+				.FirstOrDefaultAsync(user => user.Id == command.UserId, cancellationToken);
 
-			if (user == null) throw new EntityNotFoundException(nameof(User), command.Id);
+			if (user == null) throw new EntityNotFoundException(nameof(User), command.UserId);
 
 			if (string.IsNullOrEmpty(user.AvatarPath) ||
 				Path.Exists(user.AvatarPath) == false)

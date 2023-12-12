@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using LibraryApp.Application.Interfaces;
 using LibraryApp.Domain.Enteties;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Common.Exceptions;
 using LibraryApp.Application.Feauters.Users.Queries.Dto;
+using LibraryApp.Application.Abstractions;
 
 namespace LibraryApp.Application.Feauters.Users.Queries.GetUserDetails
 {
@@ -22,9 +22,9 @@ namespace LibraryApp.Application.Feauters.Users.Queries.GetUserDetails
         public async Task<UserDetailsDto> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
             User user = await _dbContext.Users
-                .FirstOrDefaultAsync(user => user.Id == request.Id, cancellationToken);
+                .FirstOrDefaultAsync(user => user.Id == request.UserId, cancellationToken);
 
-            if (user == null) throw new EntityNotFoundException(nameof(User), request.Id);
+            if (user == null) throw new EntityNotFoundException(nameof(User), request.UserId);
 
             return _mapper.Map<UserDetailsDto>(user);
         }

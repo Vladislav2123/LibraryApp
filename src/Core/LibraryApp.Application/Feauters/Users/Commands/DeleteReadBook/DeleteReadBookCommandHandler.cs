@@ -1,8 +1,7 @@
 ﻿using LibraryApp.Application.Common.Exceptions;
-using LibraryApp.Application.Interfaces;
-using LibraryApp.Domain.Enteties;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using LibraryApp.Application.Abstractions;
 
 namespace LibraryApp.Application.Feauters.Users.Commands.DeleteReadBook
 {
@@ -15,17 +14,15 @@ namespace LibraryApp.Application.Feauters.Users.Commands.DeleteReadBook
 			_dbContext = dbContext;
 		}
 
-		public async Task<Unit> Handle(DeleteReadBookCommand request, CancellationToken cancellationToken)
+		public async Task<Unit> Handle(DeleteReadBookCommand command, CancellationToken cancellationToken)
 		{
 			var user = await _dbContext.Users
 				.Include(user => user.ReadBooks)
-				.FirstOrDefaultAsync(user => user.Id == request.UserId, cancellationToken);
+				.FirstOrDefaultAsync(user => user.Id == command.UserId, cancellationToken);
 
-			if (user == null) throw new EntityNotFoundException(nameof(User), request.UserId);
+			var book = user.ReadBooks.FirstOrDefault(book => book.Id == command.BookId);
 
-			var book = user.ReadBooks.FirstOrDefault(book => book.Id == request.BookId);
-
-			if (book == null) throw new UserHasNotReadBookException(request.UserId, request.BookId);
+			if (book == null) throw new UserHasNotReadBookException(command.UserId, command.BookId);
 
 			user.ReadBooks.Remove(book);
 			book.Readers.Remove(user);

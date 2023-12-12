@@ -1,28 +1,28 @@
 ﻿using LibraryApp.Application.Common.Exceptions;
-using LibraryApp.Application.Interfaces;
 using LibraryApp.Domain.Enteties;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using LibraryApp.Application.Abstractions;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace LibraryApp.Application.Feauters.Authors.Commands.Create
 {
 	public class CreateAuthorCommandHandler : IRequestHandler<CreateAuthorCommand, Guid>
 	{
 		private readonly ILibraryDbContext _dbContext;
+		private readonly IHttpContextAccessor _httpContextAccessor;
 
-		public CreateAuthorCommandHandler(ILibraryDbContext dbContext)
+		private HttpContext HttpContext => _httpContextAccessor.HttpContext;
+
+		public CreateAuthorCommandHandler(ILibraryDbContext dbContext, IHttpContextAccessor httpContextAccessor)
 		{
 			_dbContext = dbContext;
+			_httpContextAccessor = httpContextAccessor;
 		}
 
 		public async Task<Guid> Handle(CreateAuthorCommand command, CancellationToken cancellationToken)
 		{
-			if (await _dbContext.Users
-				.AnyAsync(user => user.Id == command.UserId, cancellationToken) == false)
-			{
-				throw new EntityNotFoundException(nameof(User), command.UserId);
-			}
-
 			if (await _dbContext.Authors
 				.AnyAsync(author => 
 					author.Name == command.Name &&
@@ -31,13 +31,15 @@ namespace LibraryApp.Application.Feauters.Authors.Commands.Create
 				throw new EntityAlreadyExistException(nameof(Author));
 			}
 
+			Guid userId = Guid.Parse(HttpContext.User.FindFirstValue(ClaimTypes.Actor));
+
 			Author author = new Author()
 			{
 				Id = Guid.NewGuid(),
 				Name = command.Name,
 				BirthDate = command.BirthDate,
 				CreationDate = DateTime.Now,
-				CreatedUserId = command.UserId
+				CreatedUserId = userId
 			};
 
 			await _dbContext.Authors.AddAsync(author, cancellationToken);

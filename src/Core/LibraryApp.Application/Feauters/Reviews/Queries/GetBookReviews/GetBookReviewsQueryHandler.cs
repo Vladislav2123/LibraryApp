@@ -2,11 +2,11 @@
 using LibraryApp.Application.Common.Exceptions;
 using LibraryApp.Application.Common.Pagination;
 using LibraryApp.Application.Feauters.Reviews.Queries.Dto;
-using LibraryApp.Application.Interfaces;
 using LibraryApp.Domain.Enteties;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using LibraryApp.Application.Abstractions;
 
 namespace LibraryApp.Application.Feauters.Reviews.Queries.GetBookReviews
 {

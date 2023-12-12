@@ -4,5 +4,6 @@ using LibraryApp.Application.Feauters.Users.Queries.Dto;
 
 namespace LibraryApp.Application.Feauters.Users.Queries.GetUserDetails
 {
-	public record GetUserQuery(Guid Id) : IRequest<UserDetailsDto>;
+	public record GetUserQuery(Guid UserId) 
+		: IRequest<UserDetailsDto>;
 }

@@ -7,7 +7,7 @@ namespace LibraryApp.Application.Feauters.Users.Commands.AddReadedBook
 	{
         public AddReadBookCommandValidator()
         {
-            RuleFor(command => command.UserId)
+			RuleFor(command => command.UserId)
 				.SetValidator(new GuidValidator());
 
 			RuleFor(command => command.BookId)

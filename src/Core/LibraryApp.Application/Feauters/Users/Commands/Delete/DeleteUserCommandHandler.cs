@@ -1,8 +1,8 @@
-﻿using LibraryApp.Application.Interfaces;
-using LibraryApp.Domain.Enteties;
+﻿using LibraryApp.Domain.Enteties;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Common.Exceptions;
+using LibraryApp.Application.Abstractions;
 
 namespace LibraryApp.Application.Feauters.Users.Commands.Delete
 {
@@ -19,9 +19,9 @@ namespace LibraryApp.Application.Feauters.Users.Commands.Delete
         {
             User user = await _dbContext.Users
                 .Include(user => user.CreatedAuthors)
-                .FirstOrDefaultAsync(user => user.Id == command.Id);
+                .FirstOrDefaultAsync(user => user.Id == command.UserId);
 
-            if (user == null) throw new EntityNotFoundException(nameof(User), command.Id);
+            if (user == null) throw new EntityNotFoundException(nameof(User), command.UserId);
 
             if(string.IsNullOrEmpty(user.AvatarPath) == false)
                 File.Delete(user.AvatarPath);

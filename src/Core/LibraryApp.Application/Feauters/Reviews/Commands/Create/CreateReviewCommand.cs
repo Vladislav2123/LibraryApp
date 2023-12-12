@@ -3,9 +3,9 @@
 namespace LibraryApp.Application.Feauters.Reviews.Commands.Create
 {
     public record CreateReviewCommand(
-        Guid UserId,
         Guid BookId,
         double Rating,
         string? Title,
-        string? Text) : IRequest<Guid>;
+        string? Text) 
+        : IRequest<Guid>;
 }

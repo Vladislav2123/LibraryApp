@@ -7,9 +7,6 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Create
 	{
         public CreateBookCommandValidator()
         {
-            RuleFor(command => command.UserId)
-				.SetValidator(new GuidValidator());
-
 			RuleFor(command => command.AuthorId)
 				.SetValidator(new GuidValidator());
 

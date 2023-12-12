@@ -8,5 +8,6 @@ namespace LibraryApp.Application.Feauters.Users.Queries.GetUsers
 		string? SearchTerms,
 		string? SortColumn,
 		string? SortOrder,
-		Page Page) : IRequest<PagedList<UserLookupDto>>;
+		Page Page) 
+		: IRequest<PagedList<UserLookupDto>>;
 }

@@ -7,9 +7,6 @@ namespace LibraryApp.Application.Feauters.Reviews.Commands.Delete
 	{
         public DeleteReviewCommandValidator()
         {
-            RuleFor(command => command.UserId)
-				.SetValidator(new GuidValidator());
-
 			RuleFor(command => command.ReviewId)
 				.SetValidator(new GuidValidator());
 		}

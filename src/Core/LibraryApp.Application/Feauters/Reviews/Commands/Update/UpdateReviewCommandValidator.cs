@@ -7,9 +7,6 @@ namespace LibraryApp.Application.Feauters.Reviews.Commands.Update
 	{
         public UpdateReviewCommandValidator()
         {
-			RuleFor(command => command.UserId)
-				.SetValidator(new GuidValidator());
-
 			RuleFor(command => command.ReviewId)
 				.SetValidator(new GuidValidator());
 

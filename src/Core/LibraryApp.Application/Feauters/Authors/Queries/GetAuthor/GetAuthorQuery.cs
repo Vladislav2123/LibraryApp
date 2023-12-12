@@ -3,5 +3,6 @@ using MediatR;
 
 namespace LibraryApp.Application.Feauters.Authors.Queries.GetAuthor
 {
-	public record GetAuthorQuery(Guid Id) : IRequest<AuthorDto>;
+	public record GetAuthorQuery(Guid AuthorId) 
+		: IRequest<AuthorDto>;
 }

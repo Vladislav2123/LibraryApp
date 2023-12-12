@@ -3,7 +3,17 @@ using LibraryApp.Application;
 using LibraryApp.API.Middleware;
 using Serilog;
 using LibraryApp.Domain.Models;
-using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using LibraryApp.API.Authentication;
+using LibraryApp.API.Authorization;
+using LibraryApp.Application.Abstractions;
+using MediatR;
+using LibraryApp.Domain.Enteties;
+using LibraryApp.API.Authorization.Role;
+using LibraryApp.API.Authorization.ReviewEdit;
+using LibraryApp.API.Authorization.UserEdit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,17 +24,64 @@ builder.Services.AddControllers();
 builder.Services
 	.AddEndpointsApiExplorer()
 	.AddSwaggerGen()
+	.AddHttpContextAccessor()
 	.AddApplication()
 	.AddTransient<GlobalExceptionHandlingMiddleware>()
-	.AddDal(builder.Configuration);
+	.AddTransient<CustomJwtValidationMiddleware>()
+	.AddDal(builder.Configuration)
+	.AddPoliciesHandlers()
+	.AddScoped<IJwtProvider, JwtProvider>();
+
+builder.Host.UseSerilog((context, congiguration) =>
+	congiguration.ReadFrom.Configuration(context.Configuration));
 
 builder.Services
 	.Configure<FilePaths>(
 		builder.Configuration
 		.GetSection(FilePaths.ConfigSectionKey));
 
-builder.Host.UseSerilog((context, congiguration) =>
-	congiguration.ReadFrom.Configuration(context.Configuration));
+builder.Services
+	.Configure<AuthenticationConfig>(
+		builder.Configuration
+		.GetSection(AuthenticationConfig.ConfigSectionKey));
+
+AuthenticationConfig? authConfig = builder.Configuration
+	.GetSection(AuthenticationConfig.ConfigSectionKey)
+	.Get<AuthenticationConfig>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+	.AddJwtBearer(options =>
+	{
+		options.TokenValidationParameters = new TokenValidationParameters()
+		{
+			ValidIssuer = authConfig.Issuer,
+			ValidAudience = authConfig.Audience,
+			IssuerSigningKey = new SymmetricSecurityKey(
+				Encoding.UTF8.GetBytes(authConfig.Key)),
+			ValidateIssuer = true,
+			ValidateAudience = true,
+			ValidateLifetime = true,
+			ValidateIssuerSigningKey = true,
+		};
+	});
+
+builder.Services.AddAuthorization(options =>
+{
+	options.AddPolicy(Policies.AdminOnlyPolicyName, policy =>
+		policy.Requirements.Add(new RoleRequirement(UserRole.Admin.ToString())));
+
+	options.AddPolicy(Policies.ReviewUpdatePolicyName, policy =>
+		policy.Requirements.Add(new EditReviewRequirement(false)));
+
+	options.AddPolicy(Policies.ReviewDeletePolicyName, policy =>
+		policy.Requirements.Add(new EditReviewRequirement(true)));
+
+	options.AddPolicy(Policies.UserUpdatePolicyName, policy =>
+		policy.Requirements.Add(new EditUserRequirement(false)));
+
+	options.AddPolicy(Policies.UserDeletePolicyName, policy =>
+		policy.Requirements.Add(new EditUserRequirement(true)));
+});
 
 var app = builder.Build();
 
@@ -37,19 +94,24 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseStaticFiles();
-
-app.UseAuthorization();
-
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
+app.UseAuthentication();
+app.UseCustomJwtValidation();
+app.UseAuthorization();
+
+app.UseStaticFiles();
 app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
 	var dbContext = scope.ServiceProvider
-		.GetRequiredService<LibraryDbContext>();
-	DbInitializer.Initialize(dbContext);
+		.GetRequiredService<ILibraryDbContext>();
+
+	var mediator = scope.ServiceProvider
+		.GetRequiredService<IMediator>();
+
+	await DbInitializer.Initialize(builder.Configuration, dbContext, mediator);
 }
 
 app.Run();
