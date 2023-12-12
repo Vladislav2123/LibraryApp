@@ -4,9 +4,9 @@ using Serilog;
 using System.Text.Json;
 using FileNotFoundException = LibraryApp.Application.Common.Exceptions.FileNotFoundException;
 
-namespace LibraryApp.API.Middleware
+namespace LibraryApp.API.ExceptionsHandling
 {
-    public class GlobalExceptionHandlingMiddleware : IMiddleware
+    public class GlobalExceptionsHandlingMiddleware : IMiddleware
 	{
 		public async Task InvokeAsync(HttpContext context, RequestDelegate next)
 		{

@@ -1,6 +1,5 @@
 using LibraryApp.DAL;
 using LibraryApp.Application;
-using LibraryApp.API.Middleware;
 using Serilog;
 using LibraryApp.Domain.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -14,6 +13,7 @@ using LibraryApp.Domain.Enteties;
 using LibraryApp.API.Authorization.Role;
 using LibraryApp.API.Authorization.ReviewEdit;
 using LibraryApp.API.Authorization.UserEdit;
+using LibraryApp.API.ExceptionsHandling;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +26,7 @@ builder.Services
 	.AddSwaggerGen()
 	.AddHttpContextAccessor()
 	.AddApplication()
-	.AddTransient<GlobalExceptionHandlingMiddleware>()
+	.AddTransient<GlobalExceptionsHandlingMiddleware>()
 	.AddTransient<CustomJwtValidationMiddleware>()
 	.AddDal(builder.Configuration)
 	.AddPoliciesHandlers()
@@ -94,7 +94,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+app.UseGlobalExceptionsHandling();
 
 app.UseAuthentication();
 app.UseCustomJwtValidation();
