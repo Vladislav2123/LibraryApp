@@ -20,7 +20,11 @@ namespace LibraryApp.DAL.EntityTypeConfigurations
 			builder.HasIndex(user => user.Email)
 				.IsUnique();
 
-			builder.Property(user => user.Password)
+			builder.Property(user => user.PasswordHash)
+				.HasMaxLength(100)
+				.IsRequired();
+
+			builder.Property(user => user.PasswordSalt)
 				.HasMaxLength(50)
 				.IsRequired();
 

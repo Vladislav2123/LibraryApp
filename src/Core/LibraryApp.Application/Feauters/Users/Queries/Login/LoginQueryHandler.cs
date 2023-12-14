@@ -9,11 +9,16 @@ namespace LibraryApp.Application.Feauters.Users.Queries.Login
 	{
 		private readonly ILibraryDbContext _dbConext;
 		private readonly IJwtProvider _jwtProvider;
+		private readonly IPasswordProvider _passwordProvider;
 
-		public LoginQueryHandler(ILibraryDbContext dbConext, IJwtProvider jwtProvider)
+		public LoginQueryHandler(
+			ILibraryDbContext dbConext, 
+			IJwtProvider jwtProvider,
+			IPasswordProvider passwordHasher)
 		{
 			_dbConext = dbConext;
 			_jwtProvider = jwtProvider;
+			_passwordProvider = passwordHasher;
 		}
 
 		public async Task<LoginResponse> Handle(LoginQuery command, CancellationToken cancellationToken)
@@ -23,7 +28,8 @@ namespace LibraryApp.Application.Feauters.Users.Queries.Login
 
 			if (user == null) throw new LoginFailedException();
 
-			if (user.Password != command.Password) throw new LoginFailedException();
+			string passwordHash = _passwordProvider.HashPassword(command.Password, user.PasswordSalt);
+			if (passwordHash != user.PasswordHash) throw new LoginFailedException();
 
 			LoginResponse response = new LoginResponse()
 			{

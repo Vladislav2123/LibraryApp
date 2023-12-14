@@ -23,8 +23,6 @@ namespace LibraryApp.API.Authentication
 				if (await _libraryDbContext.Users.AnyAsync(user => user.Id == userId) == false)
 				{
 					throw new SecurityTokenException("Invalid User");
-					//context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-					//return;
 				}
 			}
 
