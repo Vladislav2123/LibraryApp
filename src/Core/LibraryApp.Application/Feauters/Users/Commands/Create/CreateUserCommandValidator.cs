@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 using LibraryApp.Application.Common.Validators;
 
-namespace LibraryApp.Application.Feauters.Users.Commands.Create
+namespace LibraryApp.Application.Feauters.Users.Commands.Create;
+
+public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
 {
-	public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
-	{
         public CreateUserCommandValidator()
         {
             RuleFor(command => command.Name)
@@ -21,4 +21,3 @@ namespace LibraryApp.Application.Feauters.Users.Commands.Create
                 .NotEmpty();
         }
     }
-}

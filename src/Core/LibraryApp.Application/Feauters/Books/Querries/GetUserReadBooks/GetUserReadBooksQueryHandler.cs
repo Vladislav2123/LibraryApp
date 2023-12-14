@@ -7,12 +7,12 @@ using LibraryApp.Application.Feauters.Books.Querries.Dto;
 using LibraryApp.Application.Common.Pagination;
 using LibraryApp.Application.Abstractions;
 
-namespace LibraryApp.Application.Feauters.Books.Querries.GetUserReadBooks
-{
+namespace LibraryApp.Application.Feauters.Books.Querries.GetUserReadBooks;
+
     public class GetUserReadBooksQueryHandler : IRequestHandler<GetUserReadBooksQuery, PagedList<BookLookupDto>>
-	{
-		private readonly ILibraryDbContext _dbContext;
-		private readonly IMapper _mapper;
+{
+	private readonly ILibraryDbContext _dbContext;
+	private readonly IMapper _mapper;
 
         public GetUserReadBooksQueryHandler(ILibraryDbContext dbContext, IMapper mapper)
         {
@@ -32,4 +32,3 @@ namespace LibraryApp.Application.Feauters.Books.Querries.GetUserReadBooks
             return PagedList<BookLookupDto>.Create(booksLookups, request.Page);
         }
     }
-}

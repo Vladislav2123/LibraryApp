@@ -2,8 +2,8 @@
 using MediatR;
 using ValidationException = LibraryApp.Application.Common.Exceptions.ValidationException;
 
-namespace LibraryApp.Application.Common.Behaviours
-{
+namespace LibraryApp.Application.Common.Behaviours;
+
     public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
@@ -42,4 +42,3 @@ namespace LibraryApp.Application.Common.Behaviours
             return await next();
         }
     }
-}

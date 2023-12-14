@@ -1,8 +1,7 @@
-﻿namespace LibraryApp.Application.Abstractions
+﻿namespace LibraryApp.Application.Abstractions;
+
+public interface IPasswordProvider
 {
-	public interface IPasswordProvider
-	{
-		string HashPassword(string password, string salt);
-		string GenerateSalt();
-	}
+	string HashPassword(string password, string salt);
+	string GenerateSalt();
 }

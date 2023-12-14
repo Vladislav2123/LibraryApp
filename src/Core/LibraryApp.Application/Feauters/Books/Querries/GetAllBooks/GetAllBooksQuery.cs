@@ -2,8 +2,8 @@
 using LibraryApp.Application.Feauters.Books.Querries.Dto;
 using LibraryApp.Application.Common.Pagination;
 
-namespace LibraryApp.Application.Feauters.Books.Querries.GetBooks
-{
+namespace LibraryApp.Application.Feauters.Books.Querries.GetBooks;
+
     public record GetAllBooksQuery(
         string? SearchTerms,
         Guid? AuthorId, 
@@ -11,4 +11,3 @@ namespace LibraryApp.Application.Feauters.Books.Querries.GetBooks
         string? SortOrder,
         Page Page) 
         : IRequest<PagedList<BookLookupDto>>;
-}

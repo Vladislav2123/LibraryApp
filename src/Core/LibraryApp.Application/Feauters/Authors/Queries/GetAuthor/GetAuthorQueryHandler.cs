@@ -6,27 +6,26 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Abstractions;
 
-namespace LibraryApp.Application.Feauters.Authors.Queries.GetAuthor
+namespace LibraryApp.Application.Feauters.Authors.Queries.GetAuthor;
+
+public class GetAuthorQueryHandler : IRequestHandler<GetAuthorQuery, AuthorDto>
 {
-	public class GetAuthorQueryHandler : IRequestHandler<GetAuthorQuery, AuthorDto>
+	private readonly ILibraryDbContext _dbContext;
+	private readonly IMapper _mapper;
+
+	public GetAuthorQueryHandler(ILibraryDbContext dbContext, IMapper mapper)
 	{
-		private readonly ILibraryDbContext _dbContext;
-		private readonly IMapper _mapper;
+		_dbContext = dbContext;
+		_mapper = mapper;
+	}
 
-		public GetAuthorQueryHandler(ILibraryDbContext dbContext, IMapper mapper)
-		{
-			_dbContext = dbContext;
-			_mapper = mapper;
-		}
+	public async Task<AuthorDto> Handle(GetAuthorQuery request, CancellationToken cancellationToken)
+	{
+		var author = await _dbContext.Authors
+			.FirstOrDefaultAsync(author => author.Id == request.AuthorId, cancellationToken);
 
-		public async Task<AuthorDto> Handle(GetAuthorQuery request, CancellationToken cancellationToken)
-		{
-			var author = await _dbContext.Authors
-				.FirstOrDefaultAsync(author => author.Id == request.AuthorId, cancellationToken);
+		if (author == null) throw new EntityNotFoundException(nameof(Author), request.AuthorId);
 
-			if (author == null) throw new EntityNotFoundException(nameof(Author), request.AuthorId);
-
-			return _mapper.Map<AuthorDto>(author);
-		}
+		return _mapper.Map<AuthorDto>(author);
 	}
 }

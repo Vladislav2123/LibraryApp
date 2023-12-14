@@ -5,34 +5,33 @@ using Microsoft.EntityFrameworkCore;
 using FileNotFoundException = LibraryApp.Application.Common.Exceptions.FileNotFoundException;
 using LibraryApp.Application.Abstractions;
 
-namespace LibraryApp.Application.Feauters.Books.Commands.DeleteBookCover
+namespace LibraryApp.Application.Feauters.Books.Commands.DeleteBookCover;
+
+public class DeleteBookCoverCommandHandler : IRequestHandler<DeleteBookCoverCommand, Unit>
 {
-	public class DeleteBookCoverCommandHandler : IRequestHandler<DeleteBookCoverCommand, Unit>
+	private readonly ILibraryDbContext _dbContext;
+
+	public DeleteBookCoverCommandHandler(ILibraryDbContext dbContext)
 	{
-		private readonly ILibraryDbContext _dbContext;
+		_dbContext = dbContext;
+	}
 
-		public DeleteBookCoverCommandHandler(ILibraryDbContext dbContext)
-		{
-			_dbContext = dbContext;
-		}
+	public async Task<Unit> Handle(DeleteBookCoverCommand command, CancellationToken cancellationToken)
+	{
+		var book = await _dbContext.Books
+			.FirstOrDefaultAsync(book => book.Id == command.BookId, cancellationToken);
 
-		public async Task<Unit> Handle(DeleteBookCoverCommand command, CancellationToken cancellationToken)
-		{
-			var book = await _dbContext.Books
-				.FirstOrDefaultAsync(book => book.Id == command.BookId, cancellationToken);
+		if (book == null) throw new EntityNotFoundException(nameof(Book), command.BookId);
 
-			if (book == null) throw new EntityNotFoundException(nameof(Book), command.BookId);
+		if (string.IsNullOrEmpty(book.CoverPath) ||
+			Path.Exists(book.CoverPath) == false)
+			throw new FileNotFoundException("Book cover");
 
-			if (string.IsNullOrEmpty(book.CoverPath) ||
-				Path.Exists(book.CoverPath) == false)
-				throw new FileNotFoundException("Book cover");
+		File.Delete(book.CoverPath);
+		book.CoverPath = string.Empty;
 
-			File.Delete(book.CoverPath);
-			book.CoverPath = string.Empty;
+		await _dbContext.SaveChangesAsync(cancellationToken);
 
-			await _dbContext.SaveChangesAsync(cancellationToken);
-
-			return Unit.Value;
-		}
+		return Unit.Value;
 	}
 }

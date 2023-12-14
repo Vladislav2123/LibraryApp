@@ -1,10 +1,9 @@
-﻿namespace LibraryApp.API.ExceptionsHandling
+﻿namespace LibraryApp.API.ExceptionsHandling;
+
+public static class AppBuilderExtensions
 {
-	public static class AppBuilderExtensions
+	public static IApplicationBuilder UseGlobalExceptionsHandling(this IApplicationBuilder app)
 	{
-		public static IApplicationBuilder UseGlobalExceptionsHandling(this IApplicationBuilder app)
-		{
-			return app.UseMiddleware<GlobalExceptionsHandlingMiddleware>();
-		}
+		return app.UseMiddleware<GlobalExceptionsHandlingMiddleware>();
 	}
 }

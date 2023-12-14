@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 using LibraryApp.Application.Common.Validators;
 
-namespace LibraryApp.Application.Feauters.Users.Commands.UpdateUserAvatar
+namespace LibraryApp.Application.Feauters.Users.Commands.UpdateUserAvatar;
+
+public class UpdateUserAvatarCommandValidator : AbstractValidator<UpdateUserAvatarCommand>
 {
-	public class UpdateUserAvatarCommandValidator : AbstractValidator<UpdateUserAvatarCommand>
-	{
         public UpdateUserAvatarCommandValidator()
         {
             RuleFor(command => command.UserId)
@@ -15,4 +15,3 @@ namespace LibraryApp.Application.Feauters.Users.Commands.UpdateUserAvatar
                 .SetValidator(new ImageFileValidator());
         }
     }
-}

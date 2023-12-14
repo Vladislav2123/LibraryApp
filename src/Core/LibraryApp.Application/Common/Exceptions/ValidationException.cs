@@ -1,7 +1,7 @@
-﻿namespace LibraryApp.Application.Common.Exceptions
+﻿namespace LibraryApp.Application.Common.Exceptions;
+
+public class ValidationException : Exception
 {
-	public class ValidationException : Exception
-	{
         public ValidationException(string entityName, IReadOnlyDictionary<string, string[]> errorsDictionary) 
             : base($"{entityName} validation failed")
         {
@@ -9,5 +9,4 @@
         }
 
         public IReadOnlyDictionary<string, string[]> ErrorsDictionary { get; }
-	}
 }

@@ -5,34 +5,33 @@ using Microsoft.EntityFrameworkCore;
 using FileNotFoundException = LibraryApp.Application.Common.Exceptions.FileNotFoundException;
 using LibraryApp.Application.Abstractions;
 
-namespace LibraryApp.Application.Feauters.Authors.Commands.DeleteAuthorAvatar
+namespace LibraryApp.Application.Feauters.Authors.Commands.DeleteAuthorAvatar;
+
+public class DeleteAuthorAvatarCommandHandler : IRequestHandler<DeleteAuthorAvatarCommand, Unit>
 {
-	public class DeleteAuthorAvatarCommandHandler : IRequestHandler<DeleteAuthorAvatarCommand, Unit>
+	private readonly ILibraryDbContext _dbContext;
+
+	public DeleteAuthorAvatarCommandHandler(ILibraryDbContext dbContext)
 	{
-		private readonly ILibraryDbContext _dbContext;
+		_dbContext = dbContext;
+	}
 
-		public DeleteAuthorAvatarCommandHandler(ILibraryDbContext dbContext)
-		{
-			_dbContext = dbContext;
-		}
+	public async Task<Unit> Handle(DeleteAuthorAvatarCommand command, CancellationToken cancellationToken)
+	{
+		var author = await _dbContext.Authors
+			.FirstOrDefaultAsync(author => author.Id == command.AuthorId, cancellationToken);
 
-		public async Task<Unit> Handle(DeleteAuthorAvatarCommand command, CancellationToken cancellationToken)
-		{
-			var author = await _dbContext.Authors
-				.FirstOrDefaultAsync(author => author.Id == command.AuthorId, cancellationToken);
+		if (author == null) throw new EntityNotFoundException(nameof(Author), command.AuthorId);
 
-			if (author == null) throw new EntityNotFoundException(nameof(Author), command.AuthorId);
+		if (string.IsNullOrEmpty(author.AvatarPath) ||
+			Path.Exists(author.AvatarPath) == false)
+			throw new FileNotFoundException("Author avatar");
 
-			if (string.IsNullOrEmpty(author.AvatarPath) ||
-				Path.Exists(author.AvatarPath) == false)
-				throw new FileNotFoundException("Author avatar");
+		File.Delete(author.AvatarPath);
+		author.AvatarPath = string.Empty;
 
-			File.Delete(author.AvatarPath);
-			author.AvatarPath = string.Empty;
+		await _dbContext.SaveChangesAsync(cancellationToken);
 
-			await _dbContext.SaveChangesAsync(cancellationToken);
-
-			return Unit.Value;
-		}
+		return Unit.Value;
 	}
 }

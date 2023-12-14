@@ -4,46 +4,45 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Abstractions;
 
-namespace LibraryApp.Application.Feauters.Users.Commands.Update
+namespace LibraryApp.Application.Feauters.Users.Commands.Update;
+
+public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Unit>
 {
-	public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Unit>
+	private readonly ILibraryDbContext _dbContext;
+
+	public UpdateUserCommandHandler(ILibraryDbContext dbContext)
 	{
-		private readonly ILibraryDbContext _dbContext;
+		_dbContext = dbContext;
+	}
 
-		public UpdateUserCommandHandler(ILibraryDbContext dbContext)
+	public async Task<Unit> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
+	{
+		User user = await _dbContext.Users
+			.FirstOrDefaultAsync(user => user.Id == command.UserId, cancellationToken);
+
+		if (user == null) throw new EntityNotFoundException(nameof(User), command.UserId);
+
+		if (user.Name == command.Name &&
+			user.Email == command.Name &&
+			user.BirthDate == command.BirthDate)
 		{
-			_dbContext = dbContext;
+			throw new EntityHasNoChangesException(nameof(User), command.UserId);
 		}
 
-		public async Task<Unit> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
+		if (await _dbContext.Users
+			.AnyAsync(u =>
+				u.Id != user.Id &&
+				u.Email == command.Email, cancellationToken))
 		{
-			User user = await _dbContext.Users
-				.FirstOrDefaultAsync(user => user.Id == command.UserId, cancellationToken);
-
-			if (user == null) throw new EntityNotFoundException(nameof(User), command.UserId);
-
-			if (user.Name == command.Name &&
-				user.Email == command.Name &&
-				user.BirthDate == command.BirthDate)
-			{
-				throw new EntityHasNoChangesException(nameof(User), command.UserId);
-			}
-
-			if (await _dbContext.Users
-				.AnyAsync(u =>
-					u.Id != user.Id &&
-					u.Email == command.Email, cancellationToken))
-			{
-				throw new UserEmailAlreadyUsingException(command.Email);
-			}
-
-			user.Name = command.Name;
-			user.Email = command.Email;
-			user.BirthDate = command.BirthDate;
-
-			await _dbContext.SaveChangesAsync(cancellationToken);
-
-			return Unit.Value;
+			throw new UserEmailAlreadyUsingException(command.Email);
 		}
+
+		user.Name = command.Name;
+		user.Email = command.Email;
+		user.BirthDate = command.BirthDate;
+
+		await _dbContext.SaveChangesAsync(cancellationToken);
+
+		return Unit.Value;
 	}
 }

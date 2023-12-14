@@ -6,12 +6,12 @@ using LibraryApp.Application.Common.Exceptions;
 using LibraryApp.Application.Feauters.Users.Queries.Dto;
 using LibraryApp.Application.Abstractions;
 
-namespace LibraryApp.Application.Feauters.Users.Queries.GetUserDetails
+namespace LibraryApp.Application.Feauters.Users.Queries.GetUserDetails;
+
+public class GetUserQueryHandler : IRequestHandler<GetUserQuery, UserDetailsDto>
 {
-	public class GetUserQueryHandler : IRequestHandler<GetUserQuery, UserDetailsDto>
-	{
-		private readonly ILibraryDbContext _dbContext;
-		private readonly IMapper _mapper;
+	private readonly ILibraryDbContext _dbContext;
+	private readonly IMapper _mapper;
 
         public GetUserQueryHandler(ILibraryDbContext dbContext, IMapper mapper)
         {
@@ -29,4 +29,3 @@ namespace LibraryApp.Application.Feauters.Users.Queries.GetUserDetails
             return _mapper.Map<UserDetailsDto>(user);
         }
     }
-}

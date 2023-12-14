@@ -17,8 +17,8 @@ using LibraryApp.Application.Feauters.Books.Commands.DeleteBookCover;
 using LibraryApp.API.Authorization;
 using Microsoft.AspNetCore.Authorization;
 
-namespace LibraryApp.API.Controllers
-{
+namespace LibraryApp.API.Controllers;
+
     [ApiController]
     [Route("api/books")]
     public class BookController : ControllerBase
@@ -42,8 +42,8 @@ namespace LibraryApp.API.Controllers
         }
 
         [HttpPost]
-		[Authorize(Policy = Policies.AdminOnlyPolicyName)]
-		public async Task<ActionResult<Guid>> Create(
+	[Authorize(Policy = Policies.AdminOnlyPolicyName)]
+	public async Task<ActionResult<Guid>> Create(
             [FromForm] CreateBookCommand command, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(command, cancellationToken);
@@ -51,8 +51,8 @@ namespace LibraryApp.API.Controllers
             return CreatedAtAction(nameof(Create), response);
         }
 
-		[HttpPut]
-		[Authorize(Policy = Policies.AdminOnlyPolicyName)]
+	[HttpPut]
+	[Authorize(Policy = Policies.AdminOnlyPolicyName)]
         public async Task<ActionResult> Update(
             [FromForm] UpdateBookCommand command, CancellationToken cancellationToken)
         {
@@ -61,8 +61,8 @@ namespace LibraryApp.API.Controllers
             return NoContent();
         }
 
-		[HttpDelete("{id}")]
-		[Authorize(Policy = Policies.AdminOnlyPolicyName)]
+	[HttpDelete("{id}")]
+	[Authorize(Policy = Policies.AdminOnlyPolicyName)]
         public async Task<ActionResult> Delete(
             Guid id, CancellationToken cancellationToken)
         {
@@ -81,9 +81,9 @@ namespace LibraryApp.API.Controllers
             return Ok(response);
         }
 
-		[HttpGet("{id}/cover")]
-		public async Task<ActionResult> GetCover(Guid id, CancellationToken cancellationToken)
-		{
+	[HttpGet("{id}/cover")]
+	public async Task<ActionResult> GetCover(Guid id, CancellationToken cancellationToken)
+	{
             var query = new GetBookCoverQuery(id);
             FileVm response = await _mediator.Send(query, cancellationToken);
 
@@ -91,8 +91,8 @@ namespace LibraryApp.API.Controllers
         }
 
         [HttpPut("{id}/cover")]
-		[Authorize(Policy = Policies.AdminOnlyPolicyName)]
-		public async Task<ActionResult> UpdateCover(
+	[Authorize(Policy = Policies.AdminOnlyPolicyName)]
+	public async Task<ActionResult> UpdateCover(
             [FromForm] UpdateBookCoverCommand command, CancellationToken cancellationToken)
         {
             await _mediator.Send(command, cancellationToken);
@@ -101,8 +101,8 @@ namespace LibraryApp.API.Controllers
         }
 
         [HttpDelete("{id}/cover")]
-		[Authorize(Policy = Policies.AdminOnlyPolicyName)]
-		public async Task<ActionResult> DeleteCover(Guid id, CancellationToken cancellationToken)
+	[Authorize(Policy = Policies.AdminOnlyPolicyName)]
+	public async Task<ActionResult> DeleteCover(Guid id, CancellationToken cancellationToken)
         {
             var command = new DeleteBookCoverCommand(id);
             await _mediator.Send(command, cancellationToken);
@@ -119,7 +119,7 @@ namespace LibraryApp.API.Controllers
             return File(response.Bytes, response.ContentType, response.FileName);
         }
 
-		[HttpGet("{id}/reviews")]
+	[HttpGet("{id}/reviews")]
         public async Task<ActionResult<PagedList<ReviewDto>>> GetReviews(
             Guid id, string? sortColumn, string? sortOrder, int page, int size, CancellationToken cancellationToken)
         {
@@ -130,4 +130,3 @@ namespace LibraryApp.API.Controllers
         }
 
     }
-}

@@ -1,10 +1,9 @@
-﻿namespace LibraryApp.API.Authentication
+﻿namespace LibraryApp.API.Authentication;
+
+public static class AppBuilderExtensions
 {
-	public static class AppBuilderExtensions
+	public static IApplicationBuilder UseCustomJwtValidation(this IApplicationBuilder app)
 	{
-		public static IApplicationBuilder UseCustomJwtValidation(this IApplicationBuilder app)
-		{
-			return app.UseMiddleware<CustomJwtValidationMiddleware>();
-		}
+		return app.UseMiddleware<CustomJwtValidationMiddleware>();
 	}
 }

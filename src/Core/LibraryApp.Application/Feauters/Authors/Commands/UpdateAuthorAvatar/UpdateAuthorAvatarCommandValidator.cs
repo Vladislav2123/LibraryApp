@@ -6,10 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LibraryApp.Application.Feauters.Authors.Commands.UpdateAuthorAvatar
+namespace LibraryApp.Application.Feauters.Authors.Commands.UpdateAuthorAvatar;
+
+public class UpdateAuthorAvatarCommandValidator : AbstractValidator<UpdateAuthorAvatarCommand>
 {
-	public class UpdateAuthorAvatarCommandValidator : AbstractValidator<UpdateAuthorAvatarCommand>
-	{
         public UpdateAuthorAvatarCommandValidator()
         {
             RuleFor(command => command.AuthorId)
@@ -20,4 +20,3 @@ namespace LibraryApp.Application.Feauters.Authors.Commands.UpdateAuthorAvatar
                 .SetValidator(new ImageFileValidator());
         }
     }
-}

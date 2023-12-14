@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 using LibraryApp.Application.Common.Validators;
 
-namespace LibraryApp.Application.Feauters.Users.Queries.Login
+namespace LibraryApp.Application.Feauters.Users.Queries.Login;
+
+public class LoginQueriyValidator : AbstractValidator<LoginQuery>
 {
-	public class LoginQueriyValidator : AbstractValidator<LoginQuery>
-	{
         public LoginQueriyValidator()
         {
             RuleFor(command => command.Email)
@@ -14,4 +14,3 @@ namespace LibraryApp.Application.Feauters.Users.Queries.Login
                 .SetValidator(new PasswordValidator());
         }
     }
-}

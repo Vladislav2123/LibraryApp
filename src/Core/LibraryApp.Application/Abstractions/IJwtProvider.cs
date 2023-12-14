@@ -1,9 +1,8 @@
 ﻿using LibraryApp.Domain.Enteties;
 
-namespace LibraryApp.Application.Abstractions
+namespace LibraryApp.Application.Abstractions;
+
+public interface IJwtProvider
 {
-	public interface IJwtProvider
-	{
-		string GetJwtToken(User user);
-	}
+	string GetJwtToken(User user);
 }

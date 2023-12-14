@@ -1,15 +1,14 @@
 ﻿using FluentValidation;
 
-namespace LibraryApp.Application.Common.Validators
+namespace LibraryApp.Application.Common.Validators;
+
+public class EmailValidator : AbstractValidator<string>
 {
-	public class EmailValidator : AbstractValidator<string>
-	{
         public EmailValidator()
         {
             RuleFor(email => email)
-				.NotEmpty()
-				.EmailAddress()
-				.MaximumLength(100);
-		}
+			.NotEmpty()
+			.EmailAddress()
+			.MaximumLength(100);
+	}
     }
-}

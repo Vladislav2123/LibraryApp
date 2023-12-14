@@ -1,8 +1,7 @@
-﻿namespace LibraryApp.Application.Common.Exceptions
+﻿namespace LibraryApp.Application.Common.Exceptions;
+
+public class EntityAlreadyExistException : Exception
 {
-	public class EntityAlreadyExistException : Exception
-	{
-		public EntityAlreadyExistException(string name)
-			: base($"Entity {name} with the same values already exist") { }
-	}
+	public EntityAlreadyExistException(string name)
+		: base($"Entity {name} with the same values already exist") { }
 }

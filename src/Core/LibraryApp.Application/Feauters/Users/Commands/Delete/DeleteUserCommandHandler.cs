@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Common.Exceptions;
 using LibraryApp.Application.Abstractions;
 
-namespace LibraryApp.Application.Feauters.Users.Commands.Delete
+namespace LibraryApp.Application.Feauters.Users.Commands.Delete;
+
+public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Unit>
 {
-	public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Unit>
-	{
-		public readonly ILibraryDbContext _dbContext;
+	public readonly ILibraryDbContext _dbContext;
 
         public DeleteUserCommandHandler(ILibraryDbContext dbContext)
         {
@@ -33,4 +33,3 @@ namespace LibraryApp.Application.Feauters.Users.Commands.Delete
             return Unit.Value;
         }
     }
-}

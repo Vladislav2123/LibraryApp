@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Http;
 
-namespace LibraryApp.Application.Common.Validators
+namespace LibraryApp.Application.Common.Validators;
+
+public class ImageFileValidator : AbstractValidator<IFormFile>
 {
-	public class ImageFileValidator : AbstractValidator<IFormFile>
-	{
         public ImageFileValidator()
         {
             RuleFor(file => file.Length)
@@ -15,4 +15,3 @@ namespace LibraryApp.Application.Common.Validators
                 .WithMessage("File format must be .jpeg or .png");  
         }
     }
-}

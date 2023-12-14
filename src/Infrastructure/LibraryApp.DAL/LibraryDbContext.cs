@@ -4,40 +4,39 @@ using LibraryApp.DAL.EntityTypeConfigurations;
 using LibraryApp.DAL.ValueConverters;
 using LibraryApp.Application.Abstractions;
 
-namespace LibraryApp.DAL
+namespace LibraryApp.DAL;
+
+public class LibraryDbContext : DbContext, ILibraryDbContext
 {
-	public class LibraryDbContext : DbContext, ILibraryDbContext
+	public LibraryDbContext(DbContextOptions<LibraryDbContext> options) : base(options) 
 	{
-		public LibraryDbContext(DbContextOptions<LibraryDbContext> options) : base(options) 
-		{
-		}
+	}
 
-		public DbSet<User> Users { get; set; }
-		public DbSet<Author> Authors { get; set; }
-		public DbSet<Book> Books { get; set; }
-		public DbSet<Review> Reviews { get; set; }
+	public DbSet<User> Users { get; set; }
+	public DbSet<Author> Authors { get; set; }
+	public DbSet<Book> Books { get; set; }
+	public DbSet<Review> Reviews { get; set; }
 
-		protected override void OnModelCreating(ModelBuilder builder)
-		{
-			base.OnModelCreating(builder);
+	protected override void OnModelCreating(ModelBuilder builder)
+	{
+		base.OnModelCreating(builder);
 
-			builder.ApplyConfiguration(new UserConfiguration());
-			builder.ApplyConfiguration(new AuthorConfiguration());
-			builder.ApplyConfiguration(new BookConfiguration());
-			builder.ApplyConfiguration(new ReviewConfiguration());
-		}
+		builder.ApplyConfiguration(new UserConfiguration());
+		builder.ApplyConfiguration(new AuthorConfiguration());
+		builder.ApplyConfiguration(new BookConfiguration());
+		builder.ApplyConfiguration(new ReviewConfiguration());
+	}
 
-		protected override void ConfigureConventions(ModelConfigurationBuilder builder)
-		{
-			base.ConfigureConventions(builder);
+	protected override void ConfigureConventions(ModelConfigurationBuilder builder)
+	{
+		base.ConfigureConventions(builder);
 
-			builder.Properties<DateOnly>()
-				.HaveConversion<DateOnlyConverter>()
-				.HaveColumnType("date");
+		builder.Properties<DateOnly>()
+			.HaveConversion<DateOnlyConverter>()
+			.HaveColumnType("date");
 
-			builder.Properties<DateOnly?>()
-				.HaveConversion<DateOnlyNullableConverter>()
-				.HaveColumnType("date");
-		}
+		builder.Properties<DateOnly?>()
+			.HaveConversion<DateOnlyNullableConverter>()
+			.HaveColumnType("date");
 	}
 }

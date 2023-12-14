@@ -6,41 +6,40 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using LibraryApp.Application.Abstractions;
 
-namespace LibraryApp.Application.Feauters.Books.Commands.UpdateBookCover
+namespace LibraryApp.Application.Feauters.Books.Commands.UpdateBookCover;
+
+public class UpdateBookCoverCommandHandler : IRequestHandler<UpdateBookCoverCommand, Unit>
 {
-	public class UpdateBookCoverCommandHandler : IRequestHandler<UpdateBookCoverCommand, Unit>
+	private readonly ILibraryDbContext _dbContext;
+	private readonly FilePaths _filePaths;
+
+	public UpdateBookCoverCommandHandler(ILibraryDbContext dbContext, IOptions<FilePaths> filePathsOptions)
 	{
-		private readonly ILibraryDbContext _dbContext;
-		private readonly FilePaths _filePaths;
+		_dbContext = dbContext;
+		_filePaths = filePathsOptions.Value;
+	}
 
-		public UpdateBookCoverCommandHandler(ILibraryDbContext dbContext, IOptions<FilePaths> filePathsOptions)
+	public async Task<Unit> Handle(UpdateBookCoverCommand command, CancellationToken cancellationToken)
+	{
+		var book = await _dbContext.Books
+			.FirstOrDefaultAsync(book => book.Id == command.BookId, cancellationToken);
+
+		if (book == null) throw new EntityNotFoundException(nameof(Book), command.BookId);
+
+		if (string.IsNullOrEmpty(book.CoverPath))
 		{
-			_dbContext = dbContext;
-			_filePaths = filePathsOptions.Value;
+			string newCoverFileName = $"{Guid.NewGuid()}{Path.GetExtension(command.CoverFile.FileName)}";
+			book.CoverPath = Path.Combine(_filePaths.CoversPath, newCoverFileName);
+		}
+		else File.Delete(book.CoverPath);
+
+		using (var stream = new FileStream(book.CoverPath, FileMode.Create))
+		{
+			await command.CoverFile.CopyToAsync(stream, cancellationToken);
 		}
 
-		public async Task<Unit> Handle(UpdateBookCoverCommand command, CancellationToken cancellationToken)
-		{
-			var book = await _dbContext.Books
-				.FirstOrDefaultAsync(book => book.Id == command.BookId, cancellationToken);
+		_dbContext.SaveChangesAsync(cancellationToken);
 
-			if (book == null) throw new EntityNotFoundException(nameof(Book), command.BookId);
-
-			if (string.IsNullOrEmpty(book.CoverPath))
-			{
-				string newCoverFileName = $"{Guid.NewGuid()}{Path.GetExtension(command.CoverFile.FileName)}";
-				book.CoverPath = Path.Combine(_filePaths.CoversPath, newCoverFileName);
-			}
-			else File.Delete(book.CoverPath);
-
-			using (var stream = new FileStream(book.CoverPath, FileMode.Create))
-			{
-				await command.CoverFile.CopyToAsync(stream, cancellationToken);
-			}
-
-			_dbContext.SaveChangesAsync(cancellationToken);
-
-			return Unit.Value;
-		}
+		return Unit.Value;
 	}
 }

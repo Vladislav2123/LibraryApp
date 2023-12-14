@@ -1,16 +1,16 @@
 ﻿using FluentValidation;
 using LibraryApp.Application.Common.Validators;
 
-namespace LibraryApp.Application.Feauters.Books.Commands.Create
+namespace LibraryApp.Application.Feauters.Books.Commands.Create;
+
+public class CreateBookCommandValidator : AbstractValidator<CreateBookCommand>
 {
-	public class CreateBookCommandValidator : AbstractValidator<CreateBookCommand>
-	{
         public CreateBookCommandValidator()
         {
-			RuleFor(command => command.AuthorId)
-				.SetValidator(new GuidValidator());
+		RuleFor(command => command.AuthorId)
+			.SetValidator(new GuidValidator());
 
-			RuleFor(command => command.Name)
+		RuleFor(command => command.Name)
                 .NotEmpty()
                 .MaximumLength(100);
 
@@ -26,4 +26,3 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Create
                 .SetValidator(new PdfFileValidator());
         }
     }
-}

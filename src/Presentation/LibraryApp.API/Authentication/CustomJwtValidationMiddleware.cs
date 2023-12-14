@@ -3,30 +3,29 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 
-namespace LibraryApp.API.Authentication
+namespace LibraryApp.API.Authentication;
+
+public class CustomJwtValidationMiddleware : IMiddleware
 {
-	public class CustomJwtValidationMiddleware : IMiddleware
+	private readonly ILibraryDbContext _libraryDbContext;
+
+	public CustomJwtValidationMiddleware(ILibraryDbContext libraryDbContext)
 	{
-		private readonly ILibraryDbContext _libraryDbContext;
+		_libraryDbContext = libraryDbContext;
+	}
 
-		public CustomJwtValidationMiddleware(ILibraryDbContext libraryDbContext)
+	public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+	{
+		if (context.User.Identity.IsAuthenticated)
 		{
-			_libraryDbContext = libraryDbContext;
-		}
+			Guid userId = Guid.Parse(context.User.FindFirstValue(ClaimTypes.Actor));
 
-		public async Task InvokeAsync(HttpContext context, RequestDelegate next)
-		{
-			if (context.User.Identity.IsAuthenticated)
+			if (await _libraryDbContext.Users.AnyAsync(user => user.Id == userId) == false)
 			{
-				Guid userId = Guid.Parse(context.User.FindFirstValue(ClaimTypes.Actor));
-
-				if (await _libraryDbContext.Users.AnyAsync(user => user.Id == userId) == false)
-				{
-					throw new SecurityTokenException("Invalid User");
-				}
+				throw new SecurityTokenException("Invalid User");
 			}
-
-			await next(context);
 		}
+
+		await next(context);
 	}
 }

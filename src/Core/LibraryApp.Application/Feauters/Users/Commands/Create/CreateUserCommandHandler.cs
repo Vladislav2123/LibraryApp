@@ -4,8 +4,8 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Abstractions;
 
-namespace LibraryApp.Application.Feauters.Users.Commands.Create
-{
+namespace LibraryApp.Application.Feauters.Users.Commands.Create;
+
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Guid>
     {
         private readonly ILibraryDbContext _dbContext;
@@ -46,4 +46,3 @@ namespace LibraryApp.Application.Feauters.Users.Commands.Create
             return newUser.Id;
         }
     }
-}

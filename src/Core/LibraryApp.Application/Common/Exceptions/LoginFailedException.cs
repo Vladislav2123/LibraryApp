@@ -1,8 +1,7 @@
-﻿namespace LibraryApp.Application.Common.Exceptions
+﻿namespace LibraryApp.Application.Common.Exceptions;
+
+public class LoginFailedException : Exception
 {
-	public class LoginFailedException : Exception
-	{
-		public LoginFailedException() 
-			: base("Wrong email or password") { }
+	public LoginFailedException() 
+		: base("Wrong email or password") { }
     }
-}

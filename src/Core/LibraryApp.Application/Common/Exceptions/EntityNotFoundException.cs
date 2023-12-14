@@ -1,8 +1,7 @@
-﻿namespace LibraryApp.Application.Common.Exceptions
+﻿namespace LibraryApp.Application.Common.Exceptions;
+
+public class EntityNotFoundException : Exception
 {
-	public class EntityNotFoundException : Exception
-	{
-		public EntityNotFoundException(string name, object id) 
-			: base($"Entity {name} ({id}) not found") { }
-	}
+	public EntityNotFoundException(string name, object id) 
+		: base($"Entity {name} ({id}) not found") { }
 }

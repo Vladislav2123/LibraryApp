@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Http;
 
-namespace LibraryApp.Application.Common.Validators
+namespace LibraryApp.Application.Common.Validators;
+
+public class PdfFileValidator : AbstractValidator<IFormFile>
 {
-	public class PdfFileValidator : AbstractValidator<IFormFile>
-	{
         public PdfFileValidator()
         {
             RuleFor(file => file.Length)
@@ -16,4 +16,3 @@ namespace LibraryApp.Application.Common.Validators
                 .WithMessage("Unsopported content type");
         }
     }
-}

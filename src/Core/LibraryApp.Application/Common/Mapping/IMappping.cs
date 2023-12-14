@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 
-namespace LibraryApp.Application.Common.Mappings
+namespace LibraryApp.Application.Common.Mappings;
+
+internal interface IMappping
 {
-	internal interface IMappping
-	{
-		void CreateMap(Profile profile);
-	}
+	void CreateMap(Profile profile);
 }

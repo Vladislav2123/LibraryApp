@@ -7,40 +7,39 @@ using Microsoft.EntityFrameworkCore;
 using FileNotFoundException = LibraryApp.Application.Common.Exceptions.FileNotFoundException;
 using LibraryApp.Application.Abstractions;
 
-namespace LibraryApp.Application.Feauters.Books.Querries.GetBookCover
+namespace LibraryApp.Application.Feauters.Books.Querries.GetBookCover;
+
+public class GetBookCoverQueryHandler : IRequestHandler<GetBookCoverQuery, FileVm>
 {
-	public class GetBookCoverQueryHandler : IRequestHandler<GetBookCoverQuery, FileVm>
+	private readonly ILibraryDbContext _dbContext;
+	private readonly IContentTypeProvider _contentTypeProvider;
+
+	public GetBookCoverQueryHandler(ILibraryDbContext dbContext, IContentTypeProvider contentTypeProvider)
 	{
-		private readonly ILibraryDbContext _dbContext;
-		private readonly IContentTypeProvider _contentTypeProvider;
+		_dbContext = dbContext;
+		_contentTypeProvider = contentTypeProvider;
+	}
 
-		public GetBookCoverQueryHandler(ILibraryDbContext dbContext, IContentTypeProvider contentTypeProvider)
+	public async Task<FileVm> Handle(GetBookCoverQuery request, CancellationToken cancellationToken)
+	{
+		var book = await _dbContext.Books
+			.FirstOrDefaultAsync(book => book.Id == request.BookId, cancellationToken);
+
+		if (book == null) throw new EntityNotFoundException(nameof(Book), request.BookId);
+
+		if (string.IsNullOrEmpty(book.CoverPath) ||
+			Path.Exists(book.CoverPath) == false)
+			throw new FileNotFoundException("Book cover");
+
+		string contentType;
+		if (_contentTypeProvider.TryGetContentType(book.CoverPath, out contentType) == false)
+			throw new ContentTypeNotFoundException("Book Cover");
+
+		return new FileVm()
 		{
-			_dbContext = dbContext;
-			_contentTypeProvider = contentTypeProvider;
-		}
-
-		public async Task<FileVm> Handle(GetBookCoverQuery request, CancellationToken cancellationToken)
-		{
-			var book = await _dbContext.Books
-				.FirstOrDefaultAsync(book => book.Id == request.BookId, cancellationToken);
-
-			if (book == null) throw new EntityNotFoundException(nameof(Book), request.BookId);
-
-			if (string.IsNullOrEmpty(book.CoverPath) ||
-				Path.Exists(book.CoverPath) == false)
-				throw new FileNotFoundException("Book cover");
-
-			string contentType;
-			if (_contentTypeProvider.TryGetContentType(book.CoverPath, out contentType) == false)
-				throw new ContentTypeNotFoundException("Book Cover");
-
-			return new FileVm()
-			{
-				FileName = $"{book.Name}_cover{Path.GetExtension(book.CoverPath)}",
-				ContentType = contentType,
-				Bytes = await File.ReadAllBytesAsync(book.CoverPath, cancellationToken)
-			};
-		}
+			FileName = $"{book.Name}_cover{Path.GetExtension(book.CoverPath)}",
+			ContentType = contentType,
+			Bytes = await File.ReadAllBytesAsync(book.CoverPath, cancellationToken)
+		};
 	}
 }

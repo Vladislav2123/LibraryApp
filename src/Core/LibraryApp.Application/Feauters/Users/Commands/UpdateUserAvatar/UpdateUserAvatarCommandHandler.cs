@@ -6,43 +6,42 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using LibraryApp.Application.Abstractions;
 
-namespace LibraryApp.Application.Feauters.Users.Commands.UpdateUserAvatar
+namespace LibraryApp.Application.Feauters.Users.Commands.UpdateUserAvatar;
+
+public class UpdateUserAvatarCommandHandler : IRequestHandler<UpdateUserAvatarCommand, Unit>
 {
-	public class UpdateUserAvatarCommandHandler : IRequestHandler<UpdateUserAvatarCommand, Unit>
+	private readonly ILibraryDbContext _dbContext;
+	private readonly FilePaths _filePaths;
+
+	public UpdateUserAvatarCommandHandler(
+		ILibraryDbContext dbContext, 
+		IOptions<FilePaths> filePathsOptions)
 	{
-		private readonly ILibraryDbContext _dbContext;
-		private readonly FilePaths _filePaths;
+		_dbContext = dbContext;
+		_filePaths = filePathsOptions.Value;
+	}
 
-		public UpdateUserAvatarCommandHandler(
-			ILibraryDbContext dbContext, 
-			IOptions<FilePaths> filePathsOptions)
+	public async Task<Unit> Handle(UpdateUserAvatarCommand command, CancellationToken cancellationToken)
+	{
+		var user = await _dbContext.Users
+			.FirstOrDefaultAsync(user => user.Id == command.UserId, cancellationToken);
+
+		if (user == null) throw new EntityNotFoundException(nameof(User), command.UserId);
+
+		if (string.IsNullOrEmpty(user.AvatarPath))
 		{
-			_dbContext = dbContext;
-			_filePaths = filePathsOptions.Value;
+			string avatarFileName = $"{Guid.NewGuid()}{Path.GetExtension(command.AvatarFile.FileName)}";
+			user.AvatarPath = Path.Combine(_filePaths.AvatarsPath, avatarFileName);
+		}
+		else File.Delete(user.AvatarPath);
+
+		using (var stream = new FileStream(user.AvatarPath, FileMode.Create))
+		{
+			await command.AvatarFile.CopyToAsync(stream, cancellationToken);
 		}
 
-		public async Task<Unit> Handle(UpdateUserAvatarCommand command, CancellationToken cancellationToken)
-		{
-			var user = await _dbContext.Users
-				.FirstOrDefaultAsync(user => user.Id == command.UserId, cancellationToken);
+		await _dbContext.SaveChangesAsync(cancellationToken);
 
-			if (user == null) throw new EntityNotFoundException(nameof(User), command.UserId);
-
-			if (string.IsNullOrEmpty(user.AvatarPath))
-			{
-				string avatarFileName = $"{Guid.NewGuid()}{Path.GetExtension(command.AvatarFile.FileName)}";
-				user.AvatarPath = Path.Combine(_filePaths.AvatarsPath, avatarFileName);
-			}
-			else File.Delete(user.AvatarPath);
-
-			using (var stream = new FileStream(user.AvatarPath, FileMode.Create))
-			{
-				await command.AvatarFile.CopyToAsync(stream, cancellationToken);
-			}
-
-			await _dbContext.SaveChangesAsync(cancellationToken);
-
-			return Unit.Value;
-		}
+		return Unit.Value;
 	}
 }

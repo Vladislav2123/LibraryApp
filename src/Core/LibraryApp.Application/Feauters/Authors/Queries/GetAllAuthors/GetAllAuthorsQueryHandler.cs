@@ -6,30 +6,29 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Abstractions;
 
-namespace LibraryApp.Application.Feauters.Authors.Queries.GetAuthors
-{
-    public class GetAllAuthorsQueryHandler : IRequestHandler<GetAllAuthorsQuery, PagedList<AuthorLookupDto>>
-	{
-		private readonly ILibraryDbContext _dbContext;
-		private readonly IMapper _mapper;
+namespace LibraryApp.Application.Feauters.Authors.Queries.GetAuthors;
 
-		public GetAllAuthorsQueryHandler(ILibraryDbContext dbContext, IMapper mapper)
+    public class GetAllAuthorsQueryHandler : IRequestHandler<GetAllAuthorsQuery, PagedList<AuthorLookupDto>>
+{
+	private readonly ILibraryDbContext _dbContext;
+	private readonly IMapper _mapper;
+
+	public GetAllAuthorsQueryHandler(ILibraryDbContext dbContext, IMapper mapper)
         {
-			_dbContext = dbContext;
-			_mapper = mapper;
+		_dbContext = dbContext;
+		_mapper = mapper;
         }
 
         public async Task<PagedList<AuthorLookupDto>> Handle(GetAllAuthorsQuery request, CancellationToken cancellationToken)
+	{
+		IQueryable<Author> authorsQuery = _dbContext.Authors;
+
+		if(string.IsNullOrWhiteSpace(request.SearchTerms) == false)
 		{
-			IQueryable<Author> authorsQuery = _dbContext.Authors;
-
-			if(string.IsNullOrWhiteSpace(request.SearchTerms) == false)
-			{
-				authorsQuery = authorsQuery.Where(author => author.Name.Contains(request.SearchTerms));
-			}
-
-			var authorsLookups = _mapper.Map<List<AuthorLookupDto>>(await authorsQuery.ToListAsync(cancellationToken));
-			return PagedList<AuthorLookupDto>.Create(authorsLookups, request.Page);
+			authorsQuery = authorsQuery.Where(author => author.Name.Contains(request.SearchTerms));
 		}
+
+		var authorsLookups = _mapper.Map<List<AuthorLookupDto>>(await authorsQuery.ToListAsync(cancellationToken));
+		return PagedList<AuthorLookupDto>.Create(authorsLookups, request.Page);
 	}
 }

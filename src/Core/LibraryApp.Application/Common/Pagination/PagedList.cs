@@ -1,5 +1,5 @@
-﻿namespace LibraryApp.Application.Common.Pagination
-{
+﻿namespace LibraryApp.Application.Common.Pagination;
+
     public class PagedList<T>
     {
         private const int DefaultPage = 1;
@@ -34,4 +34,3 @@
             return new(pageItems, totalCount, page);
         }
     }
-}

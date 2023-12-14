@@ -4,11 +4,11 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Abstractions;
 
-namespace LibraryApp.Application.Feauters.Books.Commands.Delete
+namespace LibraryApp.Application.Feauters.Books.Commands.Delete;
+
+public class DeleteBookCommandHandler : IRequestHandler<DeleteBookCommand, Unit>
 {
-	public class DeleteBookCommandHandler : IRequestHandler<DeleteBookCommand, Unit>
-	{
-		private readonly ILibraryDbContext _dbContext;
+	private readonly ILibraryDbContext _dbContext;
 
         public DeleteBookCommandHandler(ILibraryDbContext dbContext)
         {
@@ -16,20 +16,19 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Delete
         }
 
         public async Task<Unit> Handle(DeleteBookCommand command, CancellationToken cancellationToken)
-		{
-			Book book = await _dbContext.Books
-				.FirstOrDefaultAsync(book => book.Id == command.BookId, cancellationToken);
+	{
+		Book book = await _dbContext.Books
+			.FirstOrDefaultAsync(book => book.Id == command.BookId, cancellationToken);
 
-			if(book == null) throw new EntityNotFoundException(nameof(Book), command.BookId);
+		if(book == null) throw new EntityNotFoundException(nameof(Book), command.BookId);
 
-			File.Delete(book.ContentPath);
-			if (string.IsNullOrEmpty(book.CoverPath) == false) 
-				File.Delete(book.CoverPath);
+		File.Delete(book.ContentPath);
+		if (string.IsNullOrEmpty(book.CoverPath) == false) 
+			File.Delete(book.CoverPath);
 
-			_dbContext.Books.Remove(book);
-			await _dbContext.SaveChangesAsync(cancellationToken);
+		_dbContext.Books.Remove(book);
+		await _dbContext.SaveChangesAsync(cancellationToken);
 
-			return Unit.Value;
-		}
+		return Unit.Value;
 	}
 }

@@ -7,12 +7,12 @@ using LibraryApp.Application.Feauters.Users.Queries.Dto;
 using LibraryApp.Application.Common.Pagination;
 using LibraryApp.Application.Abstractions;
 
-namespace LibraryApp.Application.Feauters.Users.Queries.GetUsers
-{
+namespace LibraryApp.Application.Feauters.Users.Queries.GetUsers;
+
     public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, PagedList<UserLookupDto>>
-	{
-		private readonly ILibraryDbContext _dbContext;
-		private readonly IMapper _mapper;
+{
+	private readonly ILibraryDbContext _dbContext;
+	private readonly IMapper _mapper;
 
         public GetAllUsersQueryHandler(ILibraryDbContext dbContext, IMapper mapper)
         {
@@ -20,39 +20,38 @@ namespace LibraryApp.Application.Feauters.Users.Queries.GetUsers
             _mapper = mapper;
         }
 
-		public async Task<PagedList<UserLookupDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+	public async Task<PagedList<UserLookupDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+	{
+		IQueryable<User> usersQuery = _dbContext.Users
+			.Include(user => user.ReadBooks);
+
+		if(string.IsNullOrWhiteSpace(request.SearchTerms) == false)
 		{
-			IQueryable<User> usersQuery = _dbContext.Users
-				.Include(user => user.ReadBooks);
-
-			if(string.IsNullOrWhiteSpace(request.SearchTerms) == false)
-			{
-				usersQuery = usersQuery
-					.Where(user => user.Name.Contains(request.SearchTerms));
-			}
-
-			var sortingColumnPropertyExpression = GetSortingColumnProperty(request);
-
-			if (request.SortOrder?.ToLower() == "asc")
-			{
-				usersQuery.OrderByDescending(sortingColumnPropertyExpression);
-			}
-			else usersQuery.OrderBy(sortingColumnPropertyExpression);
-
-			var usersLookups = _mapper.Map<List<UserLookupDto>>(await usersQuery.ToListAsync(cancellationToken));
-			return PagedList<UserLookupDto>.Create(usersLookups, request.Page);
+			usersQuery = usersQuery
+				.Where(user => user.Name.Contains(request.SearchTerms));
 		}
 
-		private Expression<Func<User, object>> GetSortingColumnProperty(GetAllUsersQuery request)
-		{
-			Expression<Func<User, object>> expression = request.SortColumn?.ToLower() switch
-			{
-				"name" => user => user.Name,
-				"age" => user => user.BirthDate,
-				_ => user => user.ReadBooks.Count
-			};
+		var sortingColumnPropertyExpression = GetSortingColumnProperty(request);
 
-			return expression;
+		if (request.SortOrder?.ToLower() == "asc")
+		{
+			usersQuery.OrderByDescending(sortingColumnPropertyExpression);
 		}
+		else usersQuery.OrderBy(sortingColumnPropertyExpression);
+
+		var usersLookups = _mapper.Map<List<UserLookupDto>>(await usersQuery.ToListAsync(cancellationToken));
+		return PagedList<UserLookupDto>.Create(usersLookups, request.Page);
+	}
+
+	private Expression<Func<User, object>> GetSortingColumnProperty(GetAllUsersQuery request)
+	{
+		Expression<Func<User, object>> expression = request.SortColumn?.ToLower() switch
+		{
+			"name" => user => user.Name,
+			"age" => user => user.BirthDate,
+			_ => user => user.ReadBooks.Count
+		};
+
+		return expression;
 	}
 }

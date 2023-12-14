@@ -7,8 +7,8 @@ using LibraryApp.Application.Abstractions;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
-namespace LibraryApp.Application.Feauters.Reviews.Commands.Create
-{
+namespace LibraryApp.Application.Feauters.Reviews.Commands.Create;
+
     public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand, Guid>
     {
         private readonly ILibraryDbContext _dbContext;
@@ -17,17 +17,17 @@ namespace LibraryApp.Application.Feauters.Reviews.Commands.Create
 
         private HttpContext HttpContext => _httpContextAccessor.HttpContext;
 
-		public CreateReviewCommandHandler(
+	public CreateReviewCommandHandler(
             ILibraryDbContext dbContext, 
             IPublisher publisher, 
             IHttpContextAccessor httpContextAccessor)
-		{
-			_dbContext = dbContext;
-			_publisher = publisher;
-			_httpContextAccessor = httpContextAccessor;
-		}
+	{
+		_dbContext = dbContext;
+		_publisher = publisher;
+		_httpContextAccessor = httpContextAccessor;
+	}
 
-		public async Task<Guid> Handle(CreateReviewCommand command, CancellationToken cancellationToken)
+	public async Task<Guid> Handle(CreateReviewCommand command, CancellationToken cancellationToken)
         {
             var book = await _dbContext.Books
                 .Include(book => book.Reviews)
@@ -62,4 +62,3 @@ namespace LibraryApp.Application.Feauters.Reviews.Commands.Create
             return newReview.Id;
         }
     }
-}

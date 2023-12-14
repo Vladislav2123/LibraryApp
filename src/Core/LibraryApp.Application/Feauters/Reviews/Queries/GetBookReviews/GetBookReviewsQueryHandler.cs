@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using LibraryApp.Application.Abstractions;
 
-namespace LibraryApp.Application.Feauters.Reviews.Queries.GetBookReviews
-{
+namespace LibraryApp.Application.Feauters.Reviews.Queries.GetBookReviews;
+
     public class GetBookReviewsQueryHandler : IRequestHandler<GetBookReviewsQuery, PagedList<ReviewDto>>
     {
         private readonly ILibraryDbContext _dbContext;
@@ -51,4 +51,3 @@ namespace LibraryApp.Application.Feauters.Reviews.Queries.GetBookReviews
             };
         }
     }
-}

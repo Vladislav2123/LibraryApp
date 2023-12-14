@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
 
-namespace LibraryApp.Application.Common.Validators
+namespace LibraryApp.Application.Common.Validators;
+
+public class PasswordValidator : AbstractValidator<string>
 {
-	public class PasswordValidator : AbstractValidator<string>
-	{
         public PasswordValidator()
         {
             RuleFor(password => password)
@@ -11,4 +11,3 @@ namespace LibraryApp.Application.Common.Validators
                 .Length(6, 50);
         }
     }
-}

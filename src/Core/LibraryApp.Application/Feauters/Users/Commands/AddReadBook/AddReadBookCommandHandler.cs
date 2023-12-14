@@ -4,41 +4,40 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Abstractions;
 
-namespace LibraryApp.Application.Feauters.Users.Commands.AddReadedBook
+namespace LibraryApp.Application.Feauters.Users.Commands.AddReadedBook;
+
+public class AddReadBookCommandHandler : IRequestHandler<AddReadBookCommand, Unit>
 {
-	public class AddReadBookCommandHandler : IRequestHandler<AddReadBookCommand, Unit>
+	private readonly ILibraryDbContext _dbContext;
+
+	public AddReadBookCommandHandler(ILibraryDbContext dbContext)
 	{
-		private readonly ILibraryDbContext _dbContext;
+		_dbContext = dbContext;
+	}
 
-		public AddReadBookCommandHandler(ILibraryDbContext dbContext)
+	public async Task<Unit> Handle(AddReadBookCommand command, CancellationToken cancellationToken)
+	{
+		var user = await _dbContext.Users
+			.Include(user => user.ReadBooks)
+			.FirstOrDefaultAsync(user => user.Id == command.UserId, cancellationToken);
+
+		var book = await _dbContext.Books
+			.Include(book => book.Readers)
+			.FirstOrDefaultAsync(book => book.Id == command.BookId, cancellationToken);
+
+		if(book == null) throw new EntityNotFoundException(nameof(Book), command.BookId);
+
+		if (user.ReadBooks.Any(book =>
+			book.Id == command.BookId))
 		{
-			_dbContext = dbContext;
+			throw new UserAlreadyReadBookException(command.UserId, command.BookId);
 		}
 
-		public async Task<Unit> Handle(AddReadBookCommand command, CancellationToken cancellationToken)
-		{
-			var user = await _dbContext.Users
-				.Include(user => user.ReadBooks)
-				.FirstOrDefaultAsync(user => user.Id == command.UserId, cancellationToken);
+		user.ReadBooks.Add(book);
+		book.Readers.Add(user);
 
-			var book = await _dbContext.Books
-				.Include(book => book.Readers)
-				.FirstOrDefaultAsync(book => book.Id == command.BookId, cancellationToken);
+		await _dbContext.SaveChangesAsync(cancellationToken);
 
-			if(book == null) throw new EntityNotFoundException(nameof(Book), command.BookId);
-
-			if (user.ReadBooks.Any(book =>
-				book.Id == command.BookId))
-			{
-				throw new UserAlreadyReadBookException(command.UserId, command.BookId);
-			}
-
-			user.ReadBooks.Add(book);
-			book.Readers.Add(user);
-
-			await _dbContext.SaveChangesAsync(cancellationToken);
-
-			return Unit.Value;
-		}
+		return Unit.Value;
 	}
 }

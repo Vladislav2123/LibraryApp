@@ -1,5 +1,5 @@
-﻿namespace LibraryApp.Application.Common.Pagination
-{
+﻿namespace LibraryApp.Application.Common.Pagination;
+
     public struct Page
     {
         public int number;
@@ -11,4 +11,3 @@
             this.size = size;
         }
     }
-}

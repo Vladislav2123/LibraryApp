@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace LibraryApp.API.Authorization.Role
-{
+namespace LibraryApp.API.Authorization.Role;
+
     public class RoleRequirement : IAuthorizationRequirement
     {
         public string AllowedRole { get; }
@@ -11,4 +11,3 @@ namespace LibraryApp.API.Authorization.Role
             AllowedRole = allowedRole;
         }
     }
-}

@@ -1,14 +1,13 @@
 ﻿using FluentValidation;
 
-namespace LibraryApp.Application.Common.Validators
+namespace LibraryApp.Application.Common.Validators;
+
+public class GuidValidator : AbstractValidator<Guid>
 {
-	public class GuidValidator : AbstractValidator<Guid>
+	public GuidValidator()
 	{
-		public GuidValidator()
-		{
-			RuleFor(guid => guid)
-				.NotNull()
-				.NotEmpty();
-		}
+		RuleFor(guid => guid)
+			.NotNull()
+			.NotEmpty();
 	}
 }
