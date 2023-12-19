@@ -9,10 +9,12 @@ namespace LibraryApp.Application.Feauters.Authors.Commands.Delete;
 public class DeleteAuthorCommandHandler : IRequestHandler<DeleteAuthorCommand, Unit>
 {
 	private readonly ILibraryDbContext _dbContext;
+	private readonly IFileWrapper _fileWrapper;
 
-	public DeleteAuthorCommandHandler(ILibraryDbContext dbContext)
+	public DeleteAuthorCommandHandler(ILibraryDbContext dbContext, IFileWrapper fileWrapper)
 	{
 		_dbContext = dbContext;
+		_fileWrapper = fileWrapper;
 	}
 
 	public async Task<Unit> Handle(DeleteAuthorCommand command, CancellationToken cancellationToken)
@@ -23,7 +25,7 @@ public class DeleteAuthorCommandHandler : IRequestHandler<DeleteAuthorCommand, U
 		if (author == null) throw new EntityNotFoundException(nameof(Author), command.AuthorId);
 
 		if (string.IsNullOrEmpty(author.AvatarPath) == false)
-			File.Delete(author.AvatarPath);
+			_fileWrapper.DeleteFile(author.AvatarPath);
 
 		_dbContext.Authors.Remove(author);
 		await _dbContext.SaveChangesAsync(cancellationToken);

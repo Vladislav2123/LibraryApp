@@ -11,10 +11,12 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Update;
 public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, Unit>
 {
 	private readonly ILibraryDbContext _dbContext;
+	private readonly IFileWrapper _fileWrapper;
 
-	public UpdateBookCommandHandler(ILibraryDbContext dbContext)
+	public UpdateBookCommandHandler(ILibraryDbContext dbContext, IFileWrapper fileWrapper)
 	{
 		_dbContext = dbContext;
+		_fileWrapper = fileWrapper;
 	}
 
 	public async Task<Unit> Handle(UpdateBookCommand command, CancellationToken cancellationToken)
@@ -42,7 +44,7 @@ public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, Unit>
 			if (IsContentsEqual(book.ContentPath, command.ContentFile))
 				throw new EntityHasNoChangesException(nameof(Book), command.BookId);
 
-			File.Delete(book.ContentPath);
+			_fileWrapper.DeleteFile(book.ContentPath);
 		}
 
 		book.AuthorId = command.AuthorId;
@@ -52,10 +54,7 @@ public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, Unit>
 		if (command.ContentFile != null &&
 			IsContentsEqual(book.ContentPath, command.ContentFile) == false)
 		{
-			using (FileStream stream = new FileStream(book.ContentPath, FileMode.Create))
-			{
-				await command.ContentFile.CopyToAsync(stream, cancellationToken);
-			}
+			await _fileWrapper.SaveFileAsync(command.ContentFile, book.ContentPath, cancellationToken);
 		}
 
 		await _dbContext.SaveChangesAsync(cancellationToken);

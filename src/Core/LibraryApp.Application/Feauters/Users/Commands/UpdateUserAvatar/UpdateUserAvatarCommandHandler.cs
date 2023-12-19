@@ -11,13 +11,16 @@ namespace LibraryApp.Application.Feauters.Users.Commands.UpdateUserAvatar;
 public class UpdateUserAvatarCommandHandler : IRequestHandler<UpdateUserAvatarCommand, Unit>
 {
 	private readonly ILibraryDbContext _dbContext;
+	private readonly IFileWrapper _fileWrapper;
 	private readonly FilePaths _filePaths;
 
 	public UpdateUserAvatarCommandHandler(
-		ILibraryDbContext dbContext, 
+		ILibraryDbContext dbContext,
+		IFileWrapper fileWrapper,
 		IOptions<FilePaths> filePathsOptions)
 	{
 		_dbContext = dbContext;
+		_fileWrapper = fileWrapper;
 		_filePaths = filePathsOptions.Value;
 	}
 
@@ -30,16 +33,13 @@ public class UpdateUserAvatarCommandHandler : IRequestHandler<UpdateUserAvatarCo
 
 		if (string.IsNullOrEmpty(user.AvatarPath))
 		{
-			string avatarFileName = $"{Guid.NewGuid()}{Path.GetExtension(command.AvatarFile.FileName)}";
+			string avatarFileName = 
+				$"{Guid.NewGuid()}{Path.GetExtension(command.AvatarFile.FileName)}";
 			user.AvatarPath = Path.Combine(_filePaths.AvatarsPath, avatarFileName);
 		}
-		else File.Delete(user.AvatarPath);
+		else _fileWrapper.DeleteFile(user.AvatarPath);
 
-		using (var stream = new FileStream(user.AvatarPath, FileMode.Create))
-		{
-			await command.AvatarFile.CopyToAsync(stream, cancellationToken);
-		}
-
+		await _fileWrapper.SaveFileAsync(command.AvatarFile, user.AvatarPath, cancellationToken);
 		await _dbContext.SaveChangesAsync(cancellationToken);
 
 		return Unit.Value;

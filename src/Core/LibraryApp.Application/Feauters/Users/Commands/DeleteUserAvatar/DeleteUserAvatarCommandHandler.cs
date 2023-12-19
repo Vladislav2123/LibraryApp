@@ -10,10 +10,12 @@ namespace LibraryApp.Application.Feauters.Users.Commands.DeleteUserAvatar;
 public class DeleteUserAvatarCommandHandler : IRequestHandler<DeleteUserAvatarCommand, Unit>
 {
 	private readonly ILibraryDbContext _dbContext;
+	private readonly IFileWrapper _fileWrapper;
 
-	public DeleteUserAvatarCommandHandler(ILibraryDbContext dbContext)
+	public DeleteUserAvatarCommandHandler(ILibraryDbContext dbContext, IFileWrapper fileWrapper)
 	{
 		_dbContext = dbContext;
+		_fileWrapper = fileWrapper;
 	}
 
 	public async Task<Unit> Handle(DeleteUserAvatarCommand command, CancellationToken cancellationToken)
@@ -27,7 +29,7 @@ public class DeleteUserAvatarCommandHandler : IRequestHandler<DeleteUserAvatarCo
 			Path.Exists(user.AvatarPath) == false)
 			throw new FileNotFoundException("User avatar");
 
-		File.Delete(user.AvatarPath);
+		_fileWrapper.DeleteFile(user.AvatarPath);
 		user.AvatarPath = string.Empty;
 
 		await _dbContext.SaveChangesAsync(cancellationToken);

@@ -13,19 +13,22 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Create;
 public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, Guid>
 {
 	private readonly ILibraryDbContext _dbContext;
-	private readonly FilePaths _filePaths;
+	private readonly IFileWrapper _fileWrapper;
 	private readonly IHttpContextAccessor _httpContextAccessor;
+	private readonly FilePaths _filePaths;
 
 	private HttpContext HttpContext => _httpContextAccessor.HttpContext;
 
 	public CreateBookCommandHandler(
 		ILibraryDbContext dbContext, 
-		IOptions<FilePaths> filePathsOptions, 
-		IHttpContextAccessor httpContextAccessor)
+		IHttpContextAccessor httpContextAccessor,
+		IFileWrapper fileWrapper,
+		IOptions<FilePaths> filePathsOptions)
 	{
 		_dbContext = dbContext;
-		_filePaths = filePathsOptions.Value;
 		_httpContextAccessor = httpContextAccessor;
+		_fileWrapper = fileWrapper;
+		_filePaths = filePathsOptions.Value;
 	}
 
 	public async Task<Guid> Handle(CreateBookCommand command, CancellationToken cancellationToken)
@@ -49,10 +52,7 @@ public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, Guid>
 		string newContentFileName = $"{Guid.NewGuid()}{Path.GetExtension(command.ContentFile.FileName)}";
 		string contentPath = Path.Combine(_filePaths.BooksPath, newContentFileName);
 
-		using (FileStream stream = new FileStream(contentPath, FileMode.Create))
-		{
-			await command.ContentFile.CopyToAsync(stream, cancellationToken);
-		}
+		await _fileWrapper.SaveFileAsync(command.ContentFile, contentPath, cancellationToken);
 
 		Guid userId = Guid.Parse(HttpContext.User.FindFirstValue(ClaimTypes.Actor));
 
