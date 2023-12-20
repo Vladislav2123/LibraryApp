@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Http;
 using LibraryApp.Application.Abstractions;
 
 namespace LibraryApp.Application.Feauters.Books.Commands.Update;
-
 public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, Unit>
 {
 	private readonly ILibraryDbContext _dbContext;
@@ -28,7 +27,7 @@ public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, Unit>
 
 		if (await _dbContext.Authors
 			.AnyAsync(author => author.Id == command.AuthorId, cancellationToken) == false)
-				throw new EntityNotFoundException(nameof(Author), command.AuthorId);
+			throw new EntityNotFoundException(nameof(Author), command.AuthorId);
 
 		var sameBook = await _dbContext.Books
 			.FirstOrDefaultAsync(book =>
@@ -37,23 +36,26 @@ public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, Unit>
 				book.Description == command.Description &&
 				book.Year == command.Year, cancellationToken);
 
+		
 		if (sameBook != null)
 		{
+			// If there is other book with the same properties, EntityAlreadyExist trowing
 			if (sameBook.Id != book.Id) throw new EntityAlreadyExistException(nameof(Book));
-			if (command.ContentFile == null) throw new EntityHasNoChangesException(nameof(Book), command.BookId);
-			if (IsContentsEqual(book.ContentPath, command.ContentFile))
-				throw new EntityHasNoChangesException(nameof(Book), command.BookId);
 
-			_fileWrapper.DeleteFile(book.ContentPath);
+			// If this book has the same properties and content file don`t updating, EntityHasNoChanges trowing
+			if (command.ContentFile == null) throw new EntityHasNoChangesException(nameof(Book), command.BookId);
 		}
 
 		book.AuthorId = command.AuthorId;
 		book.Name = command.Name;
 		book.Description = command.Description;
 		book.Year = command.Year;
-		if (command.ContentFile != null &&
-			IsContentsEqual(book.ContentPath, command.ContentFile) == false)
+
+		//if (command.ContentFile != null &&
+		//	IsContentsEqual(book.ContentPath, command.ContentFile) == false)
+		if (command.ContentFile != null)
 		{
+			_fileWrapper.DeleteFile(book.ContentPath);
 			await _fileWrapper.SaveFileAsync(command.ContentFile, book.ContentPath, cancellationToken);
 		}
 
@@ -62,37 +64,38 @@ public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, Unit>
 		return Unit.Value;
 	}
 
-	private bool IsContentsEqual(string currentContentPath, IFormFile commandContent)
-	{
-		PdfReader currentPdfReader = new PdfReader(currentContentPath);
-		using (var stream = commandContent.OpenReadStream())
-		{
-			PdfReader commandPdfReader = new PdfReader(stream);
+	//private bool IsContentsEqual(string currentContentPath, IFormFile commandContent)
+	//{
+	//	PdfReader currentPdfReader = new PdfReader(currentContentPath);
 
-			if (currentPdfReader.NumberOfPages != commandPdfReader.NumberOfPages)
-			{
-				currentPdfReader.Close();
-				commandPdfReader.Close();
-				return false;
-			}
+	//	using (var stream = commandContent.OpenReadStream())
+	//	{
+	//		PdfReader commandPdfReader = new PdfReader(stream);
 
-			for (int i = 1; i <= currentPdfReader.NumberOfPages; i++)
-			{
-				byte[] page1Bytes = currentPdfReader.GetPageContent(i);
-				byte[] page2Bytes = commandPdfReader.GetPageContent(i);
+	//		if (currentPdfReader.NumberOfPages != commandPdfReader.NumberOfPages)
+	//		{
+	//			currentPdfReader.Close();
+	//			commandPdfReader.Close();
+	//			return false;
+	//		}
 
-				if (page1Bytes.Length == page2Bytes.Length)
-				{
-					currentPdfReader.Close();
-					commandPdfReader.Close();
-					return true;
-				}
-			}
+	//		for (int i = 1; i <= currentPdfReader.NumberOfPages; i++)
+	//		{
+	//			byte[] page1Bytes = currentPdfReader.GetPageContent(i);
+	//			byte[] page2Bytes = commandPdfReader.GetPageContent(i);
 
-			currentPdfReader.Close();
-			commandPdfReader.Close();
-		}
+	//			if (page1Bytes.Length == page2Bytes.Length)
+	//			{
+	//				currentPdfReader.Close();
+	//				commandPdfReader.Close();
+	//				return true;
+	//			}
+	//		}
 
-		return false;
-	}
+	//		currentPdfReader.Close();
+	//		commandPdfReader.Close();
+	//	}
+
+	//	return false;
+	//}
 }
