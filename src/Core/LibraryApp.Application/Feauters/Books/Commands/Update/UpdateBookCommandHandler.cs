@@ -2,8 +2,6 @@
 using LibraryApp.Domain.Enteties;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using iTextSharp.text.pdf;
-using Microsoft.AspNetCore.Http;
 using LibraryApp.Application.Abstractions;
 
 namespace LibraryApp.Application.Feauters.Books.Commands.Update;

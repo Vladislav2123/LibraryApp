@@ -26,8 +26,7 @@ public class DeleteBookCommandHandler : IRequestHandler<DeleteBookCommand, Unit>
 		if (book == null) throw new EntityNotFoundException(nameof(Book), command.BookId);
 
 		_fileWrapper.DeleteFile(book.ContentPath);
-		if (string.IsNullOrEmpty(book.CoverPath) == false)
-			_fileWrapper.DeleteFile(book.CoverPath);
+		_fileWrapper.DeleteFile(book.CoverPath);
 
 		_dbContext.Books.Remove(book);
 		await _dbContext.SaveChangesAsync(cancellationToken);

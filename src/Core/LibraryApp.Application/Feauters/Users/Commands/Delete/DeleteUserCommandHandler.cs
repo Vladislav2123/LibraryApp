@@ -25,8 +25,7 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Unit>
 
 		if (user == null) throw new EntityNotFoundException(nameof(User), command.UserId);
 
-		if (string.IsNullOrEmpty(user.AvatarPath) == false)
-			_fileWrapper.DeleteFile(user.AvatarPath);
+		_fileWrapper.DeleteFile(user.AvatarPath);
 
 		_dbContext.Authors.RemoveRange(user.CreatedAuthors);
 		_dbContext.Users.Remove(user);

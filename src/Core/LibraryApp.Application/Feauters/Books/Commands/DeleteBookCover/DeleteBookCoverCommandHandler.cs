@@ -10,10 +10,12 @@ namespace LibraryApp.Application.Feauters.Books.Commands.DeleteBookCover;
 public class DeleteBookCoverCommandHandler : IRequestHandler<DeleteBookCoverCommand, Unit>
 {
 	private readonly ILibraryDbContext _dbContext;
+	private readonly IFileWrapper _fileWrapper;
 
-	public DeleteBookCoverCommandHandler(ILibraryDbContext dbContext)
+	public DeleteBookCoverCommandHandler(ILibraryDbContext dbContext, IFileWrapper fileWrapper)
 	{
 		_dbContext = dbContext;
+		_fileWrapper = fileWrapper;
 	}
 
 	public async Task<Unit> Handle(DeleteBookCoverCommand command, CancellationToken cancellationToken)
@@ -27,7 +29,7 @@ public class DeleteBookCoverCommandHandler : IRequestHandler<DeleteBookCoverComm
 			Path.Exists(book.CoverPath) == false)
 			throw new FileNotFoundException("Book cover");
 
-		File.Delete(book.CoverPath);
+		_fileWrapper.DeleteFile(book.CoverPath);
 		book.CoverPath = string.Empty;
 
 		await _dbContext.SaveChangesAsync(cancellationToken);

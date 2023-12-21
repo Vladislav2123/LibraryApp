@@ -11,11 +11,16 @@ namespace LibraryApp.Application.Feauters.Books.Commands.UpdateBookCover;
 public class UpdateBookCoverCommandHandler : IRequestHandler<UpdateBookCoverCommand, Unit>
 {
 	private readonly ILibraryDbContext _dbContext;
+	private readonly IFileWrapper _fileWrapper;
 	private readonly FilePaths _filePaths;
 
-	public UpdateBookCoverCommandHandler(ILibraryDbContext dbContext, IOptions<FilePaths> filePathsOptions)
+	public UpdateBookCoverCommandHandler(
+		ILibraryDbContext dbContext,
+		IFileWrapper fileWrapper,
+		IOptions<FilePaths> filePathsOptions)
 	{
 		_dbContext = dbContext;
+		_fileWrapper = fileWrapper;
 		_filePaths = filePathsOptions.Value;
 	}
 
@@ -31,14 +36,10 @@ public class UpdateBookCoverCommandHandler : IRequestHandler<UpdateBookCoverComm
 			string newCoverFileName = $"{Guid.NewGuid()}{Path.GetExtension(command.CoverFile.FileName)}";
 			book.CoverPath = Path.Combine(_filePaths.CoversPath, newCoverFileName);
 		}
-		else File.Delete(book.CoverPath);
+		else _fileWrapper.DeleteFile(book.CoverPath);
 
-		using (var stream = new FileStream(book.CoverPath, FileMode.Create))
-		{
-			await command.CoverFile.CopyToAsync(stream, cancellationToken);
-		}
-
-		_dbContext.SaveChangesAsync(cancellationToken);
+		await _fileWrapper.SaveFileAsync(command.CoverFile, book.CoverPath, cancellationToken);
+		await _dbContext.SaveChangesAsync(cancellationToken);
 
 		return Unit.Value;
 	}

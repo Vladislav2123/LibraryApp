@@ -24,8 +24,7 @@ public class DeleteAuthorCommandHandler : IRequestHandler<DeleteAuthorCommand, U
 
 		if (author == null) throw new EntityNotFoundException(nameof(Author), command.AuthorId);
 
-		if (string.IsNullOrEmpty(author.AvatarPath) == false)
-			_fileWrapper.DeleteFile(author.AvatarPath);
+		_fileWrapper.DeleteFile(author.AvatarPath);
 
 		_dbContext.Authors.Remove(author);
 		await _dbContext.SaveChangesAsync(cancellationToken);
