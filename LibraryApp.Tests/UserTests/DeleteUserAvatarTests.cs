@@ -3,6 +3,7 @@ using LibraryApp.Application.Abstractions;
 using LibraryApp.Application.Common.Exceptions;
 using LibraryApp.Application.Feauters.Users.Commands.DeleteUserAvatar;
 using LibraryApp.Domain.Enteties;
+using LibraryApp.Tests.Common;
 using Moq;
 using Moq.EntityFrameworkCore;
 using FileNotFoundException = LibraryApp.Application.Common.Exceptions.FileNotFoundException;
@@ -20,10 +21,8 @@ public class DeleteUserAvatarTests
 	public async Task Handle_ExpectedData_ReturnUnit()
 	{
 		// Arrange
-		string tempDirectory = Path.GetTempPath();
-		string avatarPath = Path.Combine(tempDirectory, "avatar.jpeg");
-
-		File.Create(avatarPath).Close();
+		string avatarPath = 
+			TestingHelper.CreateTesingFile("avatar.jpeg");
 
 		var user = new User()
 		{
