@@ -1,11 +1,12 @@
 ﻿using FluentAssertions;
 using LibraryApp.Application.Common.FileWrappers;
+using Xunit;
 
 namespace LibraryApp.Tests.FileWrapperTests;
 public class DeleteFileTests
 {
 	[Fact]
-	public async Task DeleteFile_ExpectedData_Success()
+	public void DeleteFile_ExpectedData_FileDeleting()
 	{
 		// Arrange
 		var fileWrapper = new FileWrapper();
@@ -19,5 +20,19 @@ public class DeleteFileTests
 
 		// Assert
 		Path.Exists(path).Should().BeFalse();
+	}
+
+
+	[Fact]
+	public void DeleteFile_NullPath_ThrowNothing()
+	{
+		// Arrange
+		var fileWrapper = new FileWrapper();
+
+		// Act
+		var action = () => fileWrapper.DeleteFile(string.Empty);
+
+		// Assert
+		action.Should().NotThrow();
 	}
 }

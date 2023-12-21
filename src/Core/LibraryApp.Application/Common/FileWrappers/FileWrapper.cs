@@ -12,8 +12,10 @@ public class FileWrapper : IFileWrapper
 		}
 	}
 
-	public void DeleteFile(string path)
+	public void DeleteFile(string? path)
 	{
+		if (string.IsNullOrEmpty(path)) return;
+
 		File.Delete(path);
 	}
 }

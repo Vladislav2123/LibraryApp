@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using LibraryApp.Application.Common.PasswordProviders;
+using LibraryApp.Application.Common.FileWrappers;
 
 namespace LibraryApp.Application;
 
@@ -28,6 +29,7 @@ namespace LibraryApp.Application;
 
 		services.AddSingleton<IContentTypeProvider, FileExtensionContentTypeProvider>();
 		services.AddSingleton<IPasswordProvider, BcryptPasswordProvider>();
+		services.AddSingleton<IFileWrapper, FileWrapper>();
 		services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 		services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 		services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());

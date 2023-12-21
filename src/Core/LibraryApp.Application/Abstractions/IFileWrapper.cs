@@ -7,5 +7,5 @@ public interface IFileWrapper
 		IFormFile file, 
 		string path, 
 		CancellationToken cancellationToken);
-	void DeleteFile(string path);
+	void DeleteFile(string? path);
 }
