@@ -37,12 +37,10 @@ public class DeleteUserTests
 			.Setup(x => x.Authors)
 			.ReturnsDbSet(new List<Author>());
 
-		var mockObj = _dbContextMock.Object;
-
 		var command = new DeleteUserCommand(user.Id);
 
 		var handler = new DeleteUserCommandHandler(
-			mockObj,
+			_dbContextMock.Object,
 			_fileWrapperMock.Object);
 
 		// Act
@@ -53,8 +51,10 @@ public class DeleteUserTests
 
 		_dbContextMock.Verify(x => 
 			x.Authors.RemoveRange(user.CreatedAuthors));
+
 		_fileWrapperMock.Verify(x => 
 			x.DeleteFile(user.AvatarPath));
+
 		_dbContextMock.Verify(x => 
 			x.SaveChangesAsync(CancellationToken.None));
 	}
