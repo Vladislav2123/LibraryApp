@@ -1,7 +1,7 @@
 ﻿namespace LibraryApp.Application.Common.Exceptions;
 
-public class UserEmailAlreadyUsingException : Exception
+public class EmailAlreadyInUseException : Exception
 {
-        public UserEmailAlreadyUsingException(string email)
+        public EmailAlreadyInUseException(string email)
             : base($"Email ({email}) already in use by another User") { }
     }

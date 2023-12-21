@@ -22,7 +22,7 @@ namespace LibraryApp.Application.Feauters.Users.Commands.Create;
             if(await _dbContext.Users
                 .AnyAsync(user => user.Email == command.Email, cancellationToken))
             {
-                throw new UserEmailAlreadyUsingException(command.Email);
+                throw new EmailAlreadyInUseException(command.Email);
             }
 
             string passwordSalt = BCrypt.Net.BCrypt.GenerateSalt();

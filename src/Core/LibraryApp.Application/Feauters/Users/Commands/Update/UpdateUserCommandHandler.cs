@@ -34,7 +34,7 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Unit>
 				u.Id != user.Id &&
 				u.Email == command.Email, cancellationToken))
 		{
-			throw new UserEmailAlreadyUsingException(command.Email);
+			throw new EmailAlreadyInUseException(command.Email);
 		}
 
 		user.Name = command.Name;

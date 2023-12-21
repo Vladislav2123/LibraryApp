@@ -49,7 +49,7 @@ namespace LibraryApp.API.ExceptionsHandling;
 			SecurityTokenException => StatusCodes.Status401Unauthorized,
 			EntityAlreadyExistException => StatusCodes.Status409Conflict,
 			BookAlreadyHasReviewException => StatusCodes.Status409Conflict,
-			UserEmailAlreadyUsingException => StatusCodes.Status409Conflict,
+			EmailAlreadyInUseException => StatusCodes.Status409Conflict,
 			UserAlreadyReadBookException => StatusCodes.Status409Conflict,
 			ValidationException => StatusCodes.Status422UnprocessableEntity,
 			EntityHasNoChangesException => StatusCodes.Status422UnprocessableEntity,
