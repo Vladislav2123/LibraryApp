@@ -23,16 +23,16 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Unit>
 		if (user == null) throw new EntityNotFoundException(nameof(User), command.UserId);
 
 		if (user.Name == command.Name &&
-			user.Email == command.Name &&
+			user.Email == command.Email &&
 			user.BirthDate == command.BirthDate)
 		{
 			throw new EntityHasNoChangesException(nameof(User), command.UserId);
 		}
 
 		if (await _dbContext.Users
-			.AnyAsync(u =>
-				u.Id != user.Id &&
-				u.Email == command.Email, cancellationToken))
+			.AnyAsync(user =>
+				user.Id != command.UserId &&
+				user.Email == command.Email, cancellationToken))
 		{
 			throw new EmailAlreadyInUseException(command.Email);
 		}
