@@ -20,7 +20,7 @@ public class DeleteBookCoverTests
 	[Fact]
 	public async Task Handle_ExpectedBahavior_ReturnUnit()
 	{
-		string coverPath = TestingHelper.CreateTesingFile("cover.jpeg");
+		string coverPath = TestingHelper.GetTesingFile("cover.jpeg");
 
 		// Arrange
 		var book = new Book()

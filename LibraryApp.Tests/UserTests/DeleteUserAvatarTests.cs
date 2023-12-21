@@ -22,7 +22,7 @@ public class DeleteUserAvatarTests
 	{
 		// Arrange
 		string avatarPath = 
-			TestingHelper.CreateTesingFile("avatar.jpeg");
+			TestingHelper.GetTesingFile("avatar.jpeg");
 
 		var user = new User()
 		{

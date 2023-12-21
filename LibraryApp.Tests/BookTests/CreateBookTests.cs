@@ -5,6 +5,7 @@ using LibraryApp.Application.Common.Exceptions;
 using LibraryApp.Application.Feauters.Books.Commands.Create;
 using LibraryApp.Domain.Enteties;
 using LibraryApp.Domain.Models;
+using LibraryApp.Tests.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -36,7 +37,8 @@ public class CreateBookTests
 		// Arrange
 		_httpContextAccessorMock
 			.Setup(x => x.HttpContext)
-			.Returns(GetHttpContextWithActorClaim());
+			.Returns(TestingHelper.GetHttpContextWithActorClaim(
+				Guid.NewGuid().ToString()));
 
 		var author = new Author() { Id = Guid.NewGuid() };
 
@@ -157,21 +159,5 @@ public class CreateBookTests
 
 		// Assert
 		await action.Should().ThrowAsync<EntityAlreadyExistException>();
-	}
-
-	private HttpContext GetHttpContextWithActorClaim()
-	{
-		var claims = new List<Claim>()
-		{
-			new Claim(ClaimTypes.Actor, Guid.NewGuid().ToString())
-		};
-
-		var identity = new ClaimsIdentity(claims);
-		var claimsPrincipal = new ClaimsPrincipal(identity);
-
-		HttpContext httpContext = new DefaultHttpContext();
-		httpContext.User = claimsPrincipal;
-
-		return httpContext;
 	}
 }
