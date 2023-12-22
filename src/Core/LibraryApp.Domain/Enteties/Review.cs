@@ -4,7 +4,7 @@ public class Review
 {
 	public Guid Id { get; set; }
 	public DateTime CreationDate {  get; set; }
-	public double Rating { get; set; }
+	public byte Rating { get; set; }
 	public string? Title { get; set; }
 	public string? Text { get; set; }
 

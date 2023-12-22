@@ -14,7 +14,7 @@ public class ReviewConfiguration : IEntityTypeConfiguration<Review>
 			.IsRequired();
 
 		builder.Property(review => review.Rating)
-			.HasPrecision(5)
+			.HasColumnType("byte")
 			.IsRequired();
 
 		builder.Property(review => review.Title)

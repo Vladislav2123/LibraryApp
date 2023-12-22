@@ -5,15 +5,15 @@ namespace LibraryApp.Application.Feauters.Reviews.Commands.Update;
 
 public class UpdateReviewCommandValidator : AbstractValidator<UpdateReviewCommand>
 {
-        public UpdateReviewCommandValidator()
-        {
+	public UpdateReviewCommandValidator()
+	{
 		RuleFor(command => command.ReviewId)
 			.SetValidator(new GuidValidator());
 
 		RuleFor(command => command.Rating)
-			.NotEmpty()
-			.GreaterThanOrEqualTo(1)
-			.LessThanOrEqualTo(5);
+			.NotNull()
+			.GreaterThanOrEqualTo((byte)1)
+			.LessThanOrEqualTo((byte)5);
 
 		RuleFor(command => command.Title)
 			.MaximumLength(50);
@@ -21,4 +21,4 @@ public class UpdateReviewCommandValidator : AbstractValidator<UpdateReviewComman
 		RuleFor(command => command.Text)
 			.MaximumLength(1000);
 	}
-    }
+}
