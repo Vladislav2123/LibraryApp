@@ -12,12 +12,11 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Create;
 
 public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, Guid>
 {
-	private readonly ILibraryDbContext _dbContext;
 	private readonly IFileWrapper _fileWrapper;
-	private readonly IHttpContextAccessor _httpContextAccessor;
+	private readonly ILibraryDbContext _dbContext;
 	private readonly FilePaths _filePaths;
+	private readonly HttpContext? _httpContext;
 
-	private HttpContext HttpContext => _httpContextAccessor.HttpContext;
 
 	public CreateBookCommandHandler(
 		ILibraryDbContext dbContext, 
@@ -26,7 +25,7 @@ public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, Guid>
 		IOptions<FilePaths> filePathsOptions)
 	{
 		_dbContext = dbContext;
-		_httpContextAccessor = httpContextAccessor;
+		_httpContext = httpContextAccessor.HttpContext;
 		_fileWrapper = fileWrapper;
 		_filePaths = filePathsOptions.Value;
 	}
@@ -54,7 +53,7 @@ public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, Guid>
 
 		await _fileWrapper.SaveFileAsync(command.ContentFile, contentPath, cancellationToken);
 
-		Guid userId = Guid.Parse(HttpContext.User.FindFirstValue(ClaimTypes.Actor));
+		Guid userId = Guid.Parse(_httpContext.User.FindFirstValue(ClaimTypes.Actor));
 
 		Book newBook = new Book()
 		{

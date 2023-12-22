@@ -11,14 +11,12 @@ namespace LibraryApp.Application.Feauters.Authors.Commands.Create;
 public class CreateAuthorCommandHandler : IRequestHandler<CreateAuthorCommand, Guid>
 {
 	private readonly ILibraryDbContext _dbContext;
-	private readonly IHttpContextAccessor _httpContextAccessor;
-
-	private HttpContext HttpContext => _httpContextAccessor.HttpContext;
+	private readonly HttpContext? _httpContext;
 
 	public CreateAuthorCommandHandler(ILibraryDbContext dbContext, IHttpContextAccessor httpContextAccessor)
 	{
 		_dbContext = dbContext;
-		_httpContextAccessor = httpContextAccessor;
+		_httpContext = httpContextAccessor.HttpContext;
 	}
 
 	public async Task<Guid> Handle(CreateAuthorCommand command, CancellationToken cancellationToken)
@@ -31,7 +29,7 @@ public class CreateAuthorCommandHandler : IRequestHandler<CreateAuthorCommand, G
 			throw new EntityAlreadyExistException(nameof(Author));
 		}
 
-		Guid userId = Guid.Parse(HttpContext.User.FindFirstValue(ClaimTypes.Actor));
+		Guid userId = Guid.Parse(_httpContext.User.FindFirstValue(ClaimTypes.Actor));
 
 		Author author = new Author()
 		{
