@@ -14,13 +14,13 @@ public class ReviewConfiguration : IEntityTypeConfiguration<Review>
 			.IsRequired();
 
 		builder.Property(review => review.Rating)
-			.HasColumnType("byte")
+			.HasColumnType("tinyint")
 			.IsRequired();
 
 		builder.Property(review => review.Title)
 			.HasMaxLength(50);
 
-		builder.Property(review => review.Text)
+		builder.Property(review => review.Comment)
 			.HasMaxLength(1000);
 
 		builder.Property(review => review.CreationDate);

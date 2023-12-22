@@ -6,5 +6,5 @@ namespace LibraryApp.Application.Feauters.Reviews.Commands.Create;
         Guid BookId,
         byte Rating,
         string? Title,
-        string? Text) 
+        string? Comment) 
         : IRequest<Guid>;

@@ -18,7 +18,7 @@ public class CreateReviewCommandValidator : AbstractValidator<CreateReviewComman
 		RuleFor(command => command.Title)
 			.MaximumLength(50);
 
-		RuleFor(command => command.Text)
+		RuleFor(command => command.Comment)
 			.MaximumLength(1000);
 	}
 }

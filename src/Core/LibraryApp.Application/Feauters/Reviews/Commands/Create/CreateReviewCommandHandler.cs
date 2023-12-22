@@ -13,9 +13,7 @@ public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand, G
 {
 	private readonly ILibraryDbContext _dbContext;
 	private readonly IPublisher _publisher;
-	private readonly IHttpContextAccessor _httpContextAccessor;
-
-	private HttpContext HttpContext => _httpContextAccessor.HttpContext;
+	private readonly HttpContext? _httpContext;
 
 	public CreateReviewCommandHandler(
 			ILibraryDbContext dbContext,
@@ -24,7 +22,7 @@ public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand, G
 	{
 		_dbContext = dbContext;
 		_publisher = publisher;
-		_httpContextAccessor = httpContextAccessor;
+		_httpContext = httpContextAccessor.HttpContext;
 	}
 
 	public async Task<Guid> Handle(CreateReviewCommand command, CancellationToken cancellationToken)
@@ -35,7 +33,7 @@ public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand, G
 
 		if (book == null) throw new EntityNotFoundException(nameof(Book), command.BookId);
 
-		Guid userId = Guid.Parse(HttpContext.User.FindFirstValue(ClaimTypes.Actor));
+		Guid userId = Guid.Parse(_httpContext.User.FindFirstValue(ClaimTypes.Actor));
 
 		if (book.Reviews
 			.Any(review => review.UserId == userId))
@@ -50,7 +48,7 @@ public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand, G
 			BookId = command.BookId,
 			Rating = command.Rating,
 			Title = command.Title,
-			Text = command.Text,
+			Comment = command.Comment,
 			CreationDate = DateTime.Now,
 		};
 

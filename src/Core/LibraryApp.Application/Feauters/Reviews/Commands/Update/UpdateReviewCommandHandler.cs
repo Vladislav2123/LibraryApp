@@ -27,7 +27,7 @@ public class UpdateReviewCommandHandler : IRequestHandler<UpdateReviewCommand, U
 
 		review.Rating = command.Rating;
 		review.Title = command.Title;
-		review.Text = command.Text;
+		review.Comment = command.Comment;
 
 		await _dbContext.SaveChangesAsync(cancellationToken);
 

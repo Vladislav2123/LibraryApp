@@ -6,4 +6,4 @@ public record UpdateReviewCommand(
 	Guid ReviewId,
 	byte Rating,
 	string? Title,
-	string? Text) : IRequest<Unit>;
+	string? Comment) : IRequest<Unit>;
