@@ -2,4 +2,5 @@
 
 namespace LibraryApp.Application.Feauters.Reviews.Notifications.BookReviewsUpdated;
 
-    public record BookReviewsUpdatedEvent(Guid BookId) : INotification;
+public record BookReviewsUpdatedEvent(Guid BookId)
+	: INotification;

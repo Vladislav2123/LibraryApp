@@ -5,13 +5,13 @@ namespace LibraryApp.Application.Feauters.Users.Commands.UpdateUserAvatar;
 
 public class UpdateUserAvatarCommandValidator : AbstractValidator<UpdateUserAvatarCommand>
 {
-        public UpdateUserAvatarCommandValidator()
-        {
-            RuleFor(command => command.UserId)
-                .SetValidator(new GuidValidator());
+	public UpdateUserAvatarCommandValidator()
+	{
+		RuleFor(command => command.UserId)
+			.SetValidator(new GuidValidator());
 
-            RuleFor(command => command.AvatarFile)
-                .NotNull()
-                .SetValidator(new ImageFileValidator());
-        }
-    }
+		RuleFor(command => command.AvatarFile)
+			.NotNull()
+			.SetValidator(new ImageFileValidator());
+	}
+}

@@ -4,7 +4,7 @@ using MediatR;
 
 namespace LibraryApp.Application.Feauters.Authors.Queries.GetAuthors;
 
-    public record GetAllAuthorsQuery(
+public record GetAllAuthorsQuery(
 	string? SearchTerms,
-	Page Page) 
+	Page Page)
 	: IRequest<PagedList<AuthorLookupDto>>;

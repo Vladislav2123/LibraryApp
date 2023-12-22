@@ -5,9 +5,9 @@ namespace LibraryApp.Application.Feauters.Books.Commands.DeleteBookCover;
 
 public class DeleteBookCoverCommandValidator : AbstractValidator<DeleteBookCoverCommand>
 {
-        public DeleteBookCoverCommandValidator()
-        {
+	public DeleteBookCoverCommandValidator()
+	{
 		RuleFor(command => command.BookId)
 			.SetValidator(new GuidValidator());
 	}
-    }
+}

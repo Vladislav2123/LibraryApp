@@ -9,23 +9,23 @@ using LibraryApp.Application.Abstractions;
 
 namespace LibraryApp.Application.Feauters.Users.Queries.GetUsers;
 
-    public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, PagedList<UserLookupDto>>
+public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, PagedList<UserLookupDto>>
 {
 	private readonly ILibraryDbContext _dbContext;
 	private readonly IMapper _mapper;
 
-        public GetAllUsersQueryHandler(ILibraryDbContext dbContext, IMapper mapper)
-        {
-            _dbContext = dbContext;
-            _mapper = mapper;
-        }
+	public GetAllUsersQueryHandler(ILibraryDbContext dbContext, IMapper mapper)
+	{
+		_dbContext = dbContext;
+		_mapper = mapper;
+	}
 
 	public async Task<PagedList<UserLookupDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
 	{
 		IQueryable<User> usersQuery = _dbContext.Users
 			.Include(user => user.ReadBooks);
 
-		if(string.IsNullOrWhiteSpace(request.SearchTerms) == false)
+		if (string.IsNullOrWhiteSpace(request.SearchTerms) == false)
 		{
 			usersQuery = usersQuery
 				.Where(user => user.Name.Contains(request.SearchTerms));

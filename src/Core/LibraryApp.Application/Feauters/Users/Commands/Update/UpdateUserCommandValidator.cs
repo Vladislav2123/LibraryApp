@@ -5,8 +5,8 @@ namespace LibraryApp.Application.Feauters.Users.Commands.Update;
 
 public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
 {
-        public UpdateUserCommandValidator()
-        {
+	public UpdateUserCommandValidator()
+	{
 		RuleFor(command => command.UserId)
 			.SetValidator(new GuidValidator());
 
@@ -23,4 +23,4 @@ public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
 			.NotNull()
 			.NotEmpty();
 	}
-    }
+}

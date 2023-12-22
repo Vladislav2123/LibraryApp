@@ -5,9 +5,9 @@ namespace LibraryApp.Application.Feauters.Users.Commands.Delete;
 
 public class DeleteUserCommandValidator : AbstractValidator<DeleteUserCommand>
 {
-        public DeleteUserCommandValidator()
-        {
-            RuleFor(command => command.UserId)
-			.SetValidator(new GuidValidator());
+	public DeleteUserCommandValidator()
+	{
+		RuleFor(command => command.UserId)
+		.SetValidator(new GuidValidator());
 	}
-    }
+}

@@ -13,19 +13,19 @@ public class GetUserQueryHandler : IRequestHandler<GetUserQuery, UserDetailsDto>
 	private readonly ILibraryDbContext _dbContext;
 	private readonly IMapper _mapper;
 
-        public GetUserQueryHandler(ILibraryDbContext dbContext, IMapper mapper)
-        {
-            _dbContext = dbContext;
-            _mapper = mapper;
-        }
+	public GetUserQueryHandler(ILibraryDbContext dbContext, IMapper mapper)
+	{
+		_dbContext = dbContext;
+		_mapper = mapper;
+	}
 
-        public async Task<UserDetailsDto> Handle(GetUserQuery request, CancellationToken cancellationToken)
-        {
-            User user = await _dbContext.Users
-                .FirstOrDefaultAsync(user => user.Id == request.UserId, cancellationToken);
+	public async Task<UserDetailsDto> Handle(GetUserQuery request, CancellationToken cancellationToken)
+	{
+		User user = await _dbContext.Users
+			.FirstOrDefaultAsync(user => user.Id == request.UserId, cancellationToken);
 
-            if (user == null) throw new EntityNotFoundException(nameof(User), request.UserId);
+		if (user == null) throw new EntityNotFoundException(nameof(User), request.UserId);
 
-            return _mapper.Map<UserDetailsDto>(user);
-        }
-    }
+		return _mapper.Map<UserDetailsDto>(user);
+	}
+}

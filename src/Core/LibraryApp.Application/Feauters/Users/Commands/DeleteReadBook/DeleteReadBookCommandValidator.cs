@@ -5,12 +5,12 @@ namespace LibraryApp.Application.Feauters.Users.Commands.DeleteReadBook;
 
 public class DeleteReadBookCommandValidator : AbstractValidator<DeleteReadBookCommand>
 {
-        public DeleteReadBookCommandValidator()
-        {
+	public DeleteReadBookCommandValidator()
+	{
 		RuleFor(command => command.UserId)
 			.SetValidator(new GuidValidator());
 
 		RuleFor(command => command.BookId)
 			.SetValidator(new GuidValidator());
 	}
-    }
+}

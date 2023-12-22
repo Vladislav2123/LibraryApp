@@ -4,5 +4,5 @@ using MediatR;
 
 namespace LibraryApp.Application.Feauters.Reviews.Queries.GetAllReviews;
 
-    public record GetAllReviewsQuery(Page Page) 
-        : IRequest<PagedList<ReviewDto>>;
+public record GetAllReviewsQuery(Page Page)
+	: IRequest<PagedList<ReviewDto>>;

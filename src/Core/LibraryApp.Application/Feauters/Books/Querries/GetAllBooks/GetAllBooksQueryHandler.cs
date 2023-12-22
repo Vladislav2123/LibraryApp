@@ -9,28 +9,28 @@ using LibraryApp.Application.Abstractions;
 
 namespace LibraryApp.Application.Feauters.Books.Querries.GetBooks;
 
-    public class GetAllBooksQueryHandler : IRequestHandler<GetAllBooksQuery, PagedList<BookLookupDto>>
+public class GetAllBooksQueryHandler : IRequestHandler<GetAllBooksQuery, PagedList<BookLookupDto>>
 {
 	private readonly ILibraryDbContext _dbContext;
 	private readonly IMapper _mapper;
 
-        public GetAllBooksQueryHandler(ILibraryDbContext dbContext, IMapper mapper)
-        {
-            _dbContext = dbContext;
+	public GetAllBooksQueryHandler(ILibraryDbContext dbContext, IMapper mapper)
+	{
+		_dbContext = dbContext;
 		_mapper = mapper;
-        }
+	}
 
-        public async Task<PagedList<BookLookupDto>> Handle(GetAllBooksQuery request, CancellationToken cancellationToken)
+	public async Task<PagedList<BookLookupDto>> Handle(GetAllBooksQuery request, CancellationToken cancellationToken)
 	{
 		IQueryable<Book> booksQuery = _dbContext.Books
 			.Include(book => book.Readers);
-		
-		if(string.IsNullOrWhiteSpace(request.SearchTerms) == false)
+
+		if (string.IsNullOrWhiteSpace(request.SearchTerms) == false)
 		{
 			booksQuery = booksQuery
 				.Where(book => book.Name.Contains(request.SearchTerms));
 		}
-		if(request.AuthorId != null && request.AuthorId != Guid.Empty)
+		if (request.AuthorId != null && request.AuthorId != Guid.Empty)
 		{
 			booksQuery = booksQuery
 				.Where(book => book.AuthorId == request.AuthorId);

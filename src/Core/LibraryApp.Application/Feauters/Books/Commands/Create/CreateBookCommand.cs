@@ -8,4 +8,5 @@ public record CreateBookCommand(
 	string Name,
 	string Description,
 	int Year,
-	IFormFile ContentFile) : IRequest<Guid>;
+	IFormFile ContentFile) 
+	: IRequest<Guid>;

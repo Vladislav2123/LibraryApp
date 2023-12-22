@@ -5,9 +5,9 @@ namespace LibraryApp.Application.Feauters.Authors.Commands.Delete;
 
 public class DeleteAuthorCommandValidator : AbstractValidator<DeleteAuthorCommand>
 {
-        public DeleteAuthorCommandValidator()
-        {
+	public DeleteAuthorCommandValidator()
+	{
 		RuleFor(command => command.AuthorId)
 			.SetValidator(new GuidValidator());
 	}
-    }
+}

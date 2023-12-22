@@ -30,7 +30,7 @@ public class GetUserAvatarQueryHandler : IRequestHandler<GetUserAvatarQuery, Fil
 		if (user == null) throw new EntityNotFoundException(nameof(User), request.UserId);
 
 		if (string.IsNullOrEmpty(user.AvatarPath) ||
-			Path.Exists(user.AvatarPath) == false) 
+			Path.Exists(user.AvatarPath) == false)
 			throw new FileNotFoundException(FileType);
 
 		string contentType;

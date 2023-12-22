@@ -19,7 +19,7 @@ public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, Guid>
 
 
 	public CreateBookCommandHandler(
-		ILibraryDbContext dbContext, 
+		ILibraryDbContext dbContext,
 		IHttpContextAccessor httpContextAccessor,
 		IFileWrapper fileWrapper,
 		IOptions<FilePaths> filePathsOptions)

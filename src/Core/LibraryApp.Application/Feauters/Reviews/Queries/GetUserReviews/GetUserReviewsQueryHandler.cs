@@ -9,18 +9,18 @@ using LibraryApp.Application.Abstractions;
 
 namespace LibraryApp.Application.Feauters.Reviews.Queries.GetUserReviews;
 
-    public class GetUserReviewsQueryHandler : IRequestHandler<GetUserReviewsQuery, PagedList<ReviewDto>>
+public class GetUserReviewsQueryHandler : IRequestHandler<GetUserReviewsQuery, PagedList<ReviewDto>>
 {
 	private readonly ILibraryDbContext _dbContext;
 	private readonly IMapper _mapper;
 
-        public GetUserReviewsQueryHandler(ILibraryDbContext dbContext, IMapper mapper)
-        {
-            _dbContext = dbContext;
+	public GetUserReviewsQueryHandler(ILibraryDbContext dbContext, IMapper mapper)
+	{
+		_dbContext = dbContext;
 		_mapper = mapper;
-        }
+	}
 
-        public async Task<PagedList<ReviewDto>> Handle(GetUserReviewsQuery request, CancellationToken cancellationToken)
+	public async Task<PagedList<ReviewDto>> Handle(GetUserReviewsQuery request, CancellationToken cancellationToken)
 	{
 		var user = _dbContext.Users
 			.Include(user => user.Reviews)

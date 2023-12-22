@@ -23,7 +23,7 @@ public class UpdateReviewCommandHandler : IRequestHandler<UpdateReviewCommand, U
 		var review = await _dbContext.Reviews
 			.FirstOrDefaultAsync(review => review.Id == command.ReviewId, cancellationToken);
 
-		if(review == null) throw new EntityNotFoundException(nameof(Review), command.ReviewId);
+		if (review == null) throw new EntityNotFoundException(nameof(Review), command.ReviewId);
 
 		review.Rating = command.Rating;
 		review.Title = command.Title;

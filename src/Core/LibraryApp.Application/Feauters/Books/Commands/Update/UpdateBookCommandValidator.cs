@@ -5,8 +5,8 @@ namespace LibraryApp.Application.Feauters.Books.Commands.Update;
 
 public class UpdateBookCommandValidator : AbstractValidator<UpdateBookCommand>
 {
-        public UpdateBookCommandValidator()
-        {
+	public UpdateBookCommandValidator()
+	{
 		RuleFor(command => command.BookId)
 			.SetValidator(new GuidValidator());
 
@@ -28,4 +28,4 @@ public class UpdateBookCommandValidator : AbstractValidator<UpdateBookCommand>
 		RuleFor(command => command.ContentFile)
 			.SetValidator(new PdfFileValidator());
 	}
-    }
+}

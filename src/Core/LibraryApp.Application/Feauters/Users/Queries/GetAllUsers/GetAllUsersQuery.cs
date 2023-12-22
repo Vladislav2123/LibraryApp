@@ -4,9 +4,9 @@ using LibraryApp.Application.Common.Pagination;
 
 namespace LibraryApp.Application.Feauters.Users.Queries.GetUsers;
 
-    public record GetAllUsersQuery(
+public record GetAllUsersQuery(
 	string? SearchTerms,
 	string? SortColumn,
 	string? SortOrder,
-	Page Page) 
+	Page Page)
 	: IRequest<PagedList<UserLookupDto>>;

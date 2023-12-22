@@ -5,13 +5,13 @@ namespace LibraryApp.Application.Feauters.Authors.Commands.Update;
 
 public class UpdateAuthorCommandValidator : AbstractValidator<UpdateAuthorCommand>
 {
-        public UpdateAuthorCommandValidator()
-        {
+	public UpdateAuthorCommandValidator()
+	{
 		RuleFor(command => command.AuthorId)
 			.SetValidator(new GuidValidator());
 
 		RuleFor(command => command.Name)
-                .NotEmpty()
-                .Length(3, 50);
-        }
-    }
+				.NotEmpty()
+				.Length(3, 50);
+	}
+}

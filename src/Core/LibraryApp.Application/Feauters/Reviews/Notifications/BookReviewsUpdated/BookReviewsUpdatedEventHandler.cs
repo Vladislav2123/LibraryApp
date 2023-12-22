@@ -23,7 +23,7 @@ public class BookReviewsUpdatedEventHandler : INotificationHandler<BookReviewsUp
 
 		if (book == null) throw new EntityNotFoundException(nameof(Book), notification.BookId);
 
-		book.Rating = book.Reviews.Any() ? 
+		book.Rating = book.Reviews.Any() ?
 			book.Reviews.Average(book => book.Rating) : 0;
 
 		await _dbContext.SaveChangesAsync(cancellationToken);

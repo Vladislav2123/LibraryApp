@@ -4,7 +4,7 @@ using LibraryApp.Application.Common.Pagination;
 
 namespace LibraryApp.Application.Feauters.Books.Querries.GetUserReadBooks;
 
-    public record GetUserReadBooksQuery(
-        Guid UserId, 
-        Page Page) 
-        : IRequest<PagedList<BookLookupDto>>;
+public record GetUserReadBooksQuery(
+	Guid UserId,
+	Page Page)
+	: IRequest<PagedList<BookLookupDto>>;

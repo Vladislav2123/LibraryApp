@@ -8,18 +8,18 @@ using LibraryApp.Application.Abstractions;
 
 namespace LibraryApp.Application.Feauters.Reviews.Queries.GetAllReviews;
 
-    public class GetAllReviewsQueryHandler : IRequestHandler<GetAllReviewsQuery, PagedList<ReviewDto>>
+public class GetAllReviewsQueryHandler : IRequestHandler<GetAllReviewsQuery, PagedList<ReviewDto>>
 {
 	private readonly ILibraryDbContext _dbContext;
 	private readonly IMapper _mapper;
 
-        public GetAllReviewsQueryHandler(ILibraryDbContext dbContext, IMapper mapper)
-        {
-            _dbContext = dbContext;
+	public GetAllReviewsQueryHandler(ILibraryDbContext dbContext, IMapper mapper)
+	{
+		_dbContext = dbContext;
 		_mapper = mapper;
-        }
+	}
 
-        public async Task<PagedList<ReviewDto>> Handle(GetAllReviewsQuery request, CancellationToken cancellationToken)
+	public async Task<PagedList<ReviewDto>> Handle(GetAllReviewsQuery request, CancellationToken cancellationToken)
 	{
 		IQueryable<Review> reviewsQuery = _dbContext.Reviews;
 
