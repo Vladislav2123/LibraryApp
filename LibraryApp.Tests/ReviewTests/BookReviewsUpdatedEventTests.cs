@@ -9,20 +9,19 @@ using Moq;
 namespace LibraryApp.Tests.ReviewTests;
 public class BookReviewsUpdatedEventTests
 {
-	private readonly Mock<ILibraryDbContext> _dbContextMock =
-		new Mock<ILibraryDbContext>();
+	private readonly Mock<ILibraryDbContext> _dbContextMock = new();
 
 	[Fact]
 	public async Task Handle_ExpectedBehavior()
 	{
 		// Arrange
-		var book = new Book()
+		var book = new Book
 		{
 			Id = Guid.NewGuid(),
-			Reviews = new List<Review>()
+			Reviews = new List<Review>
 			{
-				new Review() { Rating = 4 },
-				new Review() { Rating = 5 },
+				new Review { Rating = 4 },
+				new Review { Rating = 5 },
 			}
 		};
 

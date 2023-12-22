@@ -3,20 +3,20 @@ using LibraryApp.Application.Abstractions;
 using LibraryApp.Application.Common.Exceptions;
 using LibraryApp.Application.Feauters.Authors.Commands.Update;
 using LibraryApp.Domain.Enteties;
-using Moq;
 using Moq.EntityFrameworkCore;
+using Moq;
+using System.Linq;
 
 namespace LibraryApp.Tests.AuthorTests;
 public class UpdateAuthorTests
 {
-	private readonly Mock<ILibraryDbContext> _dbContextMock =
-		new Mock<ILibraryDbContext>();
+	private readonly Mock<ILibraryDbContext> _dbContextMock = new();
 
 	[Fact]
-	public async Task Handle_ExpectedData_ReturnUnit()
+	public async Task Handle_ExpectedBehavior_ReturnUnit()
 	{
 		// Arrange
-		var author = new Author()
+		var author = new Author
 		{
 			Id = Guid.NewGuid(),
 			Name = "Name",
@@ -40,6 +40,11 @@ public class UpdateAuthorTests
 		// Assert
 		result.Should().NotBeNull();
 
+		var updatedAuthor = _dbContextMock.Object.Authors.FirstOrDefault();
+
+		updatedAuthor.Name.Should().Be(command.Name);
+		updatedAuthor.BirthDate.Should().Be(command.BirthDate);
+
 		_dbContextMock.Verify(x =>
 			x.SaveChangesAsync(CancellationToken.None));
 	}
@@ -50,13 +55,13 @@ public class UpdateAuthorTests
 		// Arrange
 		var authors = new Author[]
 		{
-			new Author()
+			new Author
 			{
 				Id = Guid.NewGuid(),
 				Name = "Name",
 				BirthDate = DateOnly.Parse("0001-01-01")
 			},
-			new Author()
+			new Author
 			{
 				Id = Guid.NewGuid(),
 				Name = "DestName",
@@ -87,7 +92,7 @@ public class UpdateAuthorTests
 	public async Task Handle_NoChanges_ThrowEntityHasNoChangesException()
 	{
 		// Arrange
-		var author = new Author()
+		var author = new Author
 		{
 			Id = Guid.NewGuid(),
 			Name = "Name",

@@ -1,24 +1,21 @@
-﻿using FluentAssertions;
-using LibraryApp.Application.Abstractions;
+﻿using LibraryApp.Application.Feauters.Authors.Commands.Create;
 using LibraryApp.Application.Common.Exceptions;
-using LibraryApp.Application.Feauters.Authors.Commands.Create;
+using LibraryApp.Application.Abstractions;
 using LibraryApp.Domain.Enteties;
-using LibraryApp.Tests.Common;
 using Microsoft.AspNetCore.Http;
-using Moq;
+using LibraryApp.Tests.Common;
 using Moq.EntityFrameworkCore;
+using FluentAssertions;
+using Moq;
 
 namespace LibraryApp.Tests.AuthorTests;
 public class CreateAuthorTests
 {
-	private readonly Mock<ILibraryDbContext> _dbContextMock =
-		new Mock<ILibraryDbContext>();
-
-	private readonly Mock<IHttpContextAccessor> _httpContextAccessorMock =
-		new Mock<IHttpContextAccessor>();
+	private readonly Mock<ILibraryDbContext> _dbContextMock = new();
+	private readonly Mock<IHttpContextAccessor> _httpContextAccessorMock = new();
 
 	[Fact]
-	public async Task Handle_ExpectedData_ReturnCreatedAuthorGuid()
+	public async Task Handle_ExpectedBehavior_ReturnCreatedAuthorGuid()
 	{
 		// Arrange
 		_dbContextMock
@@ -51,12 +48,11 @@ public class CreateAuthorTests
 			x.SaveChangesAsync(CancellationToken.None));
 	}
 
-
 	[Fact]
 	public async Task Handle_AlreadyExistingAuthor_ThrowEntityAlreadyExistException()
 	{
 		// Arrange
-		var author = new Author()
+		var author = new Author
 		{
 			Id = Guid.NewGuid(),
 			Name = "Name",

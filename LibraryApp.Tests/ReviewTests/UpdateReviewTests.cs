@@ -11,17 +11,14 @@ using Moq;
 namespace LibraryApp.Tests.ReviewTests;
 public class UpdateReviewTests
 {
-	private readonly Mock<ILibraryDbContext> _dbContextMock =
-		new Mock<ILibraryDbContext>();
-
-	private readonly Mock<IPublisher> _publisherMock =
-		new Mock<IPublisher>();
+	private readonly Mock<ILibraryDbContext> _dbContextMock = new();
+	private readonly Mock<IPublisher> _publisherMock = new();
 
 	[Fact]
 	public async Task Handle_ExpectedBehavior_ReturnUnit()
 	{
 		// Arrange
-		var review = new Review()
+		var review = new Review
 		{
 			Id = Guid.NewGuid(),
 			BookId = Guid.NewGuid(),
@@ -45,6 +42,12 @@ public class UpdateReviewTests
 
 		// Assert
 		result.Should().NotBeNull();
+
+		var updatedReview = _dbContextMock.Object.Reviews.FirstOrDefault();
+
+		updatedReview.Rating.Should().Be(command.Rating);
+		updatedReview.Title.Should().Be(command.Title);
+		updatedReview.Comment.Should().Be(command.Comment);
 
 		_dbContextMock.Verify(x =>
 			x.SaveChangesAsync(CancellationToken.None));

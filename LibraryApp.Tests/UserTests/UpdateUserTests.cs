@@ -8,18 +8,15 @@ using Moq;
 using Moq.EntityFrameworkCore;
 
 namespace LibraryApp.Tests.UserTests;
-
 public class UpdateUserTests
 {
-	private readonly Mock<ILibraryDbContext> _dbContextMock =
-		new Mock<ILibraryDbContext>();
-
+	private readonly Mock<ILibraryDbContext> _dbContextMock = new();
 
 	[Fact]
-	public async Task Handle_ExpectedData_UpdateEntityAndReturnUnit()
+	public async Task Handle_ExpectedBehavior_UpdateEntityAndReturnUnit()
 	{
 		// Arrange
-		var user = new User()
+		var user = new User
 		{
 			Id = Guid.NewGuid(),
 			Name = "Name",
@@ -29,7 +26,7 @@ public class UpdateUserTests
 
 		_dbContextMock
 			.Setup(x => x.Users)
-			.ReturnsDbSet(new List<User>() { user });
+			.ReturnsDbSet(new User[] { user });
 
 		var command = new UpdateUserCommand(
 			user.Id,
@@ -56,7 +53,7 @@ public class UpdateUserTests
 		// Arrange
 		_dbContextMock
 			.Setup(x => x.Users)
-			.ReturnsDbSet(new List<User>());
+			.ReturnsDbSet(new User[0]);
 
 		var command = new UpdateUserCommand(
 			Guid.NewGuid(),
@@ -79,7 +76,7 @@ public class UpdateUserTests
 	public async Task Handle_SameData_ThrowEntityHasNoChangesExceptions()
 	{
 		// Arrange
-		User user = new User()
+		User user = new User
 		{
 			Id = Guid.NewGuid(),
 			Name = "Name",
@@ -89,7 +86,7 @@ public class UpdateUserTests
 
 		_dbContextMock
 			.Setup(x => x.Users)
-			.ReturnsDbSet(new List<User>() { user });
+			.ReturnsDbSet(new User[] { user });
 
 		var command = new UpdateUserCommand(
 			user.Id,
@@ -107,7 +104,6 @@ public class UpdateUserTests
 		await action.Should().ThrowAsync<EntityHasNoChangesException>();
 	}
 
-
 	[Fact]
 	public async Task Handle_DataWithUsedEmail_ThrowEmailAlreadyInUseExeption()
 	{
@@ -115,7 +111,7 @@ public class UpdateUserTests
 		Guid updatingUserId = Guid.NewGuid();
 		string usedEmail = "usedEmail@email.com";
 
-		var users = new List<User>
+		var users = new User[]
 		{
 			new User { Id = updatingUserId },
 			new User { Email = usedEmail }

@@ -1,16 +1,13 @@
-﻿using FluentAssertions;
-using LibraryApp.Application.Common.FileWrappers;
+﻿using LibraryApp.Application.Common.FileWrappers;
 using Microsoft.AspNetCore.Http;
+using FluentAssertions;
 using Moq;
 
 namespace LibraryApp.Tests.FileWrapperTests;
 public class SaveFileTests
 {
-	private readonly FileWrapper _fileWrapper = 
-		new FileWrapper();
-
-	private readonly Mock<IFormFile> _fileMock =
-		new Mock<IFormFile>();
+	private readonly FileWrapper _fileWrapper = new();
+	private readonly Mock<IFormFile> _fileMock = new();
 
 	[Fact]
 	public async Task SaveFileAsync_ExpectedData_Success()

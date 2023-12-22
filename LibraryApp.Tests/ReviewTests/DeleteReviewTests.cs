@@ -1,28 +1,24 @@
 ﻿using LibraryApp.Application.Feauters.Reviews.Notifications.BookReviewsUpdated;
 using LibraryApp.Application.Feauters.Reviews.Commands.Delete;
+using LibraryApp.Application.Common.Exceptions;
 using LibraryApp.Application.Abstractions;
 using LibraryApp.Domain.Enteties;
 using Moq.EntityFrameworkCore;
 using FluentAssertions;
 using MediatR;
 using Moq;
-using LibraryApp.Application.Common.Exceptions;
-using LibraryApp.Application.Feauters.Reviews.Commands.Update;
 
 namespace LibraryApp.Tests.ReviewTests;
 public class DeleteReviewTests
 {
-	private readonly Mock<ILibraryDbContext> _dbContextMock =
-		new Mock<ILibraryDbContext>();
-
-	private readonly Mock<IPublisher> _publisherMock =
-		new Mock<IPublisher>();
+	private readonly Mock<ILibraryDbContext> _dbContextMock = new();
+	private readonly Mock<IPublisher> _publisherMock = new();
 
 	[Fact]
 	public async Task Handle_ExpectedBehavior_ReturnUnit()
 	{
 		// Arrange
-		var review = new Review() { Id = Guid.NewGuid() };
+		var review = new Review { Id = Guid.NewGuid() };
 
 		_dbContextMock
 			.Setup(x => x.Reviews)

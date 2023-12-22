@@ -1,30 +1,27 @@
-﻿using FluentAssertions;
-using LibraryApp.Application.Abstractions;
+﻿using LibraryApp.Application.Feauters.Users.Commands.DeleteUserAvatar;
 using LibraryApp.Application.Common.Exceptions;
-using LibraryApp.Application.Feauters.Users.Commands.DeleteUserAvatar;
+using LibraryApp.Application.Abstractions;
 using LibraryApp.Domain.Enteties;
 using LibraryApp.Tests.Common;
-using Moq;
 using Moq.EntityFrameworkCore;
+using FluentAssertions;
+using Moq;
 using FileNotFoundException = LibraryApp.Application.Common.Exceptions.FileNotFoundException;
 
 namespace LibraryApp.Tests.UserTests;
 public class DeleteUserAvatarTests
 {
-	private readonly Mock<ILibraryDbContext> _dbContextMock = 
-		new Mock<ILibraryDbContext>();
-
-	private readonly Mock<IFileWrapper> _fileWrapperMock = 
-		new Mock<IFileWrapper>();
+	private readonly Mock<ILibraryDbContext> _dbContextMock = new();
+	private readonly Mock<IFileWrapper> _fileWrapperMock = new();
 
 	[Fact]
-	public async Task Handle_ExpectedData_ReturnUnit()
+	public async Task Handle_ExpectedBehavior_ReturnUnit()
 	{
 		// Arrange
 		string avatarPath = 
 			TestingHelper.GetTesingFile("avatar.jpeg");
 
-		var user = new User()
+		var user = new User
 		{
 			Id = Guid.NewGuid(),
 			AvatarPath = avatarPath
@@ -32,7 +29,7 @@ public class DeleteUserAvatarTests
 
 		_dbContextMock
 			.Setup(x => x.Users)
-			.ReturnsDbSet(new List<User>() { user });
+			.ReturnsDbSet(new User[] { user });
 
 		var command = new DeleteUserAvatarCommand(user.Id);
 
@@ -58,7 +55,7 @@ public class DeleteUserAvatarTests
 		// Arrange
 		_dbContextMock
 			.Setup(x => x.Users)
-			.ReturnsDbSet(new List<User>());
+			.ReturnsDbSet(new User[0]);
 
 		var command = new DeleteUserAvatarCommand(Guid.NewGuid());
 
@@ -78,11 +75,11 @@ public class DeleteUserAvatarTests
 	public async Task Handle_NonexistentAvatarFile_ThrowFileNotFoundException()
 	{
 		// Arrange
-		var user = new User() { Id = Guid.NewGuid() };
+		var user = new User { Id = Guid.NewGuid() };
 
 		_dbContextMock
 			.Setup(x => x.Users)
-			.ReturnsDbSet(new List<User>() { user });
+			.ReturnsDbSet(new User[] { user });
 
 		var command = new DeleteUserAvatarCommand(user.Id);
 

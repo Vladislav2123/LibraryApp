@@ -1,28 +1,24 @@
-﻿using FluentAssertions;
-using LibraryApp.Application.Abstractions;
+﻿using LibraryApp.Application.Feauters.Users.Commands.Create;
 using LibraryApp.Application.Common.Exceptions;
-using LibraryApp.Application.Feauters.Users.Commands.Create;
+using LibraryApp.Application.Abstractions;
 using LibraryApp.Domain.Enteties;
-using Moq;
 using Moq.EntityFrameworkCore;
+using FluentAssertions;
+using Moq;
 
 namespace LibraryApp.Tests.UserTests;
-
 public class CreateUserTests
 {
-	private readonly Mock<ILibraryDbContext> _dbContextMock =
-		new Mock<ILibraryDbContext>();
-
-	private readonly Mock<IPasswordProvider> _passwordProviderMock =
-		new Mock<IPasswordProvider>();
+	private readonly Mock<ILibraryDbContext> _dbContextMock = new();
+	private readonly Mock<IPasswordProvider> _passwordProviderMock = new();
 
 	[Fact]
-	public async Task Handle_ExpectedData_ReturnCreatedUserGuid()
+	public async Task Handle_ExpectedBehavior_ReturnCreatedUserGuid()
 	{
 		// Arrange
 		_dbContextMock
 			.Setup(x => x.Users)
-			.ReturnsDbSet(new List<User>());
+			.ReturnsDbSet(new User[0]);
 
 		_passwordProviderMock
 			.Setup(x => x.HashPassword(It.IsAny<string>(), It.IsAny<string>()))
@@ -51,16 +47,15 @@ public class CreateUserTests
 		result.Should().NotBeEmpty();
 	}
 
-
 	[Fact]
 	public async Task Handle_AlredyUsingEmail_ThrowEmailAlreadyInUserException()
 	{
 		// Arrange
-			var user = new User() { Email = "email@email.com" };
+			var user = new User { Email = "email@email.com" };
 
 		_dbContextMock
 			.Setup(x => x.Users)
-			.ReturnsDbSet(new List<User>() { user });
+			.ReturnsDbSet(new User[] { user });
 
 		_passwordProviderMock
 			.Setup(x => x.HashPassword(It.IsAny<string>(), It.IsAny<string>()))

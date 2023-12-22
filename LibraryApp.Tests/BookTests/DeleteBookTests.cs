@@ -10,17 +10,14 @@ using Moq.EntityFrameworkCore;
 namespace LibraryApp.Tests.BookTests;
 public class DeleteBookTests
 {
-	private readonly Mock<ILibraryDbContext> _dbContextMock
-		= new Mock<ILibraryDbContext>();
-
-	private readonly Mock<IFileWrapper> _fileWrapperMock
-		= new Mock<IFileWrapper>();
+	private readonly Mock<ILibraryDbContext> _dbContextMock = new ();
+	private readonly Mock<IFileWrapper> _fileWrapperMock = new ();
 
 	[Fact]
-	public async Task Handle_ExpectedData_ReturnUnit()
+	public async Task Handle_ExpectedBehavior_ReturnUnit()
 	{
 		// Arrange
-		var book = new Book()
+		var book = new Book
 		{
 			Id = Guid.NewGuid(),
 			ContentPath = "content",
@@ -29,7 +26,7 @@ public class DeleteBookTests
 
 		_dbContextMock
 			.Setup(x => x.Books)
-			.ReturnsDbSet(new List<Book>() { book });
+			.ReturnsDbSet(new Book[] { book });
 
 		var command = new DeleteBookCommand(book.Id);
 
@@ -63,7 +60,7 @@ public class DeleteBookTests
 		// Arrange
 		_dbContextMock
 			.Setup(x => x.Books)
-			.ReturnsDbSet(new List<Book>());
+			.ReturnsDbSet(new Book[0]);
 
 		var command = new DeleteBookCommand(Guid.NewGuid());
 

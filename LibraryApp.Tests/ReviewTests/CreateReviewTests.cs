@@ -13,20 +13,15 @@ using Moq;
 namespace LibraryApp.Tests.ReviewTests;
 public class CreateReviewTests
 {
-	private readonly Mock<ILibraryDbContext> _dbContextMock =
-		new Mock<ILibraryDbContext>();
-
-	private readonly Mock<IPublisher> _publisherMock =
-		new Mock<IPublisher>();
-
-	private readonly Mock<IHttpContextAccessor> _httpContextAccessorMock =
-		new Mock<IHttpContextAccessor>();
+	private readonly Mock<ILibraryDbContext> _dbContextMock = new();
+	private readonly Mock<IPublisher> _publisherMock = new();
+	private readonly Mock<IHttpContextAccessor> _httpContextAccessorMock = new();
 
 	[Fact]
 	public async Task Handler_ExpectedBehavior_ReturnCreatedReviewGuid()
 	{
 		// Arrange
-		var book = new Book()
+		var book = new Book
 		{
 			Id = Guid.NewGuid(),
 			Reviews = new List<Review>()
@@ -69,7 +64,6 @@ public class CreateReviewTests
 			x.Publish(new BookReviewsUpdatedEvent(book.Id), CancellationToken.None));
 	}
 
-
 	[Fact]
 	public async Task Handler_NonexistentBook_ThrowEntityNotFoundExeption()
 	{
@@ -108,15 +102,14 @@ public class CreateReviewTests
 	public async Task Handle_ReviewAlreadyExist_ThrowBookAlreadyHasReviewException()
 	{
 		// Arrange
-
 		var userId = Guid.NewGuid();
 
-		var book = new Book()
+		var book = new Book
 		{
 			Id = Guid.NewGuid(),
 			Reviews = new List<Review>()
 			{
-				new Review() { UserId = userId }
+				new Review { UserId = userId }
 			}
 		};
 

@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using LibraryApp.Application.Common.FileWrappers;
-using Xunit;
 
 namespace LibraryApp.Tests.FileWrapperTests;
 public class DeleteFileTests

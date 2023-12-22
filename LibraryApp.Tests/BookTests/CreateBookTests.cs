@@ -1,38 +1,26 @@
-﻿using FluentAssertions;
-using iTextSharp.text;
-using LibraryApp.Application.Abstractions;
+﻿using LibraryApp.Application.Feauters.Books.Commands.Create;
 using LibraryApp.Application.Common.Exceptions;
-using LibraryApp.Application.Feauters.Books.Commands.Create;
+using LibraryApp.Application.Abstractions;
+using Microsoft.Extensions.Options;
 using LibraryApp.Domain.Enteties;
+using Microsoft.AspNetCore.Http;
 using LibraryApp.Domain.Models;
 using LibraryApp.Tests.Common;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
-using Moq;
+using FluentAssertions;
 using Moq.EntityFrameworkCore;
-using System.Security.Claims;
-using Xunit;
+using Moq;
 
 namespace LibraryApp.Tests.BookTests;
 public class CreateBookTests
 {
-	private Mock<ILibraryDbContext> _dbContextMock =
-		new Mock<ILibraryDbContext>();
-	
-	private Mock<IFileWrapper> _fileWrapperMock =
-		new Mock<IFileWrapper>();
-
-	private Mock<IHttpContextAccessor> _httpContextAccessorMock =
-		new Mock<IHttpContextAccessor>();
-
-	private Mock<IOptions<FilePaths>> _filePathOptionsMock =
-		new Mock<IOptions<FilePaths>>();
-
-	private Mock<IFormFile> _contentFileMock = 
-		new Mock<IFormFile>();
+	private readonly Mock<ILibraryDbContext> _dbContextMock = new();
+	private readonly Mock<IFileWrapper> _fileWrapperMock = new();
+	private readonly Mock<IHttpContextAccessor> _httpContextAccessorMock = new();
+	private readonly Mock<IOptions<FilePaths>> _filePathOptionsMock = new();
+	private readonly Mock<IFormFile> _contentFileMock = new();
 
 	[Fact]
-	public async Task Handle_ExpectedData_ReturnBookId()
+	public async Task Handle_ExpectedBehavior_ReturnBookId()
 	{
 		// Arrange
 		_httpContextAccessorMock
@@ -40,19 +28,19 @@ public class CreateBookTests
 			.Returns(TestingHelper.GetHttpContextWithActorClaim(
 				Guid.NewGuid().ToString()));
 
-		var author = new Author() { Id = Guid.NewGuid() };
+		var author = new Author { Id = Guid.NewGuid() };
 
 		_dbContextMock
 			.Setup(x => x.Authors)
-			.ReturnsDbSet(new List<Author>() { author });
+			.ReturnsDbSet(new Author[] { author });
 
 		_dbContextMock
 			.Setup(x => x.Books)
-			.ReturnsDbSet(new List<Book>());
+			.ReturnsDbSet(new Book[0]);
 
 		_filePathOptionsMock
 			.Setup(x => x.Value)
-			.Returns(new FilePaths() { BooksPath = "books" });
+			.Returns(new FilePaths { BooksPath = "books" });
 
 		var command = new CreateBookCommand(
 			author.Id,
@@ -93,7 +81,7 @@ public class CreateBookTests
 		// Arrange
 		_dbContextMock
 			.Setup(x => x.Authors)
-			.ReturnsDbSet(new List<Author>());
+			.ReturnsDbSet(new Author[0]);
 
 		var command = new CreateBookCommand(
 			Guid.NewGuid(),
@@ -134,11 +122,11 @@ public class CreateBookTests
 
 		_dbContextMock
 			.Setup(x => x.Authors)
-			.ReturnsDbSet(new List<Author>() { author });
+			.ReturnsDbSet(new Author[] { author });
 
 		_dbContextMock
 			.Setup(x => x.Books)
-			.ReturnsDbSet(new List<Book>() { book });
+			.ReturnsDbSet(new Book[] { book });
 
 		var command = new CreateBookCommand(
 			author.Id,

@@ -1,44 +1,37 @@
-﻿using FluentAssertions;
-using LibraryApp.Application.Abstractions;
+﻿using LibraryApp.Application.Feauters.Users.Commands.UpdateUserAvatar;
 using LibraryApp.Application.Common.Exceptions;
-using LibraryApp.Application.Feauters.Users.Commands.UpdateUserAvatar;
-using LibraryApp.Domain.Enteties;
-using LibraryApp.Domain.Models;
-using Microsoft.AspNetCore.Http;
+using LibraryApp.Application.Abstractions;
 using Microsoft.Extensions.Options;
-using Moq;
+using LibraryApp.Domain.Enteties;
+using Microsoft.AspNetCore.Http;
+using LibraryApp.Domain.Models;
 using Moq.EntityFrameworkCore;
+using FluentAssertions;
+using Moq;
 
 namespace LibraryApp.Tests.UserTests;
 public class UpdateUserAvatarTests
 {
-	private readonly Mock<ILibraryDbContext> _dbContextMock =
-		new Mock<ILibraryDbContext>();
-
-	private readonly Mock<IOptions<FilePaths>> _filePathOptionsMock =
-		new Mock<IOptions<FilePaths>>();
-
-	private readonly Mock<IFormFile> _avatarFileMock =
-		new Mock<IFormFile>();
-
-	private readonly Mock<IFileWrapper> _fileWrapperMock =
-		new Mock<IFileWrapper>();
+	private readonly Mock<ILibraryDbContext> _dbContextMock = new();
+	private readonly Mock<IOptions<FilePaths>> _filePathOptionsMock = new();
+	private readonly Mock<IFormFile> _avatarFileMock = new();
+	private readonly Mock<IFileWrapper> _fileWrapperMock = new();
 
 	[Fact]
 	public async Task Handle_CreateAvatar_ReturnUnit()
 	{
 		// Arrange
-		var user = new User() { Id = Guid.NewGuid() };
+		var user = new User { Id = Guid.NewGuid() };
 
 		var avatarFile = _avatarFileMock.Object;
 
 		_dbContextMock
 			.Setup(x => x.Users)
-			.ReturnsDbSet(new List<User>() { user });
+			.ReturnsDbSet(new User[] { user });
 
 		_filePathOptionsMock
 			.Setup(x => x.Value)
-			.Returns(new FilePaths() { AvatarsPath = "avatars" });
+			.Returns(new FilePaths { AvatarsPath = "avatars" });
 
 		var command = new UpdateUserAvatarCommand(user.Id, avatarFile);
 
@@ -66,7 +59,7 @@ public class UpdateUserAvatarTests
 		// Arrange
 		_dbContextMock
 			.Setup(x => x.Users)
-			.ReturnsDbSet(new List<User>());
+			.ReturnsDbSet(new User[0]);
 
 		var command = new UpdateUserAvatarCommand(
 			Guid.NewGuid(), 

@@ -1,35 +1,27 @@
-﻿using FluentAssertions;
-using LibraryApp.Application.Abstractions;
+﻿using LibraryApp.Application.Feauters.Authors.Commands.UpdateAuthorAvatar;
 using LibraryApp.Application.Common.Exceptions;
-using LibraryApp.Application.Feauters.Authors.Commands.Create;
-using LibraryApp.Application.Feauters.Authors.Commands.UpdateAuthorAvatar;
-using LibraryApp.Domain.Enteties;
-using LibraryApp.Domain.Models;
-using Microsoft.AspNetCore.Http;
+using LibraryApp.Application.Abstractions;
 using Microsoft.Extensions.Options;
-using Moq;
+using LibraryApp.Domain.Enteties;
+using Microsoft.AspNetCore.Http;
+using LibraryApp.Domain.Models;
 using Moq.EntityFrameworkCore;
+using FluentAssertions;
+using Moq;
 
 namespace LibraryApp.Tests.AuthorTests;
 public class UpdateAuthorAvatarTests
 {
-	private readonly Mock<ILibraryDbContext> _dbContextMock =
-	new Mock<ILibraryDbContext>();
-
-	private readonly Mock<IFileWrapper> _fileWrapperMock =
-		new Mock<IFileWrapper>();
-
-	private readonly Mock<IOptions<FilePaths>> _filePathOptionsMock =
-		new Mock<IOptions<FilePaths>>();
-
-	private readonly Mock<IFormFile> _avatarFileMock =
-		new Mock<IFormFile>();
+	private readonly Mock<ILibraryDbContext> _dbContextMock = new();
+	private readonly Mock<IFileWrapper> _fileWrapperMock = new();
+	private readonly Mock<IOptions<FilePaths>> _filePathOptionsMock = new();
+	private readonly Mock<IFormFile> _avatarFileMock = new();
 
 	[Fact]
 	public async Task Handle_CreateAvatar_ReturnUnit()
 	{
 		// Arrange
-		var author = new Author()
+		var author = new Author
 		{
 			Id = Guid.NewGuid(),
 			AvatarPath = "avatar"

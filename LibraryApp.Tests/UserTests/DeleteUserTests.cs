@@ -6,23 +6,19 @@ using LibraryApp.Domain.Enteties;
 using MediatR;
 using Moq;
 using Moq.EntityFrameworkCore;
-using Xunit;
 
 namespace LibraryApp.Tests.UserTests;
 public class DeleteUserTests
 {
-	private readonly Mock<ILibraryDbContext> _dbContextMock
-		= new Mock<ILibraryDbContext>();
-
-	private readonly Mock<IFileWrapper> _fileWrapperMock
-		= new Mock<IFileWrapper>();
+	private readonly Mock<ILibraryDbContext> _dbContextMock = new ();
+	private readonly Mock<IFileWrapper> _fileWrapperMock = new();
 
 
 	[Fact]
 	public async Task Handle_FullExpectedData_ReturnUnit()
 	{
 		// Arrange
-		var user = new User()
+		var user = new User
 		{
 			Id = Guid.NewGuid(),
 			AvatarPath = "avatarPath",
@@ -31,11 +27,11 @@ public class DeleteUserTests
 
 		_dbContextMock
 			.Setup(x => x.Users)
-			.ReturnsDbSet(new List<User> { user });
+			.ReturnsDbSet(new User[] { user });
 
 		_dbContextMock
 			.Setup(x => x.Authors)
-			.ReturnsDbSet(new List<Author>());
+			.ReturnsDbSet(new Author[0]);
 
 		var command = new DeleteUserCommand(user.Id);
 
@@ -66,7 +62,7 @@ public class DeleteUserTests
 		// Arrange
 		_dbContextMock
 			.Setup(x => x.Users)
-			.ReturnsDbSet(new List<User>());
+			.ReturnsDbSet(new User[0]);
 
 		var command = new DeleteUserCommand(Guid.NewGuid());
 

@@ -1,21 +1,18 @@
-﻿using FluentAssertions;
-using LibraryApp.Application.Abstractions;
+﻿using LibraryApp.Application.Feauters.Books.Commands.DeleteBookCover;
 using LibraryApp.Application.Common.Exceptions;
-using LibraryApp.Application.Feauters.Books.Commands.DeleteBookCover;
+using LibraryApp.Application.Abstractions;
 using LibraryApp.Domain.Enteties;
 using LibraryApp.Tests.Common;
 using Moq.EntityFrameworkCore;
+using FluentAssertions;
 using Moq;
 using FileNotFoundException = LibraryApp.Application.Common.Exceptions.FileNotFoundException;
 
 namespace LibraryApp.Tests.BookTests;
 public class DeleteBookCoverTests
 {
-	private readonly Mock<ILibraryDbContext> _dbContextMock =
-		new Mock<ILibraryDbContext>();
-
-	private readonly Mock<IFileWrapper> _fileWrapperMock =
-		new Mock<IFileWrapper>();
+	private readonly Mock<ILibraryDbContext> _dbContextMock = new();
+	private readonly Mock<IFileWrapper> _fileWrapperMock = new();
 
 	[Fact]
 	public async Task Handle_ExpectedBahavior_ReturnUnit()
@@ -23,7 +20,7 @@ public class DeleteBookCoverTests
 		string coverPath = TestingHelper.GetTesingFile("cover.jpeg");
 
 		// Arrange
-		var book = new Book()
+		var book = new Book
 		{
 			Id = Guid.NewGuid(),
 			CoverPath = coverPath
@@ -80,7 +77,7 @@ public class DeleteBookCoverTests
 	public async Task Handle_NonexistentCoverFile_ThrowFileNotFoundExeption()
 	{
 		// Arrange
-		var book = new Book() { Id = Guid.NewGuid() }; 
+		var book = new Book { Id = Guid.NewGuid() }; 
 	
 		_dbContextMock
 			.Setup(x => x.Books)

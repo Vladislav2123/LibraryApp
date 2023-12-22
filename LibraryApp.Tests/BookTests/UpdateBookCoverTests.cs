@@ -1,34 +1,27 @@
-﻿using FluentAssertions;
-using LibraryApp.Application.Abstractions;
+﻿using LibraryApp.Application.Feauters.Books.Commands.UpdateBookCover;
 using LibraryApp.Application.Common.Exceptions;
-using LibraryApp.Application.Feauters.Books.Commands.UpdateBookCover;
-using LibraryApp.Domain.Enteties;
-using LibraryApp.Domain.Models;
-using Microsoft.AspNetCore.Http;
+using LibraryApp.Application.Abstractions;
 using Microsoft.Extensions.Options;
-using Moq;
+using LibraryApp.Domain.Enteties;
+using Microsoft.AspNetCore.Http;
+using LibraryApp.Domain.Models;
 using Moq.EntityFrameworkCore;
+using FluentAssertions;
+using Moq;
 
 namespace LibraryApp.Tests.BookTests;
 public class UpdateBookCoverTests
 {
-	private readonly Mock<ILibraryDbContext> _dbContextMock =
-		new Mock<ILibraryDbContext>();
-
-	private readonly Mock<IFileWrapper> _fileWrapperMock = 
-		new Mock<IFileWrapper>();
-
-	private readonly Mock<IOptions<FilePaths>> _filePathOptionsMock =
-		new Mock<IOptions<FilePaths>>();
-
-	private readonly Mock<IFormFile> _coverFileMock =
-		new Mock<IFormFile>();
+	private readonly Mock<ILibraryDbContext> _dbContextMock = new();
+	private readonly Mock<IFileWrapper> _fileWrapperMock = new();
+	private readonly Mock<IOptions<FilePaths>> _filePathOptionsMock = new();
+	private readonly Mock<IFormFile> _coverFileMock = new();
 
 	[Fact]
 	public async Task Handle_CreateCover_ReturnUnit()
 	{
 		// Arrange
-		var book = new Book()
+		var book = new Book
 		{
 			Id = Guid.NewGuid(),
 			ContentPath = "content",
@@ -67,7 +60,6 @@ public class UpdateBookCoverTests
 			x.SaveChangesAsync(CancellationToken.None));
 	}
 
-
 	[Fact]
 	public async Task Handle_NonexistentBook_ThrowEntityNotFoundException()
 	{
@@ -90,6 +82,6 @@ public class UpdateBookCoverTests
 			await handler.Handle(command, CancellationToken.None);
 
 		// Assert
-		await action.Should().ThrowAsync <EntityNotFoundException>();
+		await action.Should().ThrowAsync<EntityNotFoundException>();
 	}
 }

@@ -3,23 +3,20 @@ using LibraryApp.Application.Abstractions;
 using LibraryApp.Application.Common.Exceptions;
 using LibraryApp.Application.Feauters.Authors.Commands.Delete;
 using LibraryApp.Domain.Enteties;
-using Moq;
 using Moq.EntityFrameworkCore;
+using Moq;
 
 namespace LibraryApp.Tests.AuthorTests;
 public class DeleteAuthorTests
 {
-	private readonly Mock<ILibraryDbContext> _dbContextMock =
-		new Mock<ILibraryDbContext>();
-
-	private readonly Mock<IFileWrapper> _fileWrapperMock =
-		new Mock<IFileWrapper>();
+	private readonly Mock<ILibraryDbContext> _dbContextMock = new();
+	private readonly Mock<IFileWrapper> _fileWrapperMock = new();
 
 	[Fact]
 	public async Task Handle_ExpectedBehavior_ReturnUnit()
 	{
 		// Arrange
-		var author = new Author() 
+		var author = new Author
 		{ 
 			Id = Guid.NewGuid(),
 			AvatarPath = "avatar"
