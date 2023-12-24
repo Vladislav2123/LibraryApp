@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
-using ValidationException = LibraryApp.Application.Common.Exceptions.ValidationException;
+using ValidationException = LibraryApp.Domain.Exceptions.ValidationException;
+using LibraryApp.Domain.Exceptions;
 
 namespace LibraryApp.Application.Common.Behaviours;
 

@@ -1,11 +1,11 @@
 ﻿using LibraryApp.Application.Feauters.Books.Commands.Update;
-using LibraryApp.Application.Common.Exceptions;
 using LibraryApp.Application.Abstractions;
 using LibraryApp.Domain.Enteties;
 using Microsoft.AspNetCore.Http;
 using Moq.EntityFrameworkCore;
 using FluentAssertions;
 using Moq;
+using LibraryApp.Domain.Exceptions;
 
 namespace LibraryApp.Tests.BookTests;
 public class UpdateBookTests

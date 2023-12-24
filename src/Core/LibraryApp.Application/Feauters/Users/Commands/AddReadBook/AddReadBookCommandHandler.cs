@@ -1,8 +1,8 @@
-﻿using LibraryApp.Application.Common.Exceptions;
-using LibraryApp.Domain.Enteties;
+﻿using LibraryApp.Domain.Enteties;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Abstractions;
+using LibraryApp.Domain.Exceptions;
 
 namespace LibraryApp.Application.Feauters.Users.Commands.AddReadedBook;
 

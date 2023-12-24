@@ -1,8 +1,8 @@
-﻿using LibraryApp.Application.Common.Exceptions;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text.Json;
-using FileNotFoundException = LibraryApp.Application.Common.Exceptions.FileNotFoundException;
+using FileNotFoundException = LibraryApp.Domain.Exceptions.FileNotFoundException;
+using LibraryApp.Domain.Exceptions;
 
 namespace LibraryApp.API.ExceptionsHandling;
 

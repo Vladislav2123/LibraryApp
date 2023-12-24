@@ -1,5 +1,4 @@
 ﻿using LibraryApp.Application.Feauters.Books.Commands.Create;
-using LibraryApp.Application.Common.Exceptions;
 using LibraryApp.Application.Abstractions;
 using Microsoft.Extensions.Options;
 using LibraryApp.Domain.Enteties;
@@ -9,6 +8,7 @@ using LibraryApp.Tests.Common;
 using FluentAssertions;
 using Moq.EntityFrameworkCore;
 using Moq;
+using LibraryApp.Domain.Exceptions;
 
 namespace LibraryApp.Tests.BookTests;
 public class CreateBookTests

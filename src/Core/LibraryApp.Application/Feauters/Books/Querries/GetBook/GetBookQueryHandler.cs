@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using LibraryApp.Application.Common.Exceptions;
 using LibraryApp.Domain.Enteties;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Feauters.Books.Querries.Dto;
 using LibraryApp.Application.Abstractions;
+using LibraryApp.Domain.Exceptions;
 
 namespace LibraryApp.Application.Feauters.Books.Querries.GetBook;
 

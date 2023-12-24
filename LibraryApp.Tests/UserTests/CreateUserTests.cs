@@ -1,10 +1,10 @@
 ﻿using LibraryApp.Application.Feauters.Users.Commands.Create;
-using LibraryApp.Application.Common.Exceptions;
 using LibraryApp.Application.Abstractions;
 using LibraryApp.Domain.Enteties;
 using Moq.EntityFrameworkCore;
 using FluentAssertions;
 using Moq;
+using LibraryApp.Domain.Exceptions;
 
 namespace LibraryApp.Tests.UserTests;
 public class CreateUserTests

@@ -1,12 +1,12 @@
 ﻿using LibraryApp.Application.Feauters.Authors.Commands.DeleteAuthorAvatar;
-using LibraryApp.Application.Common.Exceptions;
 using LibraryApp.Application.Abstractions;
 using LibraryApp.Domain.Enteties;
 using LibraryApp.Tests.Common;
 using Moq.EntityFrameworkCore;
 using FluentAssertions;
 using Moq;
-using FileNotFoundException = LibraryApp.Application.Common.Exceptions.FileNotFoundException;
+using FileNotFoundException = LibraryApp.Domain.Exceptions.FileNotFoundException;
+using LibraryApp.Domain.Exceptions;
 
 namespace LibraryApp.Tests.AuthorTests;
 public class DeleteAuthorAvatarTests

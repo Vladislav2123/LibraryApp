@@ -1,4 +1,4 @@
-﻿namespace LibraryApp.Application.Common.Exceptions;
+﻿namespace LibraryApp.Domain.Exceptions;
 
 public class FileNotFoundException : Exception
 {

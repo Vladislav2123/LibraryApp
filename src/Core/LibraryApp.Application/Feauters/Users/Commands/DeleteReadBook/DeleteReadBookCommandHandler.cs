@@ -1,7 +1,7 @@
-﻿using LibraryApp.Application.Common.Exceptions;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Abstractions;
+using LibraryApp.Domain.Exceptions;
 
 namespace LibraryApp.Application.Feauters.Users.Commands.DeleteReadBook;
 

@@ -2,9 +2,9 @@
 using LibraryApp.Domain.Enteties;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using LibraryApp.Application.Common.Exceptions;
 using LibraryApp.Application.Feauters.Users.Queries.Dto;
 using LibraryApp.Application.Abstractions;
+using LibraryApp.Domain.Exceptions;
 
 namespace LibraryApp.Application.Feauters.Users.Queries.GetUserDetails;
 

@@ -1,11 +1,11 @@
-﻿using LibraryApp.Application.Common.Exceptions;
-using LibraryApp.Domain.Enteties;
+﻿using LibraryApp.Domain.Enteties;
 using LibraryApp.Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
-using FileNotFoundException = LibraryApp.Application.Common.Exceptions.FileNotFoundException;
+using FileNotFoundException = LibraryApp.Domain.Exceptions.FileNotFoundException;
 using LibraryApp.Application.Abstractions;
+using LibraryApp.Domain.Exceptions;
 
 namespace LibraryApp.Application.Feauters.Users.Queries.GetUserAvatar;
 

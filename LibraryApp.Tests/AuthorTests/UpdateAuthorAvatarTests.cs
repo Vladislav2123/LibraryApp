@@ -1,5 +1,4 @@
 ﻿using LibraryApp.Application.Feauters.Authors.Commands.UpdateAuthorAvatar;
-using LibraryApp.Application.Common.Exceptions;
 using LibraryApp.Application.Abstractions;
 using Microsoft.Extensions.Options;
 using LibraryApp.Domain.Enteties;
@@ -8,6 +7,7 @@ using LibraryApp.Domain.Models;
 using Moq.EntityFrameworkCore;
 using FluentAssertions;
 using Moq;
+using LibraryApp.Domain.Exceptions;
 
 namespace LibraryApp.Tests.AuthorTests;
 public class UpdateAuthorAvatarTests

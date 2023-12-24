@@ -1,10 +1,10 @@
-﻿using LibraryApp.Application.Common.Exceptions;
-using LibraryApp.Domain.Enteties;
+﻿using LibraryApp.Domain.Enteties;
 using LibraryApp.Domain.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using LibraryApp.Application.Abstractions;
+using LibraryApp.Domain.Exceptions;
 
 namespace LibraryApp.Application.Feauters.Users.Commands.UpdateUserAvatar;
 

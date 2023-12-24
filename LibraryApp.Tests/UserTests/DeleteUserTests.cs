@@ -1,11 +1,11 @@
 ﻿using FluentAssertions;
 using LibraryApp.Application.Abstractions;
-using LibraryApp.Application.Common.Exceptions;
 using LibraryApp.Application.Feauters.Users.Commands.Delete;
 using LibraryApp.Domain.Enteties;
 using MediatR;
 using Moq;
 using Moq.EntityFrameworkCore;
+using LibraryApp.Domain.Exceptions;
 
 namespace LibraryApp.Tests.UserTests;
 public class DeleteUserTests

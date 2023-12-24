@@ -1,5 +1,4 @@
 ﻿using LibraryApp.Application.Feauters.Authors.Commands.Create;
-using LibraryApp.Application.Common.Exceptions;
 using LibraryApp.Application.Abstractions;
 using LibraryApp.Domain.Enteties;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +6,7 @@ using LibraryApp.Tests.Common;
 using Moq.EntityFrameworkCore;
 using FluentAssertions;
 using Moq;
+using LibraryApp.Domain.Exceptions;
 
 namespace LibraryApp.Tests.AuthorTests;
 public class CreateAuthorTests

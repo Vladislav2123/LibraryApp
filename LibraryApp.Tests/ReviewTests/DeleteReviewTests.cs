@@ -1,12 +1,12 @@
 ﻿using LibraryApp.Application.Feauters.Reviews.Notifications.BookReviewsUpdated;
 using LibraryApp.Application.Feauters.Reviews.Commands.Delete;
-using LibraryApp.Application.Common.Exceptions;
 using LibraryApp.Application.Abstractions;
 using LibraryApp.Domain.Enteties;
 using Moq.EntityFrameworkCore;
 using FluentAssertions;
 using MediatR;
 using Moq;
+using LibraryApp.Domain.Exceptions;
 
 namespace LibraryApp.Tests.ReviewTests;
 public class DeleteReviewTests
