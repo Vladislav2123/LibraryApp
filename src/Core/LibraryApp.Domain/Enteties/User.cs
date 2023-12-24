@@ -20,7 +20,7 @@ public class User
 	public ICollection<Review> Reviews { get; set; }
 }
 
-public enum UserRole
+public enum UserRole : byte
 {
 	Default,
 	Admin

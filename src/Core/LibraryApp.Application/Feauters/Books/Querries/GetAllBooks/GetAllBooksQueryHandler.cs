@@ -47,15 +47,11 @@ public class GetAllBooksQueryHandler : IRequestHandler<GetAllBooksQuery, PagedLi
 		return PagedList<BookLookupDto>.Create(booksLookups, request.Page);
 	}
 
-	private Expression<Func<Book, object>> GetSortingColumnProperty(GetAllBooksQuery request)
-	{
-		Expression<Func<Book, object>> expression = request.SortColumn?.ToLower() switch
+	private Expression<Func<Book, object>> GetSortingColumnProperty(GetAllBooksQuery request) =>
+		request.SortColumn?.ToLower() switch
 		{
 			"name" => book => book.Name,
 			"year" => book => book.Year,
 			_ => book => book.Readers.Count,
 		};
-
-		return expression;
-	}
 }

@@ -42,12 +42,10 @@ public class GetBookReviewsQueryHandler : IRequestHandler<GetBookReviewsQuery, P
 		return PagedList<ReviewDto>.Create(reviewsDtos, request.Page);
 	}
 
-	private Expression<Func<Review, object>> GetSortingColumnProperty(GetBookReviewsQuery request)
-	{
-		return request.SortColumn?.ToLower() switch
+	private Expression<Func<Review, object>> GetSortingColumnProperty(GetBookReviewsQuery request) =>
+		request.SortColumn?.ToLower() switch
 		{
 			"date" => review => review.CreationDate,
 			_ => review => review.Rating
 		};
-	}
 }

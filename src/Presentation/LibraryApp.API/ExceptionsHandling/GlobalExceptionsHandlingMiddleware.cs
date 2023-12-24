@@ -6,7 +6,7 @@ using LibraryApp.Domain.Exceptions;
 
 namespace LibraryApp.API.ExceptionsHandling;
 
-    public class GlobalExceptionsHandlingMiddleware : IMiddleware
+public class GlobalExceptionsHandlingMiddleware : IMiddleware
 {
 	public async Task InvokeAsync(HttpContext context, RequestDelegate next)
 	{
@@ -39,29 +39,28 @@ namespace LibraryApp.API.ExceptionsHandling;
 		await context.Response.WriteAsync(JsonSerializer.Serialize(response));
 	}
 
-	private int GetStatusCode(Exception exception) =>
-		exception switch
-		{
-			LoginFailedException => StatusCodes.Status400BadRequest,
-			UserHasNotReadBookException => StatusCodes.Status400BadRequest,
-			EntityNotFoundException => StatusCodes.Status404NotFound,
-			FileNotFoundException => StatusCodes.Status404NotFound,
-			SecurityTokenException => StatusCodes.Status401Unauthorized,
-			EntityAlreadyExistException => StatusCodes.Status409Conflict,
-			BookAlreadyHasReviewException => StatusCodes.Status409Conflict,
-			EmailAlreadyInUseException => StatusCodes.Status409Conflict,
-			UserAlreadyReadBookException => StatusCodes.Status409Conflict,
-			ValidationException => StatusCodes.Status422UnprocessableEntity,
-			EntityHasNoChangesException => StatusCodes.Status422UnprocessableEntity,
-			ContentTypeNotFoundException => StatusCodes.Status500InternalServerError,
-			_ => StatusCodes.Status500InternalServerError
-		};
+	private int GetStatusCode(Exception exception) => exception switch
+	{
+		LoginFailedException => StatusCodes.Status400BadRequest,
+		UserHasNotReadBookException => StatusCodes.Status400BadRequest,
+		EntityNotFoundException => StatusCodes.Status404NotFound,
+		FileNotFoundException => StatusCodes.Status404NotFound,
+		SecurityTokenException => StatusCodes.Status401Unauthorized,
+		EntityAlreadyExistException => StatusCodes.Status409Conflict,
+		BookAlreadyHasReviewException => StatusCodes.Status409Conflict,
+		EmailAlreadyInUseException => StatusCodes.Status409Conflict,
+		UserAlreadyReadBookException => StatusCodes.Status409Conflict,
+		ValidationException => StatusCodes.Status422UnprocessableEntity,
+		EntityHasNoChangesException => StatusCodes.Status422UnprocessableEntity,
+		ContentTypeNotFoundException => StatusCodes.Status500InternalServerError,
+		_ => StatusCodes.Status500InternalServerError
+	};
 
 	private IReadOnlyDictionary<string, string[]> GetErrors(Exception exception)
 	{
 		IReadOnlyDictionary<string, string[]> errors = null;
 
-		if(exception is ValidationException validationException)
+		if (exception is ValidationException validationException)
 		{
 			errors = validationException.ErrorsDictionary;
 		}

@@ -43,15 +43,11 @@ public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, PagedLi
 		return PagedList<UserLookupDto>.Create(usersLookups, request.Page);
 	}
 
-	private Expression<Func<User, object>> GetSortingColumnProperty(GetAllUsersQuery request)
-	{
-		Expression<Func<User, object>> expression = request.SortColumn?.ToLower() switch
+	private Expression<Func<User, object>> GetSortingColumnProperty(GetAllUsersQuery request) =>
+		request.SortColumn?.ToLower() switch
 		{
 			"name" => user => user.Name,
 			"age" => user => user.BirthDate,
 			_ => user => user.ReadBooks.Count
 		};
-
-		return expression;
-	}
 }
