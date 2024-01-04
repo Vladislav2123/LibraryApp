@@ -111,7 +111,10 @@ using (var scope = app.Services.CreateScope())
 	var mediator = scope.ServiceProvider
 		.GetRequiredService<IMediator>();
 
-	await DbInitializer.Initialize(builder.Configuration, dbContext, mediator);
+	await DbInitializer.Initialize(
+		builder.Configuration, 
+		dbContext, 
+		mediator);
 }
 
 app.Run();

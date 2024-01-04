@@ -14,7 +14,7 @@ public class ReviewConfiguration : IEntityTypeConfiguration<Review>
 			.IsRequired();
 
 		builder.Property(review => review.Rating)
-			.HasColumnType("tinyint")
+			.HasColumnType("char")
 			.IsRequired();
 
 		builder.Property(review => review.Title)

@@ -10,6 +10,7 @@ public class LibraryDbContext : DbContext, ILibraryDbContext
 {
 	public LibraryDbContext(DbContextOptions<LibraryDbContext> options) : base(options) 
 	{
+		AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 	}
 
 	public DbSet<User> Users { get; set; }

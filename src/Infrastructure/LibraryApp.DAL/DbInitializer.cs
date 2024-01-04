@@ -9,22 +9,23 @@ namespace LibraryApp.DAL;
 public class DbInitializer
 {
 	public static async Task Initialize(
-		IConfiguration configuration, 
-		ILibraryDbContext dbContext, 
+		IConfiguration configuration,
+		ILibraryDbContext dbContext,
 		IMediator mediator)
 	{
-		dbContext.Database.EnsureDeleted();
+		//dbContext.Database.EnsureDeleted();
 		dbContext.Database.EnsureCreated();
 
 		await SeedDatabase(configuration, dbContext, mediator);
 	}
 
 	private static async Task SeedDatabase(
-		IConfiguration config, 
-		ILibraryDbContext dbContext, 
+		IConfiguration config,
+		ILibraryDbContext dbContext,
 		IMediator mediator)
 	{
-		await CreateAdminUser(config, dbContext, mediator);
+		if (dbContext.Users.Any() == false)
+			await CreateAdminUser(config, dbContext, mediator);
 
 		dbContext.SaveChanges();
 	}

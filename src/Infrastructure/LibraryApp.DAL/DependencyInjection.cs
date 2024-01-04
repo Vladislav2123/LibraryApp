@@ -11,7 +11,7 @@ public static class DependencyInjection
 	{
 		service.AddDbContext<LibraryDbContext>(options =>
 		{
-			options.UseSqlServer(configuration.GetConnectionString("SqlServer"));
+			options.UseNpgsql("Host=localhost; Port=5432; Database=LibraryApp; Username=postgres; Password=Password123");
 		});
 		service.AddScoped<ILibraryDbContext>(provider => provider.GetService<LibraryDbContext>());
 
