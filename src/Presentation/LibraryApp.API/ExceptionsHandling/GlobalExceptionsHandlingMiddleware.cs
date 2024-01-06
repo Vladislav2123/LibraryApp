@@ -16,7 +16,7 @@ public class GlobalExceptionsHandlingMiddleware : IMiddleware
 		}
 		catch (Exception exception)
 		{
-			Log.Error(exception.Message);
+			if (ShouldLog(exception)) Log.Error(exception.Message);
 			await HandleExceptionAsync(context, exception);
 		}
 	}
@@ -54,6 +54,12 @@ public class GlobalExceptionsHandlingMiddleware : IMiddleware
 		EntityHasNoChangesException => StatusCodes.Status422UnprocessableEntity,
 		ContentTypeNotFoundException => StatusCodes.Status500InternalServerError,
 		_ => StatusCodes.Status500InternalServerError
+	};
+
+	private bool ShouldLog(Exception exception) => exception switch
+	{
+		SecurityTokenException => false,
+		_ => true
 	};
 
 	private IReadOnlyDictionary<string, string[]> GetErrors(Exception exception)
