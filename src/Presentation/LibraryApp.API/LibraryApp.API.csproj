@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -31,6 +31,7 @@
     <Folder Include="Files\Books\" />
     <Folder Include="Files\Images\Avatars\" />
     <Folder Include="Files\Images\Covers\" />
+    <Folder Include="Logs\" />
   </ItemGroup>
 
 </Project>
