@@ -114,7 +114,8 @@ using (var scope = app.Services.CreateScope())
 	await DbInitializer.Initialize(
 		builder.Configuration, 
 		dbContext, 
-		mediator);
+		mediator,
+		app.Environment);
 }
 
 app.Run();

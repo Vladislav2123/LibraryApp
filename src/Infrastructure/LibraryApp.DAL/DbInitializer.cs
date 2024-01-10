@@ -2,7 +2,9 @@
 using LibraryApp.Application.Feauters.Users.Commands.Create;
 using LibraryApp.Domain.Enteties;
 using MediatR;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 
 namespace LibraryApp.DAL;
 
@@ -11,9 +13,12 @@ public class DbInitializer
 	public static async Task Initialize(
 		IConfiguration configuration,
 		ILibraryDbContext dbContext,
-		IMediator mediator)
+		IMediator mediator,
+		IWebHostEnvironment environment)
 	{
-		//dbContext.Database.EnsureDeleted();
+		if (environment.IsDevelopment())
+			dbContext.Database.EnsureDeleted();
+
 		dbContext.Database.EnsureCreated();
 
 		await SeedDatabase(configuration, dbContext, mediator);
