@@ -1,4 +1,5 @@
 ﻿using LibraryApp.Application.Abstractions;
+using LibraryApp.Application.Common.FileWrappers;
 using LibraryApp.Application.Feauters.Users.Commands.Create;
 using LibraryApp.Domain.Enteties;
 using MediatR;
@@ -14,10 +15,11 @@ public class DbInitializer
 		IConfiguration configuration,
 		ILibraryDbContext dbContext,
 		IMediator mediator,
-		IWebHostEnvironment environment)
+		IWebHostEnvironment environment,
+		IFileWrapper fileWrapper)
 	{
 		if (environment.IsDevelopment())
-			dbContext.Database.EnsureDeleted();
+			ClearDatabase(dbContext, fileWrapper);
 
 		dbContext.Database.EnsureCreated();
 
@@ -50,5 +52,26 @@ public class DbInitializer
 
 		var adminUser = dbContext.Users.FirstOrDefault(user => user.Id == adminUserId);
 		adminUser.Role = UserRole.Admin;
+	}
+
+	private static void ClearDatabase(
+		ILibraryDbContext dbContext,
+		IFileWrapper fileWrapper)
+	{
+		if (dbContext.Database.EnsureCreated() == true) return;
+
+		foreach (var book in dbContext.Books)
+		{
+			fileWrapper.DeleteFile(book.ContentPath);
+			fileWrapper.DeleteFile(book.CoverPath);
+		}
+
+		foreach (var author in dbContext.Authors)
+			fileWrapper.DeleteFile(author.AvatarPath);
+			
+		foreach (var user in dbContext.Users)
+			fileWrapper.DeleteFile(user.AvatarPath);
+
+		dbContext.Database.EnsureDeleted();
 	}
 }

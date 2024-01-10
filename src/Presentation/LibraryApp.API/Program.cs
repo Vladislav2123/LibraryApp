@@ -106,16 +106,20 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
 	var dbContext = scope.ServiceProvider
-		.GetRequiredService<ILibraryDbContext>();
+		.GetService<ILibraryDbContext>();
 
 	var mediator = scope.ServiceProvider
-		.GetRequiredService<IMediator>();
+		.GetService<IMediator>();
+
+	var fileWrapper = scope.ServiceProvider
+		.GetService<IFileWrapper>();
 
 	await DbInitializer.Initialize(
 		builder.Configuration, 
 		dbContext, 
 		mediator,
-		app.Environment);
+		app.Environment,
+		fileWrapper);
 }
 
 app.Run();
