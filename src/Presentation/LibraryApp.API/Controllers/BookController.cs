@@ -93,8 +93,9 @@ namespace LibraryApp.API.Controllers;
         [HttpPut("{id}/cover")]
 	[Authorize(Policy = Policies.AdminOnlyPolicyName)]
 	public async Task<ActionResult> UpdateCover(
-            [FromForm] UpdateBookCoverCommand command, CancellationToken cancellationToken)
+            Guid id, [FromForm] IFormFile coverFile, CancellationToken cancellationToken)
         {
+            var command = new UpdateBookCoverCommand(id, coverFile);
             await _mediator.Send(command, cancellationToken);
 
             return NoContent();

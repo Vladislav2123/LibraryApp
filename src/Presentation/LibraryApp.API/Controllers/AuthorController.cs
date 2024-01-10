@@ -88,8 +88,9 @@ public class AuthorController : ControllerBase
 	[HttpPut("{id}/avatar")]
 	[Authorize(Policy = Policies.AdminOnlyPolicyName)]
 	public async Task<ActionResult> UpdateAvatar(
-		[FromForm] UpdateAuthorAvatarCommand command, CancellationToken cancellationToken)
+		Guid id, [FromForm] IFormFile avatarFile, CancellationToken cancellationToken)
 	{
+		var command = new UpdateAuthorAvatarCommand(id, avatarFile);
 		await _mediator.Send(command, cancellationToken);
 
 		return NoContent();
