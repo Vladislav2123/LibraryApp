@@ -11,11 +11,13 @@ using LibraryApp.Application.Feauters.Users.Commands.DeleteReadBook;
 using LibraryApp.Application.Feauters.Users.Commands.DeleteUserAvatar;
 using LibraryApp.Application.Feauters.Users.Commands.Update;
 using LibraryApp.Application.Feauters.Users.Commands.UpdateUserAvatar;
+using LibraryApp.Application.Feauters.Users.Commands.UpdateUserRole;
 using LibraryApp.Application.Feauters.Users.Queries.Dto;
 using LibraryApp.Application.Feauters.Users.Queries.GetUserAvatar;
 using LibraryApp.Application.Feauters.Users.Queries.GetUserDetails;
 using LibraryApp.Application.Feauters.Users.Queries.GetUsers;
 using LibraryApp.Application.Feauters.Users.Queries.Login;
+using LibraryApp.Domain.Enteties;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -199,6 +201,17 @@ public class UserController : ControllerBase
 			return new ForbidResult();
 
 		var command = new DeleteReadBookCommand(userId, bookId);
+		await _mediator.Send(command, cancellationToken);
+
+		return NoContent();
+	}
+
+	[HttpPut("{userId}/role")]
+	[Authorize(Policy = Policies.AdminOnlyPolicyName)]
+	public async Task<ActionResult> UpdateUserRole(
+		Guid userId, [FromForm] string role, CancellationToken cancellationToken)
+	{
+		var command = new UpdateUserRoleCommand(userId, role);
 		await _mediator.Send(command, cancellationToken);
 
 		return NoContent();
