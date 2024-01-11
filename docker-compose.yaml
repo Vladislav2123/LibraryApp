@@ -13,7 +13,7 @@ services:
       DB_HOST: db
       DB_PORT: 5432
       DB_NAME: LibraryApp
-      DB_PASSWORD: StrongPassword
+      DB_PASSWORD: StrongPassword           # You can set another password here
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets
       - ${USERPROFILE}\.aspnet\https:/root/.aspnet/https/
@@ -30,7 +30,7 @@ services:
     image: postgres
     container_name: library_postgres
     environment:
-      POSTGRES_PASSWORD: StrongPassword
+      POSTGRES_PASSWORD: StrongPassword     # You can set another password here
     ports:
       - 5432:5432
     networks:
