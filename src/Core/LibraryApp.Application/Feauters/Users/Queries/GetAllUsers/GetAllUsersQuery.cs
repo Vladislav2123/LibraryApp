@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using LibraryApp.Application.Feauters.Users.Queries.Dto;
-using LibraryApp.Application.Common.Pagination;
+using LibraryApp.Application.Pagination;
 
 namespace LibraryApp.Application.Feauters.Users.Queries.GetUsers;
 

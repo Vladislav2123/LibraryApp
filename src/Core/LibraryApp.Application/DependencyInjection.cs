@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using LibraryApp.Application.Abstractions;
-using LibraryApp.Application.Common.Behaviours;
-using LibraryApp.Application.Common.Mappings;
+using LibraryApp.Application.Mapping;
 using MediatR;
 using MediatR.NotificationPublishers;
 using Microsoft.AspNetCore.StaticFiles;
@@ -9,10 +8,11 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using LibraryApp.Application.Common.PasswordProviders;
 using LibraryApp.Application.Common.FileWrappers;
+using LibraryApp.Application.Behaviours;
 
 namespace LibraryApp.Application;
 
-    public static class DependencyInjection
+public static class DependencyInjection
 {
 	public static IServiceCollection AddApplication(this IServiceCollection services)
 	{

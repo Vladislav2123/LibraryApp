@@ -8,7 +8,6 @@ using LibraryApp.Application.Feauters.Books.Commands.Update;
 using LibraryApp.Application.Feauters.Books.Commands.Delete;
 using LibraryApp.Application.Feauters.Reviews.Queries.Dto;
 using LibraryApp.Application.Feauters.Reviews.Queries.GetBookReviews;
-using LibraryApp.Application.Common.Pagination;
 using LibraryApp.Application.Feauters.Books.Querries.GetBookContent;
 using LibraryApp.Domain.Models;
 using LibraryApp.Application.Feauters.Books.Querries.GetBookCover;
@@ -16,10 +15,11 @@ using LibraryApp.Application.Feauters.Books.Commands.UpdateBookCover;
 using LibraryApp.Application.Feauters.Books.Commands.DeleteBookCover;
 using LibraryApp.API.Authorization;
 using Microsoft.AspNetCore.Authorization;
+using LibraryApp.Application.Pagination;
 
 namespace LibraryApp.API.Controllers;
 
-    [ApiController]
+[ApiController]
     [Route("api/books")]
     public class BookController : ControllerBase
     {

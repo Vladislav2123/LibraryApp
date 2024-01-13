@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using LibraryApp.Application.Common.Mappings;
+using LibraryApp.Application.Mapping;
 using LibraryApp.Domain.Enteties;
 
 namespace LibraryApp.Application.Feauters.Books.Querries.Dto;
 
-    public class BookDto : IMappping
+public class BookDto : IMappping
 {
 	public Guid Id { get; set; }
 	public Guid CreatedUserId { get; set; }

@@ -1,5 +1,5 @@
-﻿using LibraryApp.Application.Common.Pagination;
-using LibraryApp.Application.Feauters.Authors.Queries.Dto;
+﻿using LibraryApp.Application.Feauters.Authors.Queries.Dto;
+using LibraryApp.Application.Pagination;
 using MediatR;
 
 namespace LibraryApp.Application.Feauters.Authors.Queries.GetAuthors;

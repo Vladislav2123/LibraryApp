@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using LibraryApp.Application.Common.Mappings;
+using LibraryApp.Application.Mapping;
 using LibraryApp.Domain.Enteties;
 
 namespace LibraryApp.Application.Feauters.Authors.Queries.Dto;

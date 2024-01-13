@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using LibraryApp.Application.Common.Pagination;
 using LibraryApp.Application.Feauters.Authors.Queries.Dto;
 using LibraryApp.Domain.Enteties;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Abstractions;
+using LibraryApp.Application.Pagination;
 
 namespace LibraryApp.Application.Feauters.Authors.Queries.GetAuthors;
 
