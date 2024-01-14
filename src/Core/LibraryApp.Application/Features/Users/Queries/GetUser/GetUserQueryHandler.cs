@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using LibraryApp.Domain.Enteties;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Abstractions;
 using LibraryApp.Domain.Exceptions;
 using LibraryApp.Application.Features.Users.Queries.Dto;
+using LibraryApp.Domain.Entities;
 
-namespace LibraryApp.Application.Feauters.Users.Queries.GetUserDetails;
+namespace LibraryApp.Application.Features.Users.Queries.GetUser;
 
 public class GetUserQueryHandler : IRequestHandler<GetUserQuery, UserDetailsDto>
 {

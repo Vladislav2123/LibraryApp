@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace LibraryApp.Application.Feauters.Users.Queries.Login;
+namespace LibraryApp.Application.Features.Users.Queries.Login;
 
 public record LoginQuery(
 	string Email,

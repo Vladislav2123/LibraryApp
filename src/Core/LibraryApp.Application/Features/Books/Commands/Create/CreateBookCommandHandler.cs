@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using LibraryApp.Domain.Enteties;
 using Microsoft.EntityFrameworkCore;
 using LibraryApp.Domain.Models;
 using Microsoft.Extensions.Options;
@@ -7,6 +6,7 @@ using LibraryApp.Application.Abstractions;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using LibraryApp.Domain.Exceptions;
+using LibraryApp.Domain.Entities;
 
 namespace LibraryApp.Application.Features.Books.Commands.Create;
 

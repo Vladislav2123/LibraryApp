@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using LibraryApp.Domain.Enteties;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using LibraryApp.Domain.Entities;
 
 namespace LibraryApp.DAL.EntityTypeConfigurations;
 

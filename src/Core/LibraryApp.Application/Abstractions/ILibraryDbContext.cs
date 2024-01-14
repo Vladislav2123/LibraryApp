@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using LibraryApp.Domain.Enteties;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using LibraryApp.Domain.Entities;
 
 namespace LibraryApp.Application.Abstractions;
 

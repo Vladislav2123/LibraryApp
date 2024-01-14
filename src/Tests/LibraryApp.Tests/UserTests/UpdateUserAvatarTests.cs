@@ -1,7 +1,5 @@
-﻿using LibraryApp.Application.Feauters.Users.Commands.UpdateUserAvatar;
-using LibraryApp.Application.Abstractions;
+﻿using LibraryApp.Application.Abstractions;
 using Microsoft.Extensions.Options;
-using LibraryApp.Domain.Enteties;
 using Microsoft.AspNetCore.Http;
 using LibraryApp.Domain.Models;
 using Moq.EntityFrameworkCore;
@@ -9,6 +7,7 @@ using FluentAssertions;
 using Moq;
 using LibraryApp.Domain.Exceptions;
 using LibraryApp.Application.Features.Users.Commands.UpdateUserAvatar;
+using LibraryApp.Domain.Entities;
 
 namespace LibraryApp.Tests.UserTests;
 public class UpdateUserAvatarTests

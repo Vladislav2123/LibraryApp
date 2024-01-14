@@ -1,4 +1,4 @@
-﻿namespace LibraryApp.Domain.Enteties;
+﻿namespace LibraryApp.Domain.Entities;
 
 public class Author
 {

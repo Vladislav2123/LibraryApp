@@ -1,6 +1,4 @@
-﻿using LibraryApp.Application.Feauters.Users.Commands.DeleteUserAvatar;
-using LibraryApp.Application.Abstractions;
-using LibraryApp.Domain.Enteties;
+﻿using LibraryApp.Application.Abstractions;
 using LibraryApp.Tests.Common;
 using Moq.EntityFrameworkCore;
 using FluentAssertions;
@@ -8,6 +6,7 @@ using Moq;
 using FileNotFoundException = LibraryApp.Domain.Exceptions.FileNotFoundException;
 using LibraryApp.Domain.Exceptions;
 using LibraryApp.Application.Features.Users.Commands.DeleteUserAvatar;
+using LibraryApp.Domain.Entities;
 
 namespace LibraryApp.Tests.UserTests;
 public class DeleteUserAvatarTests

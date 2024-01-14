@@ -1,11 +1,10 @@
-﻿using LibraryApp.Application.Feauters.Reviews.Notifications.BookReviewsUpdated;
-using LibraryApp.Application.Abstractions;
-using LibraryApp.Domain.Enteties;
+﻿using LibraryApp.Application.Abstractions;
 using Moq.EntityFrameworkCore;
 using FluentAssertions;
 using Moq;
 using LibraryApp.Domain.Exceptions;
 using LibraryApp.Application.Features.Reviews.Notifications.BookReviewsUpdated;
+using LibraryApp.Domain.Entities;
 
 namespace LibraryApp.Tests.ReviewTests;
 public class BookReviewsUpdatedEventTests

@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using LibraryApp.Domain.Enteties;
 using LibraryApp.DAL.EntityTypeConfigurations;
 using LibraryApp.DAL.ValueConverters;
 using LibraryApp.Application.Abstractions;
+using LibraryApp.Domain.Entities;
 
 namespace LibraryApp.DAL;
 

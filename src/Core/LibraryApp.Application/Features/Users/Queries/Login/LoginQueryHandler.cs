@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Abstractions;
 using LibraryApp.Domain.Exceptions;
 
-namespace LibraryApp.Application.Feauters.Users.Queries.Login;
+namespace LibraryApp.Application.Features.Users.Queries.Login;
 
 public class LoginQueryHandler : IRequestHandler<LoginQuery, LoginResponse>
 {

@@ -1,13 +1,13 @@
-﻿using LibraryApp.Domain.Enteties;
-using LibraryApp.Domain.Models;
+﻿using LibraryApp.Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using FileNotFoundException = LibraryApp.Domain.Exceptions.FileNotFoundException;
 using LibraryApp.Application.Abstractions;
 using LibraryApp.Domain.Exceptions;
+using LibraryApp.Domain.Entities;
 
-namespace LibraryApp.Application.Feauters.Users.Queries.GetUserAvatar;
+namespace LibraryApp.Application.Features.Users.Queries.GetUserAvatar;
 
 public class GetUserAvatarQueryHandler : IRequestHandler<GetUserAvatarQuery, FileVm>
 {

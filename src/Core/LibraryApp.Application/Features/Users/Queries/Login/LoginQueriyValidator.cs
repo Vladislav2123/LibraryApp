@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using LibraryApp.Application.Common.Validators;
 
-namespace LibraryApp.Application.Feauters.Users.Queries.Login;
+namespace LibraryApp.Application.Features.Users.Queries.Login;
 
 public class LoginQueriyValidator : AbstractValidator<LoginQuery>
 {

@@ -1,6 +1,6 @@
-﻿using LibraryApp.Domain.Enteties;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using LibraryApp.Domain.Entities;
 
 namespace LibraryApp.API.Authorization.Common;
 

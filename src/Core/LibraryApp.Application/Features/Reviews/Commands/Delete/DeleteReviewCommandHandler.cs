@@ -1,9 +1,9 @@
-﻿using LibraryApp.Domain.Enteties;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Abstractions;
 using LibraryApp.Domain.Exceptions;
 using LibraryApp.Application.Features.Reviews.Notifications.BookReviewsUpdated;
+using LibraryApp.Domain.Entities;
 
 namespace LibraryApp.Application.Features.Reviews.Commands.Delete;
 

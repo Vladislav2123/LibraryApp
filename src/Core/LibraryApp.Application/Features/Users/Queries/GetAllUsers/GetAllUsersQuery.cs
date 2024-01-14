@@ -2,7 +2,7 @@
 using LibraryApp.Application.Pagination;
 using LibraryApp.Application.Features.Users.Queries.Dto;
 
-namespace LibraryApp.Application.Feauters.Users.Queries.GetUsers;
+namespace LibraryApp.Application.Features.Users.Queries.GetAllUsers;
 
 public record GetAllUsersQuery(
 	string? SearchTerms,

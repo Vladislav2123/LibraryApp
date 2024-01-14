@@ -1,8 +1,8 @@
-﻿using LibraryApp.Domain.Enteties;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Abstractions;
 using LibraryApp.Domain.Exceptions;
+using LibraryApp.Domain.Entities;
 
 namespace LibraryApp.Application.Features.Books.Commands.Delete;
 

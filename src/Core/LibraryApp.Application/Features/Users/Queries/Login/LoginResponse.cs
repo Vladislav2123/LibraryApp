@@ -1,4 +1,4 @@
-﻿namespace LibraryApp.Application.Feauters.Users.Queries.Login;
+﻿namespace LibraryApp.Application.Features.Users.Queries.Login;
 
 public class LoginResponse
 {

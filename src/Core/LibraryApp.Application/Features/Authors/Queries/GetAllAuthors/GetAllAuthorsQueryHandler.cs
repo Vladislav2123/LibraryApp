@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using LibraryApp.Domain.Enteties;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Abstractions;
 using LibraryApp.Application.Pagination;
 using LibraryApp.Application.Features.Authors.Queries.Dto;
+using LibraryApp.Domain.Entities;
 
 namespace LibraryApp.Application.Features.Authors.Queries.GetAllAuthors;
 public class GetAllAuthorsQueryHandler : IRequestHandler<GetAllAuthorsQuery, PagedList<AuthorLookupDto>>

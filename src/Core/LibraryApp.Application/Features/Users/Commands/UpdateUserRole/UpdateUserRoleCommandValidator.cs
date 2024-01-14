@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using LibraryApp.Application.Common.Validators;
-using LibraryApp.Domain.Enteties;
+using LibraryApp.Domain.Entities;
 
 namespace LibraryApp.Application.Features.Users.Commands.UpdateUserRole;
 public class UpdateUserRoleCommandValidator : AbstractValidator<UpdateUserRoleCommand>

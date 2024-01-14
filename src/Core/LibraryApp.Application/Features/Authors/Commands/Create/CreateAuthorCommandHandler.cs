@@ -1,10 +1,10 @@
-﻿using LibraryApp.Domain.Enteties;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Abstractions;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using LibraryApp.Domain.Exceptions;
+using LibraryApp.Domain.Entities;
 
 namespace LibraryApp.Application.Features.Authors.Commands.Create;
 

@@ -1,8 +1,4 @@
 ﻿using LibraryApp.API.Authorization;
-using LibraryApp.Application.Feauters.Users.Queries.GetUserAvatar;
-using LibraryApp.Application.Feauters.Users.Queries.GetUserDetails;
-using LibraryApp.Application.Feauters.Users.Queries.GetUsers;
-using LibraryApp.Application.Feauters.Users.Queries.Login;
 using LibraryApp.Application.Pagination;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -20,6 +16,10 @@ using LibraryApp.Application.Features.Users.Commands.Update;
 using LibraryApp.Application.Features.Users.Commands.UpdateUserAvatar;
 using LibraryApp.Application.Features.Users.Commands.UpdateUserRole;
 using LibraryApp.Application.Features.Users.Queries.Dto;
+using LibraryApp.Application.Features.Users.Queries.Login;
+using LibraryApp.Application.Features.Users.Queries.GetAllUsers;
+using LibraryApp.Application.Features.Users.Queries.GetUserAvatar;
+using LibraryApp.Application.Features.Users.Queries.GetUser;
 
 namespace LibraryApp.API.Controllers;
 

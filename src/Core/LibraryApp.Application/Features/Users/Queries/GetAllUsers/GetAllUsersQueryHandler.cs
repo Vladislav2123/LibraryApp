@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using LibraryApp.Domain.Enteties;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using LibraryApp.Application.Abstractions;
 using LibraryApp.Application.Pagination;
 using LibraryApp.Application.Features.Users.Queries.Dto;
+using LibraryApp.Domain.Entities;
 
-namespace LibraryApp.Application.Feauters.Users.Queries.GetUsers;
+namespace LibraryApp.Application.Features.Users.Queries.GetAllUsers;
 
 public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, PagedList<UserLookupDto>>
 {

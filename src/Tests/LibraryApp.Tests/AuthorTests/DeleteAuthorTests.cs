@@ -1,11 +1,10 @@
 ﻿using FluentAssertions;
 using LibraryApp.Application.Abstractions;
-using LibraryApp.Application.Feauters.Authors.Commands.Delete;
-using LibraryApp.Domain.Enteties;
 using Moq.EntityFrameworkCore;
 using Moq;
 using LibraryApp.Domain.Exceptions;
 using LibraryApp.Application.Features.Authors.Commands.Delete;
+using LibraryApp.Domain.Entities;
 
 namespace LibraryApp.Tests.AuthorTests;
 public class DeleteAuthorTests

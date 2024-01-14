@@ -9,11 +9,11 @@ using LibraryApp.API.Authentication;
 using LibraryApp.API.Authorization;
 using LibraryApp.Application.Abstractions;
 using MediatR;
-using LibraryApp.Domain.Enteties;
 using LibraryApp.API.Authorization.Role;
 using LibraryApp.API.Authorization.ReviewEdit;
 using LibraryApp.API.Authorization.UserEdit;
 using LibraryApp.API.ExceptionsHandling;
+using LibraryApp.Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using LibraryApp.Application.Mapping;
-using LibraryApp.Domain.Enteties;
+using LibraryApp.Domain.Entities;
 
 namespace LibraryApp.Application.Features.Users.Queries.Dto;
 

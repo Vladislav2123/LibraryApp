@@ -1,10 +1,10 @@
-﻿using LibraryApp.Domain.Enteties;
-using LibraryApp.Domain.Models;
+﻿using LibraryApp.Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Abstractions;
 using LibraryApp.Domain.Exceptions;
+using LibraryApp.Domain.Entities;
 
 namespace LibraryApp.Application.Features.Books.Querries.GetBookContent;
 

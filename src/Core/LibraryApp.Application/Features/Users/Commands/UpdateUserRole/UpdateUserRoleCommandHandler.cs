@@ -1,8 +1,8 @@
 ﻿using LibraryApp.Application.Abstractions;
-using LibraryApp.Domain.Enteties;
 using LibraryApp.Domain.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using MediatR;
+using LibraryApp.Domain.Entities;
 
 namespace LibraryApp.Application.Features.Users.Commands.UpdateUserRole;
 public class UpdateUserRoleCommandHandler : IRequestHandler<UpdateUserRoleCommand, Unit>

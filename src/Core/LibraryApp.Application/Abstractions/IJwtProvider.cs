@@ -1,4 +1,4 @@
-﻿using LibraryApp.Domain.Enteties;
+﻿using LibraryApp.Domain.Entities;
 
 namespace LibraryApp.Application.Abstractions;
 

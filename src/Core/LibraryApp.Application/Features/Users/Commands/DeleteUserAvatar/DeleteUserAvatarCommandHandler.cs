@@ -1,9 +1,9 @@
-﻿using LibraryApp.Domain.Enteties;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Abstractions;
 using FileNotFoundException = LibraryApp.Domain.Exceptions.FileNotFoundException;
 using LibraryApp.Domain.Exceptions;
+using LibraryApp.Domain.Entities;
 
 namespace LibraryApp.Application.Features.Users.Commands.DeleteUserAvatar;
 

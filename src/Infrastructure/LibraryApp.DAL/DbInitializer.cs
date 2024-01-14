@@ -1,10 +1,10 @@
 ﻿using LibraryApp.Application.Abstractions;
-using LibraryApp.Domain.Enteties;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using LibraryApp.Application.Features.Users.Commands.Create;
+using LibraryApp.Domain.Entities;
 
 namespace LibraryApp.DAL;
 

@@ -1,7 +1,5 @@
-﻿using LibraryApp.Application.Feauters.Books.Commands.Create;
-using LibraryApp.Application.Abstractions;
+﻿using LibraryApp.Application.Abstractions;
 using Microsoft.Extensions.Options;
-using LibraryApp.Domain.Enteties;
 using Microsoft.AspNetCore.Http;
 using LibraryApp.Domain.Models;
 using LibraryApp.Tests.Common;
@@ -10,6 +8,7 @@ using Moq.EntityFrameworkCore;
 using Moq;
 using LibraryApp.Domain.Exceptions;
 using LibraryApp.Application.Features.Books.Commands.Create;
+using LibraryApp.Domain.Entities;
 
 namespace LibraryApp.Tests.BookTests;
 public class CreateBookTests

@@ -1,12 +1,11 @@
 ﻿using FluentAssertions;
 using LibraryApp.Application.Abstractions;
-using LibraryApp.Application.Feauters.Users.Commands.Update;
-using LibraryApp.Domain.Enteties;
 using MediatR;
 using Moq;
 using Moq.EntityFrameworkCore;
 using LibraryApp.Domain.Exceptions;
 using LibraryApp.Application.Features.Users.Commands.Update;
+using LibraryApp.Domain.Entities;
 
 namespace LibraryApp.Tests.UserTests;
 public class UpdateUserTests
