@@ -1,13 +1,13 @@
 ﻿using LibraryApp.API.Authorization;
-using LibraryApp.Application.Feauters.Reviews.Commands.Create;
-using LibraryApp.Application.Feauters.Reviews.Commands.Delete;
-using LibraryApp.Application.Feauters.Reviews.Commands.Update;
-using LibraryApp.Application.Feauters.Reviews.Queries.Dto;
-using LibraryApp.Application.Feauters.Reviews.Queries.GetAllReviews;
 using LibraryApp.Application.Pagination;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using LibraryApp.Application.Features.Reviews.Commands.Create;
+using LibraryApp.Application.Features.Reviews.Commands.Delete;
+using LibraryApp.Application.Features.Reviews.Commands.Update;
+using LibraryApp.Application.Features.Reviews.Queries.Dto;
+using LibraryApp.Application.Features.Reviews.Queries.GetAllReviews;
 
 namespace LibraryApp.API.Controllers;
 

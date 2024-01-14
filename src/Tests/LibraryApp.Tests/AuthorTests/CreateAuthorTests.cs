@@ -7,6 +7,7 @@ using Moq.EntityFrameworkCore;
 using FluentAssertions;
 using Moq;
 using LibraryApp.Domain.Exceptions;
+using LibraryApp.Application.Features.Authors.Commands.Create;
 
 namespace LibraryApp.Tests.AuthorTests;
 public class CreateAuthorTests

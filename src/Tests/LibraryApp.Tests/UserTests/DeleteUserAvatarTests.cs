@@ -7,6 +7,7 @@ using FluentAssertions;
 using Moq;
 using FileNotFoundException = LibraryApp.Domain.Exceptions.FileNotFoundException;
 using LibraryApp.Domain.Exceptions;
+using LibraryApp.Application.Features.Users.Commands.DeleteUserAvatar;
 
 namespace LibraryApp.Tests.UserTests;
 public class DeleteUserAvatarTests

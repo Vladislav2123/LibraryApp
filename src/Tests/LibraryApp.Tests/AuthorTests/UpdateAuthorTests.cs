@@ -1,11 +1,10 @@
 ﻿using FluentAssertions;
 using LibraryApp.Application.Abstractions;
-using LibraryApp.Application.Feauters.Authors.Commands.Update;
 using LibraryApp.Domain.Enteties;
 using Moq.EntityFrameworkCore;
 using Moq;
-using System.Linq;
 using LibraryApp.Domain.Exceptions;
+using LibraryApp.Application.Features.Authors.Commands.Update;
 
 namespace LibraryApp.Tests.AuthorTests;
 public class UpdateAuthorTests

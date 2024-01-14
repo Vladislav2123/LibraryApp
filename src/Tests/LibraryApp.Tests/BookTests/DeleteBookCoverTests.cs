@@ -7,6 +7,7 @@ using FluentAssertions;
 using Moq;
 using FileNotFoundException = LibraryApp.Domain.Exceptions.FileNotFoundException;
 using LibraryApp.Domain.Exceptions;
+using LibraryApp.Application.Features.Books.Commands.DeleteBookCover;
 
 namespace LibraryApp.Tests.BookTests;
 public class DeleteBookCoverTests

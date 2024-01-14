@@ -1,21 +1,21 @@
-﻿using LibraryApp.Application.Feauters.Books.Querries.Dto;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using LibraryApp.Application.Feauters.Books.Querries.GetBooks;
-using LibraryApp.Application.Feauters.Books.Querries.GetBook;
-using LibraryApp.Application.Feauters.Books.Commands.Create;
-using LibraryApp.Application.Feauters.Books.Commands.Update;
-using LibraryApp.Application.Feauters.Books.Commands.Delete;
-using LibraryApp.Application.Feauters.Reviews.Queries.Dto;
-using LibraryApp.Application.Feauters.Reviews.Queries.GetBookReviews;
-using LibraryApp.Application.Feauters.Books.Querries.GetBookContent;
 using LibraryApp.Domain.Models;
-using LibraryApp.Application.Feauters.Books.Querries.GetBookCover;
-using LibraryApp.Application.Feauters.Books.Commands.UpdateBookCover;
-using LibraryApp.Application.Feauters.Books.Commands.DeleteBookCover;
 using LibraryApp.API.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using LibraryApp.Application.Pagination;
+using LibraryApp.Application.Features.Books.Commands.Create;
+using LibraryApp.Application.Features.Books.Commands.Delete;
+using LibraryApp.Application.Features.Books.Commands.DeleteBookCover;
+using LibraryApp.Application.Features.Books.Commands.Update;
+using LibraryApp.Application.Features.Books.Commands.UpdateBookCover;
+using LibraryApp.Application.Features.Books.Querries.Dto;
+using LibraryApp.Application.Features.Books.Querries.GetAllBooks;
+using LibraryApp.Application.Features.Books.Querries.GetBook;
+using LibraryApp.Application.Features.Books.Querries.GetBookContent;
+using LibraryApp.Application.Features.Books.Querries.GetBookCover;
+using LibraryApp.Application.Features.Reviews.Queries.Dto;
+using LibraryApp.Application.Features.Reviews.Queries.GetBookReviews;
 
 namespace LibraryApp.API.Controllers;
 

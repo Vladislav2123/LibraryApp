@@ -8,6 +8,7 @@ using Moq.EntityFrameworkCore;
 using FluentAssertions;
 using Moq;
 using LibraryApp.Domain.Exceptions;
+using LibraryApp.Application.Features.Authors.Commands.UpdateAuthorAvatar;
 
 namespace LibraryApp.Tests.AuthorTests;
 public class UpdateAuthorAvatarTests

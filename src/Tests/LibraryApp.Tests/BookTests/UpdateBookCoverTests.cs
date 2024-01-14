@@ -8,6 +8,7 @@ using Moq.EntityFrameworkCore;
 using FluentAssertions;
 using Moq;
 using LibraryApp.Domain.Exceptions;
+using LibraryApp.Application.Features.Books.Commands.UpdateBookCover;
 
 namespace LibraryApp.Tests.BookTests;
 public class UpdateBookCoverTests

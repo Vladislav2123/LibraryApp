@@ -1,18 +1,17 @@
 ﻿using LibraryApp.API.Authorization;
-using LibraryApp.Application.Feauters.Authors.Commands.Create;
-using LibraryApp.Application.Feauters.Authors.Commands.Delete;
-using LibraryApp.Application.Feauters.Authors.Commands.DeleteAuthorAvatar;
-using LibraryApp.Application.Feauters.Authors.Commands.Update;
-using LibraryApp.Application.Feauters.Authors.Commands.UpdateAuthorAvatar;
-using LibraryApp.Application.Feauters.Authors.Queries.Dto;
-using LibraryApp.Application.Feauters.Authors.Queries.GetAuthor;
-using LibraryApp.Application.Feauters.Authors.Queries.GetAuthorAvatar;
-using LibraryApp.Application.Feauters.Authors.Queries.GetAuthors;
 using LibraryApp.Application.Pagination;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+using LibraryApp.Application.Features.Authors.Commands.Create;
+using LibraryApp.Application.Features.Authors.Commands.Delete;
+using LibraryApp.Application.Features.Authors.Commands.DeleteAuthorAvatar;
+using LibraryApp.Application.Features.Authors.Commands.Update;
+using LibraryApp.Application.Features.Authors.Commands.UpdateAuthorAvatar;
+using LibraryApp.Application.Features.Authors.Queries.Dto;
+using LibraryApp.Application.Features.Authors.Queries.GetAllAuthors;
+using LibraryApp.Application.Features.Authors.Queries.GetAuthor;
+using LibraryApp.Application.Features.Authors.Queries.GetAuthorAvatar;
 
 namespace LibraryApp.API.Controllers;
 

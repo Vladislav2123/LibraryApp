@@ -5,6 +5,7 @@ using LibraryApp.Domain.Enteties;
 using Moq.EntityFrameworkCore;
 using Moq;
 using LibraryApp.Domain.Exceptions;
+using LibraryApp.Application.Features.Authors.Commands.Delete;
 
 namespace LibraryApp.Tests.AuthorTests;
 public class DeleteAuthorTests

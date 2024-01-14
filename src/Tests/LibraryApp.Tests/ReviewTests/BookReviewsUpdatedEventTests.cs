@@ -5,6 +5,7 @@ using Moq.EntityFrameworkCore;
 using FluentAssertions;
 using Moq;
 using LibraryApp.Domain.Exceptions;
+using LibraryApp.Application.Features.Reviews.Notifications.BookReviewsUpdated;
 
 namespace LibraryApp.Tests.ReviewTests;
 public class BookReviewsUpdatedEventTests

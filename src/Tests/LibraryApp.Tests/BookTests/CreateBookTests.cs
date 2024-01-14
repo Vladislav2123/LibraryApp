@@ -9,6 +9,7 @@ using FluentAssertions;
 using Moq.EntityFrameworkCore;
 using Moq;
 using LibraryApp.Domain.Exceptions;
+using LibraryApp.Application.Features.Books.Commands.Create;
 
 namespace LibraryApp.Tests.BookTests;
 public class CreateBookTests

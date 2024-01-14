@@ -7,6 +7,8 @@ using FluentAssertions;
 using MediatR;
 using Moq;
 using LibraryApp.Domain.Exceptions;
+using LibraryApp.Application.Features.Reviews.Commands.Delete;
+using LibraryApp.Application.Features.Reviews.Notifications.BookReviewsUpdated;
 
 namespace LibraryApp.Tests.ReviewTests;
 public class DeleteReviewTests

@@ -5,6 +5,7 @@ using Moq.EntityFrameworkCore;
 using FluentAssertions;
 using Moq;
 using LibraryApp.Domain.Exceptions;
+using LibraryApp.Application.Features.Users.Commands.UpdateUserRole;
 
 namespace LibraryApp.Tests.UserTests;
 public class UpdateUserRoleTests

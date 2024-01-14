@@ -6,6 +6,7 @@ using MediatR;
 using Moq;
 using Moq.EntityFrameworkCore;
 using LibraryApp.Domain.Exceptions;
+using LibraryApp.Application.Features.Books.Commands.Delete;
 
 namespace LibraryApp.Tests.BookTests;
 public class DeleteBookTests
