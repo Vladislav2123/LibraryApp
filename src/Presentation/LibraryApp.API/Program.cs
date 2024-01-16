@@ -103,24 +103,29 @@ app.UseAuthorization();
 app.UseStaticFiles();
 app.MapControllers();
 
-using (var scope = app.Services.CreateScope())
-{
-	var dbContext = scope.ServiceProvider
-		.GetService<ILibraryDbContext>();
-
-	var mediator = scope.ServiceProvider
-		.GetService<IMediator>();
-
-	var fileWrapper = scope.ServiceProvider
-		.GetService<IFileWrapper>();
-
-	await DbInitializer.Initialize(
-		builder.Configuration, 
-		dbContext, 
-		mediator,
-		app.Environment,
-		fileWrapper);
-}
+await InitializeDb();
 
 app.Run();
 
+
+async Task InitializeDb()
+{
+	using (var scope = app.Services.CreateScope())
+	{
+		var dbContext = scope.ServiceProvider
+		.GetService<ILibraryDbContext>();
+
+		var mediator = scope.ServiceProvider
+			.GetService<IMediator>();
+
+		var fileWrapper = scope.ServiceProvider
+			.GetService<IFileWrapper>();
+
+		await DbInitializer.Initialize(
+			builder.Configuration,
+			dbContext,
+			mediator,
+			app.Environment,
+			fileWrapper);
+	}
+}
