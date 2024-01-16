@@ -43,15 +43,15 @@ public class GlobalExceptionsHandlingMiddleware : IMiddleware
 	{
 		LoginFailedException => StatusCodes.Status400BadRequest,
 		UserHasNotReadBookException => StatusCodes.Status400BadRequest,
+		EntityAlreadyExistException => StatusCodes.Status400BadRequest,
+		BookAlreadyHasReviewException => StatusCodes.Status400BadRequest,
+		EmailAlreadyInUseException => StatusCodes.Status400BadRequest,
+		UserAlreadyReadBookException => StatusCodes.Status400BadRequest,
+		ValidationException => StatusCodes.Status400BadRequest,
+		EntityHasNoChangesException => StatusCodes.Status400BadRequest,
+		SecurityTokenException => StatusCodes.Status401Unauthorized,
 		EntityNotFoundException => StatusCodes.Status404NotFound,
 		FileNotFoundException => StatusCodes.Status404NotFound,
-		SecurityTokenException => StatusCodes.Status401Unauthorized,
-		EntityAlreadyExistException => StatusCodes.Status409Conflict,
-		BookAlreadyHasReviewException => StatusCodes.Status409Conflict,
-		EmailAlreadyInUseException => StatusCodes.Status409Conflict,
-		UserAlreadyReadBookException => StatusCodes.Status409Conflict,
-		ValidationException => StatusCodes.Status422UnprocessableEntity,
-		EntityHasNoChangesException => StatusCodes.Status422UnprocessableEntity,
 		ContentTypeNotFoundException => StatusCodes.Status500InternalServerError,
 		_ => StatusCodes.Status500InternalServerError
 	};
