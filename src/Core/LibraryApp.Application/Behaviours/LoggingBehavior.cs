@@ -2,7 +2,9 @@
 using Serilog;
 
 namespace LibraryApp.Application.Behaviours;
-
+/// <summary>
+/// Behavior for log each mediator request.
+/// </summary>
 public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {

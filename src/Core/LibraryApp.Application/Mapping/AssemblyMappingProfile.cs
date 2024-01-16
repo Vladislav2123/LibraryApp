@@ -2,7 +2,9 @@
 using System.Reflection;
 
 namespace LibraryApp.Application.Mapping;
-
+/// <summary>
+/// Register mappings in assebly.
+/// </summary>
 public class AssemblyMappingProfile : Profile
 {
     public AssemblyMappingProfile(Assembly assembly)

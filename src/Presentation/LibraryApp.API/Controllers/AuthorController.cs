@@ -20,6 +20,7 @@ public class AuthorController : ControllerBase
 	public AuthorController(IMediator mediator, IAuthorizationService authorizationService)
 		: base(mediator, authorizationService) { }
 
+	// Get all Authors
 	[HttpGet]
 	[AllowAnonymous]
 	public async Task<ActionResult<PagedList<AuthorLookupDto>>> GetAll(
@@ -31,6 +32,7 @@ public class AuthorController : ControllerBase
 		return Ok(response);
 	}
 
+	// Create new Author
 	[HttpPost]
 	public async Task<ActionResult<Guid>> Create(
 		[FromBody] CreateAuthorCommand command, CancellationToken cancellationToken)
@@ -43,6 +45,7 @@ public class AuthorController : ControllerBase
 		return CreatedAtAction(nameof(Create), response);
 	}
 
+	// Update Author
 	[HttpPut]
 	public async Task<ActionResult> Update(
 		[FromBody] UpdateAuthorCommand command, CancellationToken cancellationToken)
@@ -55,6 +58,7 @@ public class AuthorController : ControllerBase
 		return NoContent();
 	}
 
+	// Delete Author
 	[HttpDelete("{id}")]
 	public async Task<ActionResult> Delete(Guid id, CancellationToken cancellationToken)
 	{
@@ -67,6 +71,7 @@ public class AuthorController : ControllerBase
 		return NoContent();
 	}
 
+	// Get Author by Id
 	[HttpGet("{id}")]
 	[AllowAnonymous]
 	public async Task<ActionResult<AuthorDto>> GetById(Guid id, CancellationToken cancellationToken)
@@ -77,6 +82,7 @@ public class AuthorController : ControllerBase
 		return Ok(response);
 	}
 
+	// Get Author`s avatar 
 	[HttpGet("{id}/avatar")]
 	[AllowAnonymous]
 	public async Task<ActionResult> GetAvatar(Guid id, CancellationToken cancellationToken)
@@ -87,6 +93,7 @@ public class AuthorController : ControllerBase
 		return File(response.Bytes, response.ContentType, response.FileName);
 	}
 
+	// Update Author`s avatar
 	[HttpPut("{id}/avatar")]
 	public async Task<ActionResult> UpdateAvatar(
 		Guid id, [FromForm] IFormFile avatarFile, CancellationToken cancellationToken)
@@ -100,6 +107,7 @@ public class AuthorController : ControllerBase
 		return NoContent();
 	}
 	
+	// Delete Author`s avatar
 	[HttpDelete("{id}/avatar")]
 	public async Task<ActionResult> DeleteAvatar(Guid id, CancellationToken cancellationToken)
 	{

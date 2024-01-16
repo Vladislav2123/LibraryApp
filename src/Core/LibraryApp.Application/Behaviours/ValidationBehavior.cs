@@ -5,6 +5,9 @@ using LibraryApp.Domain.Exceptions;
 
 namespace LibraryApp.Application.Behaviours;
 
+/// <summary>
+/// Behavior for validate each mediator request.
+/// </summary>
 public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {

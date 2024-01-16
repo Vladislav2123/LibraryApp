@@ -7,9 +7,11 @@ using LibraryApp.Application.Features.Users.Commands.Create;
 using LibraryApp.Domain.Entities;
 
 namespace LibraryApp.DAL;
-
 public class DbInitializer
 {
+	/// <summary>
+	/// Initializes the database.
+	/// </summary>
 	public static async Task Initialize(
 		IConfiguration configuration,
 		ILibraryDbContext dbContext,
@@ -53,6 +55,9 @@ public class DbInitializer
 		adminUser.Role = UserRole.Admin;
 	}
 
+	/// <summary>
+	/// Deletes a database if there is any data.
+	/// </summary>
 	private static void ClearDatabase(
 		ILibraryDbContext dbContext,
 		IFileWrapper fileWrapper)

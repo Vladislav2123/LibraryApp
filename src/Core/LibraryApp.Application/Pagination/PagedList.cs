@@ -16,10 +16,25 @@ public class PagedList<T>
     }
 
     public List<T> Items { get; }
+
+    /// <summary>
+    /// Total Items amount.
+    /// </summary>
     public int Total { get; }
+
+    /// <summary>
+    /// Current page number.
+    /// </summary>
     public int Page { get; }
+
+    /// <summary>
+    /// Size of page.
+    /// </summary>
     public int Size { get; }
 
+    /// <returns>
+    /// New Paged List instance.
+    /// </returns>
     public static PagedList<T> Create(List<T> items, Page page)
     {
         var totalCount = items.Count;

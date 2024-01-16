@@ -39,6 +39,9 @@ public class GlobalExceptionsHandlingMiddleware : IMiddleware
 		await context.Response.WriteAsync(JsonSerializer.Serialize(response));
 	}
 
+	/// <summary>
+	/// Returns response status code depends on exception.
+	/// </summary>
 	private int GetStatusCode(Exception exception) => exception switch
 	{
 		LoginFailedException => StatusCodes.Status400BadRequest,
@@ -56,6 +59,10 @@ public class GlobalExceptionsHandlingMiddleware : IMiddleware
 		_ => StatusCodes.Status500InternalServerError
 	};
 
+
+	/// <summary>
+	/// Returns true if exception must be logged.
+	/// </summary>
 	private bool ShouldLog(Exception exception) => exception switch
 	{
 		SecurityTokenException => false,

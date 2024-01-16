@@ -28,6 +28,7 @@ public class UserController : ControllerBase
 	public UserController(IMediator mediator, IAuthorizationService authorizationService)
 		: base(mediator, authorizationService) { }
 
+	// Get User`s JWT-token
 	[HttpGet("login")]
 	[AllowAnonymous]
 	public async Task<ActionResult<LoginResponse>> Login(
@@ -38,6 +39,7 @@ public class UserController : ControllerBase
 		return Ok(response);
 	}
 
+	// Create new User
 	[HttpPost]
 	[AllowAnonymous]
 	public async Task<ActionResult<Guid>> Register(
@@ -48,6 +50,7 @@ public class UserController : ControllerBase
 		return CreatedAtAction(nameof(Register), response);
 	}
 
+	// Get all Users
 	[HttpGet]
 	[AllowAnonymous]
 	public async Task<ActionResult<PagedList<UserLookupDto>>> GetAll(
@@ -60,6 +63,7 @@ public class UserController : ControllerBase
 		return Ok(response);
 	}
 
+	// Update User
 	[HttpPut]
 	public async Task<ActionResult> Update(
 		[FromBody] UpdateUserCommand command, CancellationToken cancellationToken)
@@ -72,7 +76,7 @@ public class UserController : ControllerBase
 		return NoContent();
 	}
 
-
+	// Get User by Id
 	[HttpGet("{id}")]
 	public async Task<ActionResult<UserDetailsDto>> GetById(
 		Guid id, CancellationToken cancellationToken)
@@ -83,6 +87,7 @@ public class UserController : ControllerBase
 		return Ok(response);
 	}
 
+	// Delete User
 	[HttpDelete("{id}")]
 	public async Task<ActionResult> Delete(Guid id, CancellationToken cancellationToken)
 	{
@@ -95,6 +100,7 @@ public class UserController : ControllerBase
 		return NoContent();
 	}
 
+	// Get User`s avatar
 	[HttpGet("{id}/avatar")]
 	[AllowAnonymous]
 	public async Task<ActionResult> GetAvatar(Guid id, CancellationToken cancellationToken)
@@ -105,6 +111,7 @@ public class UserController : ControllerBase
 		return File(response.Bytes, response.ContentType, response.FileName);
 	}
 
+	// Update User`s avatar
 	[HttpPut("{id}/avatar")]
 	public async Task<ActionResult> UpdateAvatar(
 		Guid id, [FromForm] IFormFile avatarFile, CancellationToken cancellationToken)
@@ -118,6 +125,7 @@ public class UserController : ControllerBase
 		return NoContent();
 	}
 
+	// Delete User`s avatar
 	[HttpDelete("{id}/avatar")]
 	public async Task<ActionResult> DeleteAvatar(
 		Guid id, CancellationToken cancellationToken)
@@ -131,6 +139,7 @@ public class UserController : ControllerBase
 		return NoContent();
 	}
 
+	// Get User`s Reviews
 	[HttpGet("{id}/reviews")]
 	[AllowAnonymous]
 	public async Task<ActionResult<PagedList<ReviewDto>>> GetReviews(
@@ -142,6 +151,7 @@ public class UserController : ControllerBase
 		return Ok(resopnse);
 	}
 
+	// Get User`s readed books list
 	[HttpGet("{id}/read-books")]
 	[AllowAnonymous]
 	public async Task<ActionResult<PagedList<BookLookupDto>>> GetReadBooks(
@@ -153,6 +163,7 @@ public class UserController : ControllerBase
 		return Ok(response);
 	}
 
+	// Add Book to User`s readed books list
 	[HttpPost("{userId}/read-books/{bookId}")]
 	public async Task<ActionResult> AddReadBook(
 		Guid userId, Guid bookId, CancellationToken cancellationToken)
@@ -166,6 +177,7 @@ public class UserController : ControllerBase
 		return NoContent();
 	}
 
+	// Delete Book from User`s readed books list
 	[HttpDelete("{userId}/read-books/{bookId}")]
 	public async Task<ActionResult> DeleteReadedBook(
 		Guid userId, Guid bookId, CancellationToken cancellationToken)
@@ -179,6 +191,7 @@ public class UserController : ControllerBase
 		return NoContent();
 	}
 
+	// Update User`s role
 	[HttpPut("{userId}/role")]
 	public async Task<ActionResult> UpdateUserRole(
 		Guid userId, [FromForm] string role, CancellationToken cancellationToken)

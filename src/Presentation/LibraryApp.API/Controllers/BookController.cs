@@ -24,6 +24,7 @@ public class BookController : ControllerBase
 	public BookController(IMediator mediator, IAuthorizationService authorizationService)
 		: base(mediator, authorizationService) { }
 
+	// Get all Books
 	[HttpGet]
 	[AllowAnonymous]
 	public async Task<ActionResult<PagedList<BookLookupDto>>> GetAll(
@@ -36,6 +37,7 @@ public class BookController : ControllerBase
 		return Ok(response);
 	}
 
+	// Crate new Book
 	[HttpPost]
 	public async Task<ActionResult<Guid>> Create(
 		[FromForm] CreateBookCommand command, CancellationToken cancellationToken)
@@ -48,6 +50,7 @@ public class BookController : ControllerBase
 		return CreatedAtAction(nameof(Create), response);
 	}
 
+	// Update Book
 	[HttpPut]
 	public async Task<ActionResult> Update(
 			[FromForm] UpdateBookCommand command, CancellationToken cancellationToken)
@@ -60,6 +63,7 @@ public class BookController : ControllerBase
 		return NoContent();
 	}
 
+	// Delete Book
 	[HttpDelete("{id}")]
 	public async Task<ActionResult> Delete(
 			Guid id, CancellationToken cancellationToken)
@@ -73,6 +77,7 @@ public class BookController : ControllerBase
 		return NoContent();
 	}
 
+	// Get Book by Id
 	[HttpGet("{id}")]
 	[AllowAnonymous]
 	public async Task<ActionResult<BookDto>> GetById(Guid id, CancellationToken cancellationToken)
@@ -83,6 +88,7 @@ public class BookController : ControllerBase
 		return Ok(response);
 	}
 
+	// Get Book`s cover
 	[HttpGet("{id}/cover")]
 	[AllowAnonymous]
 	public async Task<ActionResult> GetCover(Guid id, CancellationToken cancellationToken)
@@ -93,6 +99,7 @@ public class BookController : ControllerBase
 		return File(response.Bytes, response.ContentType, response.FileName);
 	}
 
+	// Update Book`s cover
 	[HttpPut("{id}/cover")]
 	public async Task<ActionResult> UpdateCover(
 		Guid id, [FromForm] IFormFile coverFile, CancellationToken cancellationToken)
@@ -106,6 +113,7 @@ public class BookController : ControllerBase
 		return NoContent();
 	}
 
+	// Delete Book`s cover
 	[HttpDelete("{id}/cover")]
 	public async Task<ActionResult> DeleteCover(Guid id, CancellationToken cancellationToken)
 	{
@@ -118,6 +126,7 @@ public class BookController : ControllerBase
 		return NoContent();
 	}
 
+	// Get Book`s content
 	[HttpGet("{id}/content")]
 	[AllowAnonymous]
 	public async Task<ActionResult> GetContent(Guid id, CancellationToken cancellationToken)
@@ -128,6 +137,7 @@ public class BookController : ControllerBase
 		return File(response.Bytes, response.ContentType, response.FileName);
 	}
 
+	// Get Book`s reviews
 	[HttpGet("{id}/reviews")]
 	[AllowAnonymous]
 	public async Task<ActionResult<PagedList<ReviewDto>>> GetReviews(

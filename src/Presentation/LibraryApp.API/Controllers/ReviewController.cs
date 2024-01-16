@@ -16,6 +16,7 @@ public class ReviewController : ControllerBase
 	public ReviewController(IMediator mediator, IAuthorizationService authorizationService)
 		: base(mediator, authorizationService) { }
 
+	// Get all Reviews
 	[HttpGet]
 	[AllowAnonymous]
 	public async Task<ActionResult<PagedList<ReviewDto>>> GetAll(
@@ -27,6 +28,7 @@ public class ReviewController : ControllerBase
 		return Ok(response);
 	}
 
+	// Create new Review
 	[HttpPost]
 	public async Task<ActionResult<Guid>> Create(
 		[FromBody] CreateReviewCommand command, CancellationToken cancellationToken)
@@ -36,6 +38,7 @@ public class ReviewController : ControllerBase
 		return CreatedAtAction(nameof(Create), response);
 	}
 
+	// Update Review
 	[HttpPut]
 	public async Task<ActionResult> Update
 		([FromBody] UpdateReviewCommand command, CancellationToken cancellationToken)
@@ -48,6 +51,7 @@ public class ReviewController : ControllerBase
 		return NoContent();
 	}
 
+	// Delete Review
 	[HttpDelete("{id}")]
 	public async Task<ActionResult> Delete(
 		Guid id, CancellationToken cancellationToken)

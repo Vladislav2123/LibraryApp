@@ -16,6 +16,7 @@ public class CustomJwtValidationMiddleware : IMiddleware
 
 	public async Task InvokeAsync(HttpContext context, RequestDelegate next)
 	{
+		// Throwing an exception if User of Claims Principal does not exist
 		if (context.User.Identity.IsAuthenticated)
 		{
 			Guid userId = Guid.Parse(context.User.FindFirstValue(ClaimTypes.Actor));
