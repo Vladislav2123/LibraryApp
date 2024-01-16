@@ -1,133 +1,142 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using LibraryApp.Domain.Models;
-using LibraryApp.API.Authorization;
-using Microsoft.AspNetCore.Authorization;
-using LibraryApp.Application.Pagination;
-using LibraryApp.Application.Features.Books.Commands.Create;
-using LibraryApp.Application.Features.Books.Commands.Delete;
-using LibraryApp.Application.Features.Books.Commands.DeleteBookCover;
-using LibraryApp.Application.Features.Books.Commands.Update;
+﻿using LibraryApp.Application.Features.Books.Commands.DeleteBookCover;
+using LibraryApp.Application.Features.Reviews.Queries.GetBookReviews;
 using LibraryApp.Application.Features.Books.Commands.UpdateBookCover;
-using LibraryApp.Application.Features.Books.Querries.Dto;
-using LibraryApp.Application.Features.Books.Querries.GetAllBooks;
-using LibraryApp.Application.Features.Books.Querries.GetBook;
 using LibraryApp.Application.Features.Books.Querries.GetBookContent;
 using LibraryApp.Application.Features.Books.Querries.GetBookCover;
+using LibraryApp.Application.Features.Books.Querries.GetAllBooks;
+using LibraryApp.Application.Features.Books.Querries.GetBook;
+using LibraryApp.Application.Features.Books.Commands.Create;
+using LibraryApp.Application.Features.Books.Commands.Update;
+using LibraryApp.Application.Features.Books.Commands.Delete;
 using LibraryApp.Application.Features.Reviews.Queries.Dto;
-using LibraryApp.Application.Features.Reviews.Queries.GetBookReviews;
+using LibraryApp.Application.Features.Books.Querries.Dto;
+using Microsoft.AspNetCore.Authorization;
+using LibraryApp.Application.Pagination;
+using LibraryApp.API.Authorization;
+using LibraryApp.Domain.Models;
+using Microsoft.AspNetCore.Mvc;
+using MediatR;
 
 namespace LibraryApp.API.Controllers;
+[Route("api/books")]
+public class BookController : ControllerBase
+{
+	public BookController(IMediator mediator, IAuthorizationService authorizationService)
+		: base(mediator, authorizationService) { }
 
-[ApiController]
-    [Route("api/books")]
-    public class BookController : ControllerBase
-    {
-        private readonly IMediator _mediator;
+	[HttpGet]
+	[AllowAnonymous]
+	public async Task<ActionResult<PagedList<BookLookupDto>>> GetAll(
+		string? search, Guid? author, string? sortColumn, string? sortOrder,
+		int page, int size, CancellationToken cancellationToken)
+	{
+		var query = new GetAllBooksQuery(search, author, sortColumn, sortOrder, new Page(page, size));
+		var response = await Mediator.Send(query, cancellationToken);
 
-        public BookController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+		return Ok(response);
+	}
 
-        [HttpGet]
-        public async Task<ActionResult<PagedList<BookLookupDto>>> GetAll(
-            string? search, Guid? author, string? sortColumn, string? sortOrder, 
-            int page, int size, CancellationToken cancellationToken)
-        {
-            var query = new GetAllBooksQuery(search, author, sortColumn, sortOrder, new Page(page, size));
-            var response = await _mediator.Send(query, cancellationToken);
-
-            return Ok(response);
-        }
-
-        [HttpPost]
-	[Authorize(Policy = Policies.AdminOnlyPolicyName)]
+	[HttpPost]
 	public async Task<ActionResult<Guid>> Create(
-            [FromForm] CreateBookCommand command, CancellationToken cancellationToken)
-        {
-            var response = await _mediator.Send(command, cancellationToken);
+		[FromForm] CreateBookCommand command, CancellationToken cancellationToken)
+	{
+		if (await AuthorizeAsync(User, Policies.AdminOnlyPolicyName) == false)
+			return Forbid();
 
-            return CreatedAtAction(nameof(Create), response);
-        }
+		var response = await Mediator.Send(command, cancellationToken);
+
+		return CreatedAtAction(nameof(Create), response);
+	}
 
 	[HttpPut]
-	[Authorize(Policy = Policies.AdminOnlyPolicyName)]
-        public async Task<ActionResult> Update(
-            [FromForm] UpdateBookCommand command, CancellationToken cancellationToken)
-        {
-            await _mediator.Send(command, cancellationToken);
+	public async Task<ActionResult> Update(
+			[FromForm] UpdateBookCommand command, CancellationToken cancellationToken)
+	{
+		if (await AuthorizeAsync(User, Policies.AdminOnlyPolicyName) == false)
+			return Forbid();
 
-            return NoContent();
-        }
+		await Mediator.Send(command, cancellationToken);
+
+		return NoContent();
+	}
 
 	[HttpDelete("{id}")]
-	[Authorize(Policy = Policies.AdminOnlyPolicyName)]
-        public async Task<ActionResult> Delete(
-            Guid id, CancellationToken cancellationToken)
-        {
-            var command = new DeleteBookCommand(id);
-            await _mediator.Send(command, cancellationToken);
+	public async Task<ActionResult> Delete(
+			Guid id, CancellationToken cancellationToken)
+	{
+		if (await AuthorizeAsync(User, Policies.AdminOnlyPolicyName) == false)
+			return Forbid();
 
-            return NoContent();
-        }
+		var command = new DeleteBookCommand(id);
+		await Mediator.Send(command, cancellationToken);
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<BookDto>> GetById(Guid id, CancellationToken cancellationToken)
-        {
-            var query = new GetBookQuery(id);
-            var response = await _mediator.Send(query, cancellationToken);
+		return NoContent();
+	}
 
-            return Ok(response);
-        }
+	[HttpGet("{id}")]
+	[AllowAnonymous]
+	public async Task<ActionResult<BookDto>> GetById(Guid id, CancellationToken cancellationToken)
+	{
+		var query = new GetBookQuery(id);
+		var response = await Mediator.Send(query, cancellationToken);
+
+		return Ok(response);
+	}
 
 	[HttpGet("{id}/cover")]
+	[AllowAnonymous]
 	public async Task<ActionResult> GetCover(Guid id, CancellationToken cancellationToken)
 	{
-            var query = new GetBookCoverQuery(id);
-            FileVm response = await _mediator.Send(query, cancellationToken);
+		var query = new GetBookCoverQuery(id);
+		FileVm response = await Mediator.Send(query, cancellationToken);
 
-            return File(response.Bytes, response.ContentType, response.FileName);
-        }
+		return File(response.Bytes, response.ContentType, response.FileName);
+	}
 
-        [HttpPut("{id}/cover")]
-	[Authorize(Policy = Policies.AdminOnlyPolicyName)]
+	[HttpPut("{id}/cover")]
 	public async Task<ActionResult> UpdateCover(
-            Guid id, [FromForm] IFormFile coverFile, CancellationToken cancellationToken)
-        {
-            var command = new UpdateBookCoverCommand(id, coverFile);
-            await _mediator.Send(command, cancellationToken);
+		Guid id, [FromForm] IFormFile coverFile, CancellationToken cancellationToken)
+	{
+		if (await AuthorizeAsync(User, Policies.AdminOnlyPolicyName) == false)
+			return Forbid();
 
-            return NoContent();
-        }
+		var command = new UpdateBookCoverCommand(id, coverFile);
+		await Mediator.Send(command, cancellationToken);
 
-        [HttpDelete("{id}/cover")]
-	[Authorize(Policy = Policies.AdminOnlyPolicyName)]
+		return NoContent();
+	}
+
+	[HttpDelete("{id}/cover")]
 	public async Task<ActionResult> DeleteCover(Guid id, CancellationToken cancellationToken)
-        {
-            var command = new DeleteBookCoverCommand(id);
-            await _mediator.Send(command, cancellationToken);
+	{
+		if (await AuthorizeAsync(User, Policies.AdminOnlyPolicyName) == false)
+			return Forbid();
 
-            return NoContent();
-        }
+		var command = new DeleteBookCoverCommand(id);
+		await Mediator.Send(command, cancellationToken);
 
-        [HttpGet("{id}/content")]
-        public async Task<ActionResult> GetContent(Guid id, CancellationToken cancellationToken)
-        {
-            var query = new GetBookContentQuery(id);
-            FileVm response = await _mediator.Send(query, cancellationToken);
+		return NoContent();
+	}
 
-            return File(response.Bytes, response.ContentType, response.FileName);
-        }
+	[HttpGet("{id}/content")]
+	[AllowAnonymous]
+	public async Task<ActionResult> GetContent(Guid id, CancellationToken cancellationToken)
+	{
+		var query = new GetBookContentQuery(id);
+		FileVm response = await Mediator.Send(query, cancellationToken);
+
+		return File(response.Bytes, response.ContentType, response.FileName);
+	}
 
 	[HttpGet("{id}/reviews")]
-        public async Task<ActionResult<PagedList<ReviewDto>>> GetReviews(
-            Guid id, string? sortColumn, string? sortOrder, int page, int size, CancellationToken cancellationToken)
-        {
-            var query = new GetBookReviewsQuery(id, sortColumn, sortOrder, new Page(page, size));
-            var response = await _mediator.Send(query, cancellationToken);
+	[AllowAnonymous]
+	public async Task<ActionResult<PagedList<ReviewDto>>> GetReviews(
+			Guid id, string? sortColumn, string? sortOrder, int page, int size, CancellationToken cancellationToken)
+	{
+		var query = new GetBookReviewsQuery(id, sortColumn, sortOrder, new Page(page, size));
+		var response = await Mediator.Send(query, cancellationToken);
 
-            return Ok(response);
-        }
+		return Ok(response);
+	}
 
-    }
+}

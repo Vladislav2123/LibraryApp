@@ -1,79 +1,62 @@
-﻿using LibraryApp.API.Authorization;
-using LibraryApp.Application.Pagination;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using LibraryApp.Application.Features.Reviews.Queries.GetAllReviews;
 using LibraryApp.Application.Features.Reviews.Commands.Create;
 using LibraryApp.Application.Features.Reviews.Commands.Delete;
 using LibraryApp.Application.Features.Reviews.Commands.Update;
 using LibraryApp.Application.Features.Reviews.Queries.Dto;
-using LibraryApp.Application.Features.Reviews.Queries.GetAllReviews;
+using Microsoft.AspNetCore.Authorization;
+using LibraryApp.Application.Pagination;
+using LibraryApp.API.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using MediatR;
 
 namespace LibraryApp.API.Controllers;
-
-[ApiController]
 [Route("api/reviews")]
 public class ReviewController : ControllerBase
 {
-	private readonly IMediator _mediator;
-	private readonly IAuthorizationService _authorizationService;
-
 	public ReviewController(IMediator mediator, IAuthorizationService authorizationService)
-	{
-
-		_mediator = mediator;
-		_authorizationService = authorizationService;
-	}
+		: base(mediator, authorizationService) { }
 
 	[HttpGet]
+	[AllowAnonymous]
 	public async Task<ActionResult<PagedList<ReviewDto>>> GetAll(
 		int page, int size, CancellationToken cancellationToken)
 	{
 		var query = new GetAllReviewsQuery(new Page(page, size));
-		var response = await _mediator.Send(query, cancellationToken);
+		var response = await Mediator.Send(query, cancellationToken);
 
 		return Ok(response);
 	}
 
 	[HttpPost]
-	[Authorize]
 	public async Task<ActionResult<Guid>> Create(
 		[FromBody] CreateReviewCommand command, CancellationToken cancellationToken)
 	{
-		var response = await _mediator.Send(command, cancellationToken);
+		var response = await Mediator.Send(command, cancellationToken);
 
 		return CreatedAtAction(nameof(Create), response);
 	}
 
 	[HttpPut]
-	[Authorize]
 	public async Task<ActionResult> Update
 		([FromBody] UpdateReviewCommand command, CancellationToken cancellationToken)
 	{
-		var authorizationResult = await _authorizationService
-			.AuthorizeAsync(User, command.ReviewId, Policies.ReviewUpdatePolicyName);
+		if (await AuthorizeAsync(User, command.ReviewId, Policies.ReviewUpdatePolicyName) == false)
+			return Forbid();
 
-		if (authorizationResult.Succeeded == false)
-			return new ForbidResult();
-
-            await _mediator.Send(command, cancellationToken);
+		await Mediator.Send(command, cancellationToken);
 
 		return NoContent();
 	}
 
 	[HttpDelete("{id}")]
-	[Authorize]
 	public async Task<ActionResult> Delete(
 		Guid id, CancellationToken cancellationToken)
 	{
-		var authorizationResult = await _authorizationService
-			.AuthorizeAsync(User, id, Policies.ReviewDeletePolicyName);
-
-		if (authorizationResult.Succeeded == false)
-			return new ForbidResult();
+		if (await AuthorizeAsync(User, id, Policies.ReviewDeletePolicyName) == false)
+			return Forbid();
 
 		var command = new DeleteReviewCommand(id);
-		await _mediator.Send(command, cancellationToken);
+		await Mediator.Send(command, cancellationToken);
 
 		return NoContent();
 	}
