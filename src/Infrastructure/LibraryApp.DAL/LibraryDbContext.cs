@@ -18,7 +18,15 @@ public class LibraryDbContext : DbContext, ILibraryDbContext
 	public DbSet<Book> Books { get; set; }
 	public DbSet<Review> Reviews { get; set; }
 
-	protected override void OnModelCreating(ModelBuilder builder)
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+
+		optionsBuilder.UseSnakeCaseNamingConvention();
+		optionsBuilder.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
+    }
+
+    protected override void OnModelCreating(ModelBuilder builder)
 	{
 		base.OnModelCreating(builder);
 

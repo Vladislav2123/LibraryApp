@@ -11,10 +11,13 @@ public static class DependencyInjection
 	{
 		service.AddDbContext<LibraryDbContext>(options =>
 		{
+			Console.WriteLine("Connection to database");
+
 			string host = Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost";
 			string port = Environment.GetEnvironmentVariable("DB_PORT") ?? "5432";
 			string db = Environment.GetEnvironmentVariable("DB_NAME") ?? "LibraryApp";
 			string password = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? configuration["DbPassword"];
+
 
 			options.UseNpgsql($"Host={host}; Port={port}; Database={db}; Username=postgres; Password={password}");
 		});

@@ -14,12 +14,14 @@ using LibraryApp.API.Authorization.ReviewEdit;
 using LibraryApp.API.Authorization.UserEdit;
 using LibraryApp.API.ExceptionsHandling;
 using LibraryApp.Domain.Entities;
+using LibraryApp.Application.Extensions.Environment;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
+builder.Configuration.AddUserSecrets<Program>();
 builder.Services.AddControllers();
 builder.Services
 	.AddEndpointsApiExplorer()
@@ -86,7 +88,7 @@ builder.Services.AddAuthorization(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsTesting())
 {
 	app.UseSwagger();
 	app.UseSwaggerUI();
