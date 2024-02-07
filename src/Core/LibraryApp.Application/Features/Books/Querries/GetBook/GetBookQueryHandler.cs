@@ -21,8 +21,19 @@ public class GetBookQueryHandler : IRequestHandler<GetBookQuery, BookDto>
 
 	public async Task<BookDto> Handle(GetBookQuery request, CancellationToken cancellationToken)
 	{
-		Book book = await _dbContext.Books
-				.FirstOrDefaultAsync(book => book.Id == request.BookId, cancellationToken);
+		var book = await _dbContext.Books
+			.AsNoTracking()
+			.Select(book => new Book
+			{
+				Id = book.Id,
+				CreatedUserId = book.CreatedUserId,
+				AuthorId = book.AuthorId,
+				Name = book.Name,
+				Rating = book.Rating,
+				Description = book.Description,
+				Year = book.Year
+			})
+			.FirstOrDefaultAsync(book => book.Id == request.BookId, cancellationToken);
 
 		if (book == null) throw new EntityNotFoundException(nameof(Book), request.BookId);
 

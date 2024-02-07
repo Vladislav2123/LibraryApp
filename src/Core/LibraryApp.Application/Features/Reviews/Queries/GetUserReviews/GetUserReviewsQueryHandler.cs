@@ -28,11 +28,14 @@ public class GetUserReviewsQueryHandler : IRequestHandler<GetUserReviewsQuery, P
 
 		if (user == null) throw new EntityNotFoundException(nameof(User), request.UserId);
 
-		IQueryable<Review> reviewsQuery = user.Reviews.AsQueryable();
+		var totalAmount = user.Reviews.Count;
+		var reviews = user.Reviews
+			.OrderByDescending(review => review.CreationDate)
+			.Skip((request.Page.number - 1) * request.Page.size)
+			.Take(request.Page.size)
+			.ToList();
+		var reviewsDtos = _mapper.Map<List<ReviewDto>>(reviews);
 
-		reviewsQuery = reviewsQuery.OrderByDescending(user => user.CreationDate);
-
-		var reviewsDtos = _mapper.Map<List<ReviewDto>>(reviewsQuery.ToList());
-		return PagedList<ReviewDto>.Create(reviewsDtos, request.Page);
+		return new PagedList<ReviewDto>(reviewsDtos, totalAmount, request.Page);
 	}
 }

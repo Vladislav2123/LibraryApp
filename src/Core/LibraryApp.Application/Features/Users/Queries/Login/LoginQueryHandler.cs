@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Abstractions;
 using LibraryApp.Domain.Exceptions;
+using LibraryApp.Domain.Entities;
 
 namespace LibraryApp.Application.Features.Users.Queries.Login;
 
@@ -24,6 +25,15 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, LoginResponse>
 	public async Task<LoginResponse> Handle(LoginQuery command, CancellationToken cancellationToken)
 	{
 		var user = await _dbConext.Users
+			.AsNoTracking()
+			.Select(user => new User 
+			{
+				Id = user.Id,
+				PasswordHash = user.PasswordHash,
+				Email = user.Email, 
+				PasswordSalt = user.PasswordSalt,
+				Role = user.Role
+			})
 			.FirstOrDefaultAsync(user => user.Email == command.Email, cancellationToken);
 
 		if (user == null) throw new LoginFailedException();

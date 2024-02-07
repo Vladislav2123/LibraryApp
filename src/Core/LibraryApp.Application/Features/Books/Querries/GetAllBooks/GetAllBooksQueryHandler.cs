@@ -23,6 +23,7 @@ public class GetAllBooksQueryHandler : IRequestHandler<GetAllBooksQuery, PagedLi
 	public async Task<PagedList<BookLookupDto>> Handle(GetAllBooksQuery request, CancellationToken cancellationToken)
 	{
 		IQueryable<Book> booksQuery = _dbContext.Books
+			.AsNoTracking()
 			.Include(book => book.Readers);
 
 		if (string.IsNullOrWhiteSpace(request.SearchTerms) == false)
@@ -43,8 +44,13 @@ public class GetAllBooksQueryHandler : IRequestHandler<GetAllBooksQuery, PagedLi
 		}
 		else booksQuery.OrderByDescending(sortingColumnPropertyExpression);
 
-		var booksLookups = _mapper.Map<List<BookLookupDto>>(await booksQuery.ToListAsync(cancellationToken));
-		return PagedList<BookLookupDto>.Create(booksLookups, request.Page);
+		var totalAmount = booksQuery.Count();
+		var books = booksQuery
+			.Skip((request.Page.number - 1) * request.Page.size)
+			.Take(request.Page.size)
+			.ToList();
+		var mappedBooks = _mapper.Map<List<BookLookupDto>>(books);
+		return new PagedList<BookLookupDto>(mappedBooks, totalAmount, request.Page);
 	}
 
 	private Expression<Func<Book, object>> GetSortingColumnProperty(GetAllBooksQuery request) =>

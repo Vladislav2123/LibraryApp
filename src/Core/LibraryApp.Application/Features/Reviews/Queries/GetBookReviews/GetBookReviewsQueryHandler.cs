@@ -29,6 +29,9 @@ public class GetBookReviewsQueryHandler : IRequestHandler<GetBookReviewsQuery, P
 
 		if (book == null) throw new EntityNotFoundException(nameof(Book), request.BookId);
 
+		// if(await _dbContext.Books.AnyAsync(book => book.Id == request.BookId) == false)
+		// 	throw new EntityNotFoundException(nameof(Book), request.BookId);
+
 		IQueryable<Review> reviewsQuery = book.Reviews.AsQueryable();
 
 		var sortingColumnPropertyExpression = GetSortingColumnProperty(request);
@@ -38,8 +41,14 @@ public class GetBookReviewsQueryHandler : IRequestHandler<GetBookReviewsQuery, P
 		}
 		else reviewsQuery = reviewsQuery.OrderByDescending(sortingColumnPropertyExpression);
 
-		var reviewsDtos = _mapper.Map<List<ReviewDto>>(reviewsQuery.ToList());
-		return PagedList<ReviewDto>.Create(reviewsDtos, request.Page);
+		var totalAmount = reviewsQuery.Count();
+		var reviews = reviewsQuery
+			.Skip((request.Page.number - 1) * request.Page.size)
+			.Take(request.Page.size)
+			.ToList();
+		var mappedReviews = _mapper.Map<List<ReviewDto>>(reviews);
+
+		return new PagedList<ReviewDto>(mappedReviews, totalAmount, request.Page);
 	}
 
 	private Expression<Func<Review, object>> GetSortingColumnProperty(GetBookReviewsQuery request) =>

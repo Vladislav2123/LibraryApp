@@ -22,6 +22,14 @@ public class GetAuthorQueryHandler : IRequestHandler<GetAuthorQuery, AuthorDto>
 	public async Task<AuthorDto> Handle(GetAuthorQuery request, CancellationToken cancellationToken)
 	{
 		var author = await _dbContext.Authors
+			.AsNoTracking()
+			.Select(author => new Author
+			{
+				Id = author.Id,
+				CreatedUserId = author.CreatedUserId,
+				Name = author.Name,
+				BirthDate = author.BirthDate
+			})
 			.FirstOrDefaultAsync(author => author.Id == request.AuthorId, cancellationToken);
 
 		if (author == null) throw new EntityNotFoundException(nameof(Author), request.AuthorId);

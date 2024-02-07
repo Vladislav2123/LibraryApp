@@ -21,7 +21,16 @@ public class GetUserQueryHandler : IRequestHandler<GetUserQuery, UserDetailsDto>
 
 	public async Task<UserDetailsDto> Handle(GetUserQuery request, CancellationToken cancellationToken)
 	{
-		User user = await _dbContext.Users
+		var user = await _dbContext.Users
+			.AsNoTracking()
+			.Select(user => new User
+			{
+				Id = user.Id,
+				Name = user.Name,
+				Email = user.Email,
+				BirthDate = user.BirthDate,
+				Role = user.Role
+			})
 			.FirstOrDefaultAsync(user => user.Id == request.UserId, cancellationToken);
 
 		if (user == null) throw new EntityNotFoundException(nameof(User), request.UserId);

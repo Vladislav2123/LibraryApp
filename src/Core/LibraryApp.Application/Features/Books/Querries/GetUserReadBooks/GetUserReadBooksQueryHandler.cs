@@ -23,12 +23,18 @@ public class GetUserReadBooksQueryHandler : IRequestHandler<GetUserReadBooksQuer
 	public async Task<PagedList<BookLookupDto>> Handle(GetUserReadBooksQuery request, CancellationToken cancellationToken)
 	{
 		User user = await _dbContext.Users
+			.AsNoTracking()
 			.Include(user => user.ReadBooks)
 			.FirstOrDefaultAsync(user => user.Id == request.UserId, cancellationToken);
 
 		if (user == null) throw new EntityNotFoundException(nameof(User), request.UserId);
 
-		var booksLookups = _mapper.Map<List<BookLookupDto>>(user.ReadBooks);
-		return PagedList<BookLookupDto>.Create(booksLookups, request.Page);
+		var books = user.ReadBooks
+			.Skip((request.Page.number - 1) * request.Page.size)
+			.Take(request.Page.size)
+			.ToList();
+		var mappedBooks = _mapper.Map<List<BookLookupDto>>(user.ReadBooks);
+
+		return new PagedList<BookLookupDto>(mappedBooks, user.ReadBooks.Count, request.Page);
 	}
 }

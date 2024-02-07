@@ -78,6 +78,7 @@ public class UserController : ControllerBase
 
 	// Get User by Id
 	[HttpGet("{id}")]
+	[AllowAnonymous]
 	public async Task<ActionResult<UserDetailsDto>> GetById(
 		Guid id, CancellationToken cancellationToken)
 	{

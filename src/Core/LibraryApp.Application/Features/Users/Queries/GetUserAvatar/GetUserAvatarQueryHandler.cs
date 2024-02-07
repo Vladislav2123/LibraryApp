@@ -25,6 +25,12 @@ public class GetUserAvatarQueryHandler : IRequestHandler<GetUserAvatarQuery, Fil
 	public async Task<FileVm> Handle(GetUserAvatarQuery request, CancellationToken cancellationToken)
 	{
 		var user = await _libraryDbContext.Users
+			.AsNoTracking()
+			.Select(user => new User 
+			{ 
+				Id = user.Id, 
+				AvatarPath = user.AvatarPath 
+			})
 			.FirstOrDefaultAsync(user => user.Id == request.UserId, cancellationToken);
 
 		if (user == null) throw new EntityNotFoundException(nameof(User), request.UserId);

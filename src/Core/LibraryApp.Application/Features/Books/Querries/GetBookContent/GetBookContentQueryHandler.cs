@@ -22,6 +22,12 @@ public class GetBookContentQueryHandler : IRequestHandler<GetBookContentQuery, F
 	public async Task<FileVm> Handle(GetBookContentQuery request, CancellationToken cancellationToken)
 	{
 		var book = await _dbContext.Books
+			.AsNoTracking()
+			.Select(book => new Book
+			{
+				Id = book.Id,
+				ContentPath = book.ContentPath
+			})
 			.FirstOrDefaultAsync(book => book.Id == request.BookId, cancellationToken);
 
 		if (book == null) throw new EntityNotFoundException(nameof(Book), request.BookId);

@@ -23,6 +23,11 @@ public class GetAuthorAvatarQueryHandler : IRequestHandler<GetAuthorAvatarQuery,
 	public async Task<FileVm> Handle(GetAuthorAvatarQuery request, CancellationToken cancellationToken)
 	{
 		var author = await _libraryDbContext.Authors
+			.Select(author => new Author
+			{
+				Id = author.Id,
+				AvatarPath = author.AvatarPath
+			})
 			.FirstOrDefaultAsync(author => author.Id == request.AuthorId, cancellationToken);
 
 		if (author == null) throw new EntityNotFoundException(nameof(Author), request.AuthorId);

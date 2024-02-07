@@ -23,6 +23,12 @@ public class GetBookCoverQueryHandler : IRequestHandler<GetBookCoverQuery, FileV
 	public async Task<FileVm> Handle(GetBookCoverQuery request, CancellationToken cancellationToken)
 	{
 		var book = await _dbContext.Books
+			.AsNoTracking()
+			.Select(book => new Book
+			{
+				Id = book.Id,
+				CoverPath = book.CoverPath
+			})
 			.FirstOrDefaultAsync(book => book.Id == request.BookId, cancellationToken);
 
 		if (book == null) throw new EntityNotFoundException(nameof(Book), request.BookId);
