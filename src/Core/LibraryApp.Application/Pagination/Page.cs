@@ -15,7 +15,7 @@ public struct Page
         if (number == 0) number = DefaultNumber;
 
         if (size == 0) size = DefaultSize;
-        else size = Math.Clamp(number, MinSize, MaxSize);
+        else size = Math.Clamp(size, MinSize, MaxSize);
 
         this.number = number;
         this.size = size;
