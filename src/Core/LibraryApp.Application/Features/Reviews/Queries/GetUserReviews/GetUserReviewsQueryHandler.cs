@@ -28,6 +28,7 @@ public class GetUserReviewsQueryHandler : IRequestHandler<GetUserReviewsQuery, P
 
 		if (user == null) throw new EntityNotFoundException(nameof(User), request.UserId);
 
+		// Response
 		var totalAmount = user.Reviews.Count;
 		var reviews = user.Reviews
 			.OrderByDescending(review => review.CreationDate)

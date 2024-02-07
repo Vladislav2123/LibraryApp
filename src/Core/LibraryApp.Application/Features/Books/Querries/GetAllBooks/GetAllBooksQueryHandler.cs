@@ -26,6 +26,7 @@ public class GetAllBooksQueryHandler : IRequestHandler<GetAllBooksQuery, PagedLi
 			.AsNoTracking()
 			.Include(book => book.Readers);
 
+		// Filtering
 		if (string.IsNullOrWhiteSpace(request.SearchTerms) == false)
 		{
 			booksQuery = booksQuery
@@ -37,13 +38,12 @@ public class GetAllBooksQueryHandler : IRequestHandler<GetAllBooksQuery, PagedLi
 				.Where(book => book.AuthorId == request.AuthorId);
 		}
 
+		// Sorting
 		var sortingColumnPropertyExpression = GetSortingColumnProperty(request);
-		if (request.SortOrder?.ToLower() == "asc")
-		{
-			booksQuery.OrderBy(sortingColumnPropertyExpression);
-		}
-		else booksQuery.OrderByDescending(sortingColumnPropertyExpression);
+		if (request.SortOrder?.ToLower() == "asc") booksQuery = booksQuery.OrderBy(sortingColumnPropertyExpression);
+		else booksQuery = booksQuery.OrderByDescending(sortingColumnPropertyExpression);
 
+		// Response
 		var totalAmount = booksQuery.Count();
 		var books = booksQuery
 			.Skip((request.Page.number - 1) * request.Page.size)

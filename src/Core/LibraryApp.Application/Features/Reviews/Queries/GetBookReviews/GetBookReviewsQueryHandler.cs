@@ -23,24 +23,21 @@ public class GetBookReviewsQueryHandler : IRequestHandler<GetBookReviewsQuery, P
 
 	public async Task<PagedList<ReviewDto>> Handle(GetBookReviewsQuery request, CancellationToken cancellationToken)
 	{
+		// Query
 		var book = await _dbContext.Books
 			.Include(book => book.Reviews)
 			.FirstOrDefaultAsync(book => book.Id == request.BookId, cancellationToken);
 
 		if (book == null) throw new EntityNotFoundException(nameof(Book), request.BookId);
 
-		// if(await _dbContext.Books.AnyAsync(book => book.Id == request.BookId) == false)
-		// 	throw new EntityNotFoundException(nameof(Book), request.BookId);
-
 		IQueryable<Review> reviewsQuery = book.Reviews.AsQueryable();
 
+		// Sorting
 		var sortingColumnPropertyExpression = GetSortingColumnProperty(request);
-		if (request.SortOrder?.ToLower() == "asc")
-		{
-			reviewsQuery = reviewsQuery.OrderBy(sortingColumnPropertyExpression);
-		}
+		if (request.SortOrder?.ToLower() == "asc") reviewsQuery = reviewsQuery.OrderBy(sortingColumnPropertyExpression);
 		else reviewsQuery = reviewsQuery.OrderByDescending(sortingColumnPropertyExpression);
 
+		// Response
 		var totalAmount = reviewsQuery.Count();
 		var reviews = reviewsQuery
 			.Skip((request.Page.number - 1) * request.Page.size)

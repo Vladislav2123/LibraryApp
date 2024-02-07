@@ -35,8 +35,8 @@ public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, PagedLi
 
 		// Sorting
 		var sortingColumnPropertyExpression = GetSortingColumnProperty(request);
-		if (request.SortOrder?.ToLower() == "asc") usersQuery.OrderByDescending(sortingColumnPropertyExpression);
-		else usersQuery.OrderBy(sortingColumnPropertyExpression);
+		if (request.SortOrder?.ToLower() == "asc") usersQuery = usersQuery.OrderByDescending(sortingColumnPropertyExpression);
+		else usersQuery = usersQuery.OrderBy(sortingColumnPropertyExpression);
 
 		// Response
 		var totalAmount = usersQuery.Count();
