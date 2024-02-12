@@ -3,21 +3,26 @@ using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Abstractions;
 using LibraryApp.Domain.Exceptions;
 using LibraryApp.Domain.Entities;
+using LibraryApp.Application.Abstractions.Caching;
 
 namespace LibraryApp.Application.Features.Users.Commands.Delete;
 
 public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Unit>
 {
-	public readonly ILibraryDbContext _dbContext;
-	public readonly IFileWrapper _fileWrapper;
+	private readonly ILibraryDbContext _dbContext;
+	private readonly IFileWrapper _fileWrapper;
+	private readonly ICacheService _cache;
+	private readonly ICacheKeys _cacheKeys;
 
-	public DeleteUserCommandHandler(ILibraryDbContext dbContext, IFileWrapper fileWrapper)
-	{
-		_dbContext = dbContext;
-		_fileWrapper = fileWrapper;
-	}
+    public DeleteUserCommandHandler(ILibraryDbContext dbContext, IFileWrapper fileWrapper, ICacheService cacheService, ICacheKeys cacheKeys)
+    {
+        _dbContext = dbContext;
+        _fileWrapper = fileWrapper;
+        _cache = cacheService;
+        _cacheKeys = cacheKeys;
+    }
 
-	public async Task<Unit> Handle(DeleteUserCommand command, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(DeleteUserCommand command, CancellationToken cancellationToken)
 	{
 		User user = await _dbContext.Users
 			.Include(user => user.CreatedAuthors)
@@ -30,6 +35,7 @@ public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Unit>
 		_dbContext.Authors.RemoveRange(user.CreatedAuthors);
 		_dbContext.Users.Remove(user);
 		await _dbContext.SaveChangesAsync(cancellationToken);
+		await _cache.RemoveAsync($"{_cacheKeys.User}{user.Id}", cancellationToken);
 
 		return Unit.Value;
 	}

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using LibraryApp.Application.Features.Users.Commands.Create;
 using LibraryApp.Domain.Entities;
 using LibraryApp.Application.Extensions.Environment;
+using LibraryApp.Application.Features.Users.Commands.UpdateUserRole;
 
 namespace LibraryApp.DAL;
 public class DbInitializer
@@ -39,7 +40,7 @@ public class DbInitializer
 		ILibraryDbContext dbContext, 
 		IMediator mediator)
     {
-		await CreateAdminUser(configuration, dbContext, mediator);
+		await CreateAdminUser(configuration, mediator);
 
 		List<User> users = new(TestUsersAmount);
 		Random random = new();
@@ -70,12 +71,11 @@ public class DbInitializer
 		IMediator mediator)
 	{
 		if (dbContext.Users.Any() == false)
-			await CreateAdminUser(configuration, dbContext, mediator);
+			await CreateAdminUser(configuration, mediator);
 	}
 
 	private static async Task CreateAdminUser(
 		IConfiguration config,
-		ILibraryDbContext dbContext,
 		IMediator mediator)
 	{
 		var createUserCommand = new CreateUserCommand(
@@ -86,8 +86,10 @@ public class DbInitializer
 
 		var adminUserId = await mediator.Send(createUserCommand);
 
-		var adminUser = dbContext.Users.FirstOrDefault(user => user.Id == adminUserId);
-		adminUser.Role = UserRole.Admin;
+		var updateUserRoleCommand = 
+			new UpdateUserRoleCommand(adminUserId, UserRole.Admin.ToString());
+
+		await mediator.Send(updateUserRoleCommand);
 	}
 
 	/// <summary>

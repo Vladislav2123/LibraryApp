@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using LibraryApp.Domain.Exceptions;
 using LibraryApp.Domain.Entities;
+using LibraryApp.Application.Abstractions.Caching;
 
 namespace LibraryApp.Application.Features.Books.Commands.Create;
 
@@ -14,23 +15,29 @@ public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, Guid>
 {
 	private readonly IFileWrapper _fileWrapper;
 	private readonly ILibraryDbContext _dbContext;
+	private readonly ICacheService _cache;
 	private readonly FilePaths _filePaths;
+	private readonly ICacheKeys _cacheKeys;
 	private readonly HttpContext? _httpContext;
 
 
-	public CreateBookCommandHandler(
-		ILibraryDbContext dbContext,
-		IHttpContextAccessor httpContextAccessor,
-		IFileWrapper fileWrapper,
-		IOptions<FilePaths> filePathsOptions)
-	{
-		_dbContext = dbContext;
-		_httpContext = httpContextAccessor.HttpContext;
-		_fileWrapper = fileWrapper;
-		_filePaths = filePathsOptions.Value;
-	}
+    public CreateBookCommandHandler(
+        ILibraryDbContext dbContext,
+        IHttpContextAccessor httpContextAccessor,
+        IFileWrapper fileWrapper,
+        IOptions<FilePaths> filePathsOptions,
+        ICacheService cache,
+        ICacheKeys cacheKeys)
+    {
+        _dbContext = dbContext;
+        _httpContext = httpContextAccessor.HttpContext;
+        _fileWrapper = fileWrapper;
+        _filePaths = filePathsOptions.Value;
+        _cache = cache;
+        _cacheKeys = cacheKeys;
+    }
 
-	public async Task<Guid> Handle(CreateBookCommand command, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(CreateBookCommand command, CancellationToken cancellationToken)
 	{
 		if (await _dbContext.Authors
 			.AnyAsync(author => author.Id == command.AuthorId, cancellationToken) == false)
@@ -55,7 +62,7 @@ public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, Guid>
 
 		Guid userId = Guid.Parse(_httpContext.User.FindFirstValue(ClaimTypes.Actor));
 
-		Book newBook = new Book()
+		Book book = new Book()
 		{
 			Id = Guid.NewGuid(),
 			AuthorId = command.AuthorId,
@@ -67,9 +74,10 @@ public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, Guid>
 			CreatedUserId = userId
 		};
 
-		await _dbContext.Books.AddAsync(newBook, cancellationToken);
+		await _dbContext.Books.AddAsync(book, cancellationToken);
 		await _dbContext.SaveChangesAsync(cancellationToken);
+		await _cache.SetAsync($"{_cacheKeys.Book}{book.Id}", book, cancellationToken);
 
-		return newBook.Id;
+		return book.Id;
 	}
 }

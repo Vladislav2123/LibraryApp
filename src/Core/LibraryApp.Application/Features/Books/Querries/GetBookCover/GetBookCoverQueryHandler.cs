@@ -6,6 +6,7 @@ using FileNotFoundException = LibraryApp.Domain.Exceptions.FileNotFoundException
 using LibraryApp.Application.Abstractions;
 using LibraryApp.Domain.Exceptions;
 using LibraryApp.Domain.Entities;
+using LibraryApp.Application.Abstractions.Caching;
 
 namespace LibraryApp.Application.Features.Books.Querries.GetBookCover;
 
@@ -13,25 +14,29 @@ public class GetBookCoverQueryHandler : IRequestHandler<GetBookCoverQuery, FileV
 {
 	private readonly ILibraryDbContext _dbContext;
 	private readonly IContentTypeProvider _contentTypeProvider;
+	private readonly ICacheService _cache;
+	private readonly ICacheKeys _cacheKeys;
 
-	public GetBookCoverQueryHandler(ILibraryDbContext dbContext, IContentTypeProvider contentTypeProvider)
+	public GetBookCoverQueryHandler(
+		ILibraryDbContext dbContext,
+		IContentTypeProvider contentTypeProvider,
+		ICacheService cache,
+		ICacheKeys cacheKeys)
 	{
 		_dbContext = dbContext;
 		_contentTypeProvider = contentTypeProvider;
+		_cache = cache;
+		_cacheKeys = cacheKeys;
 	}
 
 	public async Task<FileVm> Handle(GetBookCoverQuery request, CancellationToken cancellationToken)
 	{
-		var book = await _dbContext.Books
-			.AsNoTracking()
-			.Select(book => new Book
-			{
-				Id = book.Id,
-				CoverPath = book.CoverPath
-			})
-			.FirstOrDefaultAsync(book => book.Id == request.BookId, cancellationToken);
-
-		if (book == null) throw new EntityNotFoundException(nameof(Book), request.BookId);
+		var book = await _cache
+			.GetAsync(
+				$"{_cacheKeys.Book}{request.BookId}",
+				BookQuery,
+				cancellationToken
+			);
 
 		if (string.IsNullOrEmpty(book.CoverPath) ||
 			Path.Exists(book.CoverPath) == false)
@@ -47,5 +52,21 @@ public class GetBookCoverQueryHandler : IRequestHandler<GetBookCoverQuery, FileV
 			ContentType = contentType,
 			Bytes = await File.ReadAllBytesAsync(book.CoverPath, cancellationToken)
 		};
+
+		async Task<Book> BookQuery()
+		{
+			var book = await _dbContext.Books
+			.AsNoTracking()
+			.Select(book => new Book
+			{
+				Id = book.Id,
+				CoverPath = book.CoverPath
+			})
+			.FirstOrDefaultAsync(book => book.Id == request.BookId, cancellationToken);
+
+			if (book == null) throw new EntityNotFoundException(nameof(Book), request.BookId);
+
+			return book;
+		}
 	}
 }

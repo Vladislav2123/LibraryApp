@@ -2,10 +2,11 @@
 using MediatR;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
-using FileNotFoundException = LibraryApp.Domain.Exceptions.FileNotFoundException;
 using LibraryApp.Application.Abstractions;
 using LibraryApp.Domain.Exceptions;
 using LibraryApp.Domain.Entities;
+using LibraryApp.Application.Abstractions.Caching;
+using FileNotFoundException = LibraryApp.Domain.Exceptions.FileNotFoundException;
 
 namespace LibraryApp.Application.Features.Authors.Queries.GetAuthorAvatar;
 
@@ -13,24 +14,29 @@ public class GetAuthorAvatarQueryHandler : IRequestHandler<GetAuthorAvatarQuery,
 {
 	private readonly ILibraryDbContext _libraryDbContext;
 	private readonly IContentTypeProvider _contentTypeProvider;
+	private readonly ICacheService _cache;
+	private readonly ICacheKeys _cacheKeys;
 
-	public GetAuthorAvatarQueryHandler(ILibraryDbContext libraryDbContext, IContentTypeProvider contentTypeProvider)
+	public GetAuthorAvatarQueryHandler(
+		ILibraryDbContext libraryDbContext,
+		IContentTypeProvider contentTypeProvider,
+		ICacheService cache,
+		ICacheKeys cacheKeys)
 	{
 		_libraryDbContext = libraryDbContext;
 		_contentTypeProvider = contentTypeProvider;
+		_cache = cache;
+		_cacheKeys = cacheKeys;
 	}
 
 	public async Task<FileVm> Handle(GetAuthorAvatarQuery request, CancellationToken cancellationToken)
 	{
-		var author = await _libraryDbContext.Authors
-			.Select(author => new Author
-			{
-				Id = author.Id,
-				AvatarPath = author.AvatarPath
-			})
-			.FirstOrDefaultAsync(author => author.Id == request.AuthorId, cancellationToken);
-
-		if (author == null) throw new EntityNotFoundException(nameof(Author), request.AuthorId);
+		var author = await _cache
+			.GetAsync(
+				$"{_cacheKeys.Author}{request.AuthorId}",
+				AuthorQuery,
+				cancellationToken
+			);
 
 		if (string.IsNullOrEmpty(author.AvatarPath) ||
 			Path.Exists(author.AvatarPath) == false)
@@ -46,5 +52,20 @@ public class GetAuthorAvatarQueryHandler : IRequestHandler<GetAuthorAvatarQuery,
 			ContentType = contentType,
 			Bytes = await File.ReadAllBytesAsync(author.AvatarPath, cancellationToken)
 		};
+
+		async Task<Author> AuthorQuery()
+		{
+			var author = await _libraryDbContext.Authors
+			.Select(author => new Author
+			{
+				Id = author.Id,
+				AvatarPath = author.AvatarPath
+			})
+			.FirstOrDefaultAsync(author => author.Id == request.AuthorId, cancellationToken);
+
+			if (author == null) throw new EntityNotFoundException(nameof(Author), request.AuthorId);
+
+			return author;
+		}
 	}
 }

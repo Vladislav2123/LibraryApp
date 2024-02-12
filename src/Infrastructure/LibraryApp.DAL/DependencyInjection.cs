@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using LibraryApp.Application.Abstractions.Caching;
+using LibraryApp.Application.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
-using LibraryApp.Application.Abstractions;
+using LibraryApp.DAL.Caching;
 
 namespace LibraryApp.DAL;
 
@@ -22,6 +24,17 @@ public static class DependencyInjection
 			options.UseNpgsql($"Host={host}; Port={port}; Database={db}; Username=postgres; Password={password}");
 		});
 		service.AddScoped<ILibraryDbContext>(provider => provider.GetService<LibraryDbContext>());
+
+		service.AddStackExchangeRedisCache(options =>
+		{
+			var connectionString = configuration.GetConnectionString("Redis");
+
+			options.Configuration = connectionString;
+		});
+
+		service.AddScoped<ICacheService, CacheService>();
+		service.AddSingleton<ICacheKeys, CacheKeys>();
+		service.Configure<CacheKeys>(configuration.GetSection(CacheKeys.ConfigSectionKey));
 
 		return service;
 	}

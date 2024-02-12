@@ -3,25 +3,37 @@ using Microsoft.EntityFrameworkCore;
 using LibraryApp.Application.Abstractions;
 using LibraryApp.Domain.Exceptions;
 using LibraryApp.Domain.Entities;
+using LibraryApp.Application.Abstractions.Caching;
 
 namespace LibraryApp.Application.Features.Books.Commands.Update;
 public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, Unit>
 {
 	private readonly ILibraryDbContext _dbContext;
 	private readonly IFileWrapper _fileWrapper;
+	private readonly ICacheService _cache;
+	private readonly ICacheKeys _cacheKeys;
 
-	public UpdateBookCommandHandler(ILibraryDbContext dbContext, IFileWrapper fileWrapper)
+	public UpdateBookCommandHandler(
+		ILibraryDbContext dbContext,
+		IFileWrapper fileWrapper,
+		ICacheService cache,
+		ICacheKeys cacheKeys)
 	{
 		_dbContext = dbContext;
 		_fileWrapper = fileWrapper;
+		_cache = cache;
+		_cacheKeys = cacheKeys;
 	}
 
 	public async Task<Unit> Handle(UpdateBookCommand command, CancellationToken cancellationToken)
 	{
-		var book = await _dbContext.Books
-			.FirstOrDefaultAsync(book => book.Id == command.BookId, cancellationToken);
+		var cacheKey = $"{_cacheKeys.Book}{command.BookId}";
 
-		if (book == null) throw new EntityNotFoundException(nameof(Book), command.BookId);
+		var book = await _cache
+			.GetAsync(
+				cacheKey, 
+				BookQuery, 
+				cancellationToken);
 
 		if (await _dbContext.Authors
 			.AnyAsync(author => author.Id == command.AuthorId, cancellationToken) == false)
@@ -34,7 +46,7 @@ public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, Unit>
 				book.Description == command.Description &&
 				book.Year == command.Year, cancellationToken);
 
-		
+
 		if (sameBook != null)
 		{
 			// If there is other book with the same properties, EntityAlreadyExist trowing
@@ -49,8 +61,6 @@ public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, Unit>
 		book.Description = command.Description;
 		book.Year = command.Year;
 
-		//if (command.ContentFile != null &&
-		//	IsContentsEqual(book.ContentPath, command.ContentFile) == false)
 		if (command.ContentFile != null)
 		{
 			_fileWrapper.DeleteFile(book.ContentPath);
@@ -58,42 +68,18 @@ public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, Unit>
 		}
 
 		await _dbContext.SaveChangesAsync(cancellationToken);
+		await _cache.SetAsync(cacheKey, book, cancellationToken);
 
 		return Unit.Value;
+
+		async Task<Book> BookQuery()
+		{
+			var book = await _dbContext.Books
+			.FirstOrDefaultAsync(book => book.Id == command.BookId, cancellationToken);
+
+			if (book == null) throw new EntityNotFoundException(nameof(Book), command.BookId);
+
+			return book;
+		}
 	}
-
-	//private bool IsContentsEqual(string currentContentPath, IFormFile commandContent)
-	//{
-	//	PdfReader currentPdfReader = new PdfReader(currentContentPath);
-
-	//	using (var stream = commandContent.OpenReadStream())
-	//	{
-	//		PdfReader commandPdfReader = new PdfReader(stream);
-
-	//		if (currentPdfReader.NumberOfPages != commandPdfReader.NumberOfPages)
-	//		{
-	//			currentPdfReader.Close();
-	//			commandPdfReader.Close();
-	//			return false;
-	//		}
-
-	//		for (int i = 1; i <= currentPdfReader.NumberOfPages; i++)
-	//		{
-	//			byte[] page1Bytes = currentPdfReader.GetPageContent(i);
-	//			byte[] page2Bytes = commandPdfReader.GetPageContent(i);
-
-	//			if (page1Bytes.Length == page2Bytes.Length)
-	//			{
-	//				currentPdfReader.Close();
-	//				commandPdfReader.Close();
-	//				return true;
-	//			}
-	//		}
-
-	//		currentPdfReader.Close();
-	//		commandPdfReader.Close();
-	//	}
-
-	//	return false;
-	//}
 }

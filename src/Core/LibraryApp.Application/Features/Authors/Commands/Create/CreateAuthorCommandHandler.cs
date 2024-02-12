@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using LibraryApp.Domain.Exceptions;
 using LibraryApp.Domain.Entities;
+using LibraryApp.Application.Abstractions.Caching;
 
 namespace LibraryApp.Application.Features.Authors.Commands.Create;
 
@@ -12,14 +13,22 @@ public class CreateAuthorCommandHandler : IRequestHandler<CreateAuthorCommand, G
 {
 	private readonly ILibraryDbContext _dbContext;
 	private readonly HttpContext? _httpContext;
+	private readonly ICacheService _cache;
+	private readonly ICacheKeys _cacheKeys;
 
-	public CreateAuthorCommandHandler(ILibraryDbContext dbContext, IHttpContextAccessor httpContextAccessor)
-	{
-		_dbContext = dbContext;
-		_httpContext = httpContextAccessor.HttpContext;
-	}
+    public CreateAuthorCommandHandler(
+        ILibraryDbContext dbContext,
+        IHttpContextAccessor httpContextAccessor,
+        ICacheService cache,
+        ICacheKeys cacheKeys)
+    {
+        _dbContext = dbContext;
+        _httpContext = httpContextAccessor.HttpContext;
+        _cache = cache;
+        _cacheKeys = cacheKeys;
+    }
 
-	public async Task<Guid> Handle(CreateAuthorCommand command, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(CreateAuthorCommand command, CancellationToken cancellationToken)
 	{
 		if (await _dbContext.Authors
 			.AnyAsync(author => 
@@ -42,6 +51,7 @@ public class CreateAuthorCommandHandler : IRequestHandler<CreateAuthorCommand, G
 
 		await _dbContext.Authors.AddAsync(author, cancellationToken);
 		await _dbContext.SaveChangesAsync(cancellationToken);
+		await _cache.SetAsync($"{_cacheKeys.Author}{author.Id}", author, cancellationToken);
 
 		return author.Id;
 	}

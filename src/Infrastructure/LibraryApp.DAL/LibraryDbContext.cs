@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using LibraryApp.DAL.EntityTypeConfigurations;
 using LibraryApp.DAL.ValueConverters;
 using LibraryApp.Application.Abstractions;
@@ -47,5 +49,23 @@ public class LibraryDbContext : DbContext, ILibraryDbContext
 		builder.Properties<DateOnly?>()
 			.HaveConversion<DateOnlyNullableConverter>()
 			.HaveColumnType("date");
+	}
+
+    public object FindTrackingObject(object entity)
+	{
+		var entityType = Model.FindRuntimeEntityType(entity.GetType());
+            var key = entityType.FindPrimaryKey();
+
+            var keyProperties = key.Properties;
+
+            var keyValues = new object[keyProperties.Count];
+            for (int i = 0; i < keyValues.Length; i++)
+            {
+                keyValues[i] = keyProperties[i].GetGetter().GetClrValue(entity);
+                Console.WriteLine($"Key Value {i}: {keyValues[i]}");
+            }
+
+            var stateManager = this.GetService<IStateManager>();
+            return stateManager.TryGetEntry(key, keyValues)?.Entity;
 	}
 }

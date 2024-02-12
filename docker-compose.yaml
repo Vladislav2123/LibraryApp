@@ -1,6 +1,40 @@
 version: "3.8"
 
 services:
+  db:
+    image: postgres
+    container_name: library_postgres
+    environment:
+      POSTGRES_PASSWORD: StrongPassword     # You can set another password here
+    ports:
+      - 5432:5432
+    networks:
+      - library_net
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      start_period: 10s
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  cache:
+    image: redis
+    container_name: library_redis
+    ports:
+      - 8080:6379
+    networks:
+      - library_net
+    restart: always
+    depends_on:
+      db: 
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
   api:
     build: .
     container_name: library_api
@@ -25,23 +59,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
-
-  db:
-    image: postgres
-    container_name: library_postgres
-    environment:
-      POSTGRES_PASSWORD: StrongPassword     # You can set another password here
-    ports:
-      - 5432:5432
-    networks:
-      - library_net
-    restart: always
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      start_period: 10s
-      interval: 5s
-      timeout: 3s
-      retries: 5
+      cache:
+        condition: service_healthy
 
 networks:
   library_net:
