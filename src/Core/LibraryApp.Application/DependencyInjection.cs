@@ -9,12 +9,14 @@ using System.Reflection;
 using LibraryApp.Application.Common.PasswordProviders;
 using LibraryApp.Application.Common.FileWrappers;
 using LibraryApp.Application.Behaviours;
+using LibraryApp.Domain.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace LibraryApp.Application;
 
 public static class DependencyInjection
 {
-	public static IServiceCollection AddApplication(this IServiceCollection services)
+	public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
 	{
 		services.AddAutoMapper(cfg =>
 		{
@@ -33,6 +35,9 @@ public static class DependencyInjection
 		services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 		services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 		services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+		services.Configure<FilePaths>(
+			configuration.GetSection(FilePaths.ConfigSectionKey));
 
 		return services;
 	}
